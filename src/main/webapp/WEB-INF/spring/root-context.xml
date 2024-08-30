@@ -22,35 +22,35 @@
 		<property name="location" value="classpath:application.properties"/>
 	</bean>
 	<!-- Root Context: defines shared resources visible to all other web components -->
-<!--	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">-->
-<!--		&lt;!&ndash; <property name="driverClassName" value="oracle.jdbc.OracleDriver"/> &ndash;&gt;-->
-<!--		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>-->
-<!--		&lt;!&ndash; <property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521/XEPDB1"/> &ndash;&gt;-->
-<!--		<property name="jdbcUrl" value="${JDBC_URL}"/>-->
-<!--		<property name="username" value="${DATABASE_USERNAME}"/>-->
-<!--		<property name="password" value="${DATABASE_PASSWORD}"/>-->
-<!--	</bean>-->
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+		<!-- <property name="driverClassName" value="oracle.jdbc.OracleDriver"/> -->
+		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
+		<!-- <property name="jdbcUrl" value="jdbc:oracle:thin:@localhost:1521/XEPDB1"/> -->
+		<property name="jdbcUrl" value="${JDBC_URL}"/>
+		<property name="username" value="${DATABASE_USERNAME}"/>
+		<property name="password" value="${DATABASE_PASSWORD}"/>
+	</bean>
 
-<!--	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"-->
-<!--		  destroy-method="close">-->
-<!--		<constructor-arg ref="hikariConfig"/>-->
-<!--	</bean>-->
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		  destroy-method="close">
+		<constructor-arg ref="hikariConfig"/>
+	</bean>
 
-<!--	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
-<!--		<property name="dataSource" ref="dataSource"></property>-->
-<!--		<property name="typeAliasesPackage" value="com.devjeans.**.domain"/>-->
-<!--		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>-->
-<!--	</bean>-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="typeAliasesPackage" value="com.oasis.hworld.member.domain"/>
+		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+	</bean>
 
-<!--	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">-->
-<!--		<property name="dataSource" ref="dataSource"></property>-->
-<!--	</bean>-->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
 
 	<tx:annotation-driven />
 
-<!--	<mybatis-spring:scan base-package="com.oasis.hworld.**.mapper"/>-->
+	<mybatis-spring:scan base-package="com.oasis.hworld.member.mapper"/>
 
-	<context:component-scan base-package="com.oasis.hworld"/>
+	<context:component-scan base-package="com.oasis.hworld.**.service"/>
 
 	<!-- Enable AspectJ Auto Proxy -->
 	<aop:aspectj-autoproxy />

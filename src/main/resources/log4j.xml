@@ -11,7 +11,7 @@
 	</appender>
 
 	<!-- Application Loggers -->
-	<logger name="com.devjeans.hype">
+	<logger name="com.oasis.hworld">
 		<level value="info" />
 	</logger>
 
