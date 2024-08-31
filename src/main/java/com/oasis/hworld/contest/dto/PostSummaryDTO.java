@@ -24,8 +24,6 @@ public class PostSummaryDTO {
     private int postId;
     // 코디 이미지 url
     private String imageUrl;
-    // 회원 닉네임
-    private String nickname;
     // 추천수
     private int likeCount;
     // 댓글수
