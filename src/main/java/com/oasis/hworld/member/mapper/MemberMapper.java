@@ -5,4 +5,6 @@ import com.oasis.hworld.member.dto.SignUpRequestDTO;
 public interface MemberMapper {
 
     int insertMember(SignUpRequestDTO dto);
+
+    int selectMemberByLoginId(String loginId);
 }

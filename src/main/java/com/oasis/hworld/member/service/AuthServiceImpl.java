@@ -18,8 +18,15 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     @Override
     public int signUp(SignUpRequestDTO signUpRequestDTO) {
-        log.info("회원가입 요청 -> " + signUpRequestDTO.toString());
+        log.info("회원가입 -> " + signUpRequestDTO.toString());
 
         return memberMapper.insertMember(signUpRequestDTO);
+    }
+
+    @Override
+    public boolean checkIdAvailability(String loginId) {
+        log.info("아이디 중복 확인 -> " + loginId);
+
+        return memberMapper.selectMemberByLoginId(loginId) == 0;
     }
 }

@@ -6,4 +6,6 @@ public interface AuthService {
 
     int signUp(SignUpRequestDTO signUpRequestDTO);
 
+    boolean checkIdAvailability(String loginId);
+
 }

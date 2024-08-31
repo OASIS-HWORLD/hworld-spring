@@ -9,4 +9,12 @@
             VALUES (SEQ_MEMBER.NEXTVAL, #{loginId}, #{password}, #{nickname}, #{gender}, TO_DATE(TO_CHAR(#{birthdate}, 'YYYY-MM-DD'), 'YYYY-MM-DD'))
         ]]>
     </insert>
+
+    <select id="selectMemberByLoginId">
+        <![CDATA[
+            SELECT count(login_id)
+            FROM MEMBER
+            WHERE login_id = #{loginId} AND deleted_at IS NULL
+        ]]>
+    </select>
 </mapper>
