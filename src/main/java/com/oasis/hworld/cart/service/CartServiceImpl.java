@@ -1,8 +1,10 @@
 package com.oasis.hworld.cart.service;
 
+import com.oasis.hworld.cart.domain.Cart;
 import com.oasis.hworld.cart.dto.CartDetailDTO;
 import com.oasis.hworld.cart.dto.CartItemRequestDTO;
 import com.oasis.hworld.cart.dto.GetCartListResponseDTO;
+import com.oasis.hworld.cart.dto.ModifyCartItemCountRequestDTO;
 import com.oasis.hworld.cart.mapper.CartMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -60,5 +62,51 @@ public class CartServiceImpl implements CartService {
         }
 
         return mapper.insertCart(memberId, itemId) == 1;
+    }
+
+    /**
+     * 장바구니에서 상품 삭제
+     *
+     * @author 조영욱
+     */
+    @Override
+    public boolean removeItemFromCart(int cartId, int memberId) {
+        // 장바구니의 소유자 검증
+        if (!validateCartOwner(cartId, memberId)) {
+            return false;
+        }
+
+         return mapper.deleteCartByCartId(cartId) == 1;
+    }
+
+    /**
+     * 장바구니의 상품 개수 변경
+     *
+     * @author 조영욱
+     */
+    @Override
+    public boolean modifyCartItemCount(ModifyCartItemCountRequestDTO dto, int memberId) {
+        int cartId = dto.getCartId();
+        int itemCount = dto.getItemCount();
+
+        // 장바구니의 소유자 검증
+        if (!validateCartOwner(cartId, memberId)) {
+            return false;
+        }
+
+        // todo: 변경 가능한 상품 개수인지 검증
+
+        return mapper.updateItemCountByCartId(cartId, itemCount) == 1;
+    }
+
+    /**
+     * 장바구니 소유자 검증
+     *
+     * @author 조영욱
+     */
+    private boolean validateCartOwner(int cartId, int memberId) {
+        Cart cart = mapper.selectCartByCartId(cartId);
+
+        return cart != null && cart.getMemberId() == memberId;
     }
 }

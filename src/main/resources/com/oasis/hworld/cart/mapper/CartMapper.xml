@@ -55,6 +55,17 @@
             item_id = #{itemId}
     </select>
 
+    <!-- 장바구니 ID로 장바구니 조회 -->
+    <select id="selectCartByCartId">
+        SELECT
+            cart_id,
+            member_id
+        FROM
+            CART
+        WHERE
+            cart_id = #{cartId}
+    </select>
+
     <!-- 장바구니 추가 -->
     <insert id="insertCart">
         INSERT INTO CART(
@@ -69,4 +80,22 @@
             1
         )
     </insert>
+
+    <!-- 장바구니에서 삭제 -->
+    <delete id="deleteCartByCartId">
+        DELETE FROM
+            CART
+        WHERE
+            cart_id = #{cartId}
+    </delete>
+
+    <!-- 장바구니의 상품 개수 변경 -->
+    <update id="updateItemCountByCartId">
+        UPDATE
+            CART
+        SET
+            item_count = #{itemCount}
+        WHERE
+            cart_id = #{cartId}
+    </update>
 </mapper>

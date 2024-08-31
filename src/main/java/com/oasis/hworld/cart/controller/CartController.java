@@ -2,10 +2,12 @@ package com.oasis.hworld.cart.controller;
 
 import com.oasis.hworld.cart.dto.CartItemRequestDTO;
 import com.oasis.hworld.cart.dto.GetCartListResponseDTO;
+import com.oasis.hworld.cart.dto.ModifyCartItemCountRequestDTO;
 import com.oasis.hworld.cart.service.CartService;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,5 +55,31 @@ public class CartController {
         return service.addCart(dto, 1) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "장바구니에 추가되었습니다.")) :
                 ResponseEntity.ok(new CommonResponseDTO(false, "이미 장바구니에 추가된 상품입니다."));
+    }
+
+    /**
+     * 장바구니에서 상품 삭제
+     *
+     * @author 조영욱
+     */
+    @DeleteMapping("/{cartId}")
+    public ResponseEntity<CommonResponseDTO> removeItemFromCart(@PathVariable("cartId") int cartId) {
+        // todo: memberId 로직 추가
+        return service.removeItemFromCart(cartId, 1) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "장바구니에서 상품이 삭제되었습니다.")) :
+                ResponseEntity.ok(new CommonResponseDTO(false, "장바구니에 상품이 존재하지 않습니다."));
+    }
+
+    /**
+     * 장바구니의 상품 개수 변경
+     *
+     * @author 조영욱
+     */
+    @PutMapping("/count")
+    public ResponseEntity<CommonResponseDTO> modifyCartItemCount(@RequestBody ModifyCartItemCountRequestDTO dto) {
+        // todo: memberId 로직 추가
+        return service.modifyCartItemCount(dto, 1) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "수량이 변경되었습니다.")) :
+                ResponseEntity.ok(new CommonResponseDTO(false, "장바구니에 상품이 존재하지 않습니다."));
     }
 }
