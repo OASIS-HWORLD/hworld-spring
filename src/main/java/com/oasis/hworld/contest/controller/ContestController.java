@@ -1,6 +1,5 @@
 package com.oasis.hworld.contest.controller;
 
-import com.oasis.hworld.contest.dto.PostListResponseDTO;
 import com.oasis.hworld.contest.dto.PostSummaryDTO;
 import com.oasis.hworld.contest.service.ContestService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 콘테스트 컨트롤러
@@ -37,7 +38,7 @@ public class ContestController {
      * @apiNote 진행중인 콘테스트 게시글 목록을 조회한다.
      */
     @GetMapping("/ongoing")
-    public ResponseEntity<PostListResponseDTO> getOngoingContestPostList() {
+    public ResponseEntity<List<PostSummaryDTO>> getOngoingContestPostList() {
         return ResponseEntity.ok(service.getOngoingContestPostList());
     }
 
@@ -48,7 +49,7 @@ public class ContestController {
      * @apiNote 완료된 콘테스트 게시글 목록을 조회한다.
      */
     @GetMapping("/finished")
-    public ResponseEntity<PostListResponseDTO> getFinishedContestPostList() {
+    public ResponseEntity<List<PostSummaryDTO>> getFinishedContestPostList() {
         return ResponseEntity.ok(service.getFinishedContestPostList());
     }
 }

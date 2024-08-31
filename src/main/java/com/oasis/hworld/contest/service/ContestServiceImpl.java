@@ -1,6 +1,5 @@
 package com.oasis.hworld.contest.service;
 
-import com.oasis.hworld.contest.dto.PostListResponseDTO;
 import com.oasis.hworld.contest.dto.PostSummaryDTO;
 import com.oasis.hworld.contest.mapper.ContestMapper;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,7 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public PostListResponseDTO getOngoingContestPostList() {
+    public List<PostSummaryDTO> getOngoingContestPostList() {
         Date currentDate = new Date();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -43,7 +42,7 @@ public class ContestServiceImpl implements ContestService {
 
         List<PostSummaryDTO> postSummaryDTOList = mapper.selectOngoingContestPostList(formattedDate);
 
-        return PostListResponseDTO.from(postSummaryDTOList);
+        return postSummaryDTOList;
     }
 
     /**
@@ -51,7 +50,7 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public PostListResponseDTO getFinishedContestPostList() {
+    public List<PostSummaryDTO> getFinishedContestPostList() {
         Date currentDate = new Date();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -59,6 +58,6 @@ public class ContestServiceImpl implements ContestService {
 
         List<PostSummaryDTO> postSummaryDTOList = mapper.selectFinishedContestPostList(formattedDate);
 
-        return PostListResponseDTO.from(postSummaryDTOList);
+        return postSummaryDTOList;
     }
 }

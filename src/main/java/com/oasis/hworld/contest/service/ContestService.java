@@ -1,6 +1,5 @@
 package com.oasis.hworld.contest.service;
 
-import com.oasis.hworld.contest.dto.PostListResponseDTO;
 import com.oasis.hworld.contest.dto.PostSummaryDTO;
 
 import java.util.List;
@@ -23,12 +22,12 @@ public interface ContestService {
      *
      * @author 정은찬
      */
-    PostListResponseDTO getOngoingContestPostList();
+    List<PostSummaryDTO> getOngoingContestPostList();
 
     /**
      * 완료된 콘테스트 게시글 목록 조회
      *
      * @author 정은찬
      */
-    PostListResponseDTO getFinishedContestPostList();
+    List<PostSummaryDTO> getFinishedContestPostList();
 }
