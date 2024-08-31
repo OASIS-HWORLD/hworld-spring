@@ -22,13 +22,13 @@
             C.cart_id,
             I.item_id,
             C.item_count,
-            I.name as item_name,
-            I.image_url as item_image_url,
-            I.price as itemPrice,
-            I.detail_image_url as item_detail_image_url,
+            I.name AS item_name,
+            I.image_url AS item_image_url,
+            I.price AS itemPrice,
+            I.detail_image_url AS item_detail_image_url,
             S.shop_id,
-            S.name as shop_name,
-            S.image_url as shop_image_url
+            S.name AS shop_name,
+            S.image_url AS shop_image_url
         FROM
             CART C
         LEFT JOIN
