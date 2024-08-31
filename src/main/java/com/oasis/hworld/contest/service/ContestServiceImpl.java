@@ -26,7 +26,7 @@ import java.util.List;
 @Service
 @Log4j
 @RequiredArgsConstructor
-public class ContestServiceImp implements ContestService {
+public class ContestServiceImpl implements ContestService {
 
     private final ContestMapper mapper;
 
