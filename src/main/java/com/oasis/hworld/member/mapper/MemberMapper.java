@@ -7,4 +7,6 @@ public interface MemberMapper {
     int insertMember(SignUpRequestDTO dto);
 
     int selectMemberByLoginId(String loginId);
+
+    int selectMemberByNickname(String nickname);
 }

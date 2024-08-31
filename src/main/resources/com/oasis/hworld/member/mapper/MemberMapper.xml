@@ -17,4 +17,12 @@
             WHERE login_id = #{loginId} AND deleted_at IS NULL
         ]]>
     </select>
+
+    <select id="selectMemberByNickname">
+        <![CDATA[
+            SELECT count(nickname)
+            FROM MEMBER
+            WHERE nickname = #{nickname} AND deleted_at IS NULL
+        ]]>
+    </select>
 </mapper>

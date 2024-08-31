@@ -8,4 +8,6 @@ public interface AuthService {
 
     boolean checkIdAvailability(String loginId);
 
+    boolean checkNicknameAvailability(String nickname);
+
 }

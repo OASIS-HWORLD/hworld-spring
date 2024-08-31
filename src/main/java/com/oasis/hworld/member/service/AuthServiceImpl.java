@@ -29,4 +29,11 @@ public class AuthServiceImpl implements AuthService{
 
         return memberMapper.selectMemberByLoginId(loginId) == 0;
     }
+
+    @Override
+    public boolean checkNicknameAvailability(String nickname) {
+        log.info("닉네임 중복 확인 -> " + nickname);
+
+        return memberMapper.selectMemberByNickname(nickname) == 0;
+    }
 }

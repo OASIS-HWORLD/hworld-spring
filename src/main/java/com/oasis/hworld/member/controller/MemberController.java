@@ -31,4 +31,11 @@ public class MemberController {
                 ResponseEntity.ok(new CommonResponseDTO(false, "이미 사용 중인 아이디입니다."));
     }
 
+    @GetMapping("/check-nickname")
+    public ResponseEntity<CommonResponseDTO> checkNicknameAvailability(@RequestParam("nickname") String nickname) {
+        return authService.checkNicknameAvailability(nickname) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "사용 가능한 닉네임입니다.")) :
+                ResponseEntity.ok(new CommonResponseDTO(false, "이미 사용 중인 닉네임입니다."));
+    }
+
 }
