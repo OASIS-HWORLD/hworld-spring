@@ -1,14 +1,11 @@
-package com.oasis.hworld.member.domain;
+package com.oasis.hworld.member.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
- * 회원 VO
+ * 회원가입 요청 DTO
  * @author 김지현
  * @since 2024.08.31
  * @version 1.0
@@ -21,27 +18,20 @@ import java.util.Date;
  */
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class Member {
+@ToString
+public class SignUpRequestDTO {
 
-    // 회원 ID
-    private int memberId;
     // 로그인 ID
     private String loginId;
     // 비밀번호
     private String password;
+    // 비밀번호 확인
+    private String passwordValidation;
     // 닉네임
     private String nickname;
-    // 보유 포인트
-    private int point;
     // 성별
     private String gender;
     // 생년월일
-    private Date birthDate;
-    // 가입일
-    private Date createdAt;
-    // 탈퇴일
-    private Date deletedAt;
+    private Date birthdate;
 
 }

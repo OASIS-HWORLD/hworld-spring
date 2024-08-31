@@ -2,8 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+<!--
+* 회원 Mybatis mapper xml
+* @author 김지현
+* @since 2024.08.31
+* @version 1.0
+*
+* <pre>
+* 수정일        	수정자        수정내용
+* ==========  =========    =========
+* 2024.08.31  	김지현        최초 생성
+* </pre>
+-->
 <mapper namespace="com.oasis.hworld.member.mapper.MemberMapper">
-    <select id="testMapper2">
-        select * from dual
+    <!-- 회원 추가 -->
+    <insert id="insertMember">
+        <![CDATA[
+            INSERT INTO MEMBER (member_id, login_id, password, nickname, gender, birthdate)
+            VALUES (SEQ_MEMBER.NEXTVAL, #{loginId}, #{password}, #{nickname}, #{gender}, TO_DATE(TO_CHAR(#{birthdate}, 'YYYY-MM-DD'), 'YYYY-MM-DD'))
+        ]]>
+    </insert>
+
+    <!-- 로그인 ID로 회원 수 조회 -->
+    <select id="selectMemberByLoginId">
+        <![CDATA[
+            SELECT count(login_id)
+            FROM MEMBER
+            WHERE login_id = #{loginId} AND deleted_at IS NULL
+        ]]>
+    </select>
+
+    <!-- 닉네임으로 회원 수 조회 -->
+    <select id="selectMemberByNickname">
+        <![CDATA[
+            SELECT count(nickname)
+            FROM MEMBER
+            WHERE nickname = #{nickname} AND deleted_at IS NULL
+        ]]>
     </select>
 </mapper>
