@@ -1,6 +1,8 @@
 package com.oasis.hworld.member.mapper;
 
+import com.oasis.hworld.member.dto.SignUpRequestDTO;
+
 public interface MemberMapper {
 
-    String testMapper2();
+    int insertMember(SignUpRequestDTO dto);
 }

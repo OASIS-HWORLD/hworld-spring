@@ -3,7 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.oasis.hworld.member.mapper.MemberMapper">
-    <select id="testMapper2">
-        select * from dual
-    </select>
+    <insert id="insertMember">
+        <![CDATA[
+            INSERT INTO MEMBER (member_id, login_id, password, nickname, gender, birthdate)
+            VALUES (SEQ_MEMBER.NEXTVAL, #{loginId}, #{password}, #{nickname}, #{gender}, TO_DATE(TO_CHAR(#{birthdate}, 'YYYY-MM-DD'), 'YYYY-MM-DD'))
+        ]]>
+    </insert>
 </mapper>

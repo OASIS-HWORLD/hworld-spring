@@ -10,12 +10,4 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    private final MemberMapper mapper;
-
-    @Override
-    public int test() {
-        mapper.testMapper2();
-        log.info("서비스 잘 됨.");
-        return 0;
-    }
 }
