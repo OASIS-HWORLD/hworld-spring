@@ -1,5 +1,7 @@
 package com.oasis.hworld.cart.service;
 
+import com.oasis.hworld.cart.dto.GetCartListResponseDTO;
+
 /**
  * 장바구니 서비스 인터페이스
  * @author 조영욱
@@ -14,5 +16,10 @@ package com.oasis.hworld.cart.service;
  */
 public interface CartService {
 
-    int getCartList(int memberId);
+    /**
+     * 회원 장바구니 조회
+     *
+     * @author 조영욱
+     */
+    GetCartListResponseDTO getCartList(int memberId);
 }

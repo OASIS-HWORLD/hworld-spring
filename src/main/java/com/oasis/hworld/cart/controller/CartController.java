@@ -1,5 +1,6 @@
 package com.oasis.hworld.cart.controller;
 
+import com.oasis.hworld.cart.dto.GetCartListResponseDTO;
 import com.oasis.hworld.cart.service.CartService;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +31,14 @@ public class CartController {
 
     private final CartService service;
 
+    /**
+     * 회원 장바구니 조회
+     *
+     * @author 조영욱
+     * @apiNote 로그인 한 회원의 장바구니를 조회한다.
+     */
     @GetMapping("")
-    public ResponseEntity<CommonResponseDTO> testFunction() {
-        log.info(service.getCartList(1));
-        log.info("컨트롤러 잘 됨.");
-        return ResponseEntity.ok(new CommonResponseDTO(true, "hihi"));
+    public ResponseEntity<GetCartListResponseDTO> getCartList() {
+        return ResponseEntity.ok(service.getCartList(1));
     }
 }

@@ -1,9 +1,13 @@
 package com.oasis.hworld.cart.service;
 
+import com.oasis.hworld.cart.dto.CartDetailDTO;
+import com.oasis.hworld.cart.dto.GetCartListResponseDTO;
 import com.oasis.hworld.cart.mapper.CartMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * 장바구니 서비스 구현체
@@ -24,10 +28,20 @@ public class CartServiceImpl implements CartService {
 
     private final CartMapper mapper;
 
+    /**
+     * 회원 장바구니 조회
+     *
+     * @author 조영욱
+     */
     @Override
-    public int getCartList(int memberId) {
-        mapper.selectCartByMemberId(memberId);
-        log.info("서비스 잘 됨.");
-        return 0;
+    public GetCartListResponseDTO getCartList(int memberId) {
+        List<CartDetailDTO> CartDetailDTOList = mapper.selectCartByMemberId(memberId);
+
+        CartDetailDTOList.forEach(cart -> {
+            int subTotalPrice = cart.getItemPrice()*cart.getItemCount();
+            cart.setSubtotalPrice(subTotalPrice);
+        });
+
+        return GetCartListResponseDTO.from(CartDetailDTOList);
     }
 }

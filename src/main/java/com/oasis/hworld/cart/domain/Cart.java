@@ -16,9 +16,12 @@ import lombok.Data;
  */
 @Data
 public class Cart {
-
+    // 장바구니 ID
     private int cartId;
+    // 회원 ID
     private int memberId;
+    // 상품 ID
     private int itemId;
+    // 상품 개수
     private int itemCount;
 }

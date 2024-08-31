@@ -1,6 +1,6 @@
 package com.oasis.hworld.cart.mapper;
 
-import com.oasis.hworld.cart.domain.Cart;
+import com.oasis.hworld.cart.dto.CartDetailDTO;
 
 import java.util.List;
 
@@ -18,5 +18,6 @@ import java.util.List;
  */
 public interface CartMapper {
 
-    List<Cart> selectCartByMemberId(int memberId);
+    // 회원 ID로 장바구니 조회
+    List<CartDetailDTO> selectCartByMemberId(int memberId);
 }
