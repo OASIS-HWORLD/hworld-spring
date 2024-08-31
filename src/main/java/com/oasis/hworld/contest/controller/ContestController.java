@@ -40,4 +40,15 @@ public class ContestController {
     public ResponseEntity<PostListResponseDTO> getOngoingContestPostList() {
         return ResponseEntity.ok(service.getOngoingContestPostList());
     }
+
+    /**
+     * 완료된 콘테스트 게시글 목록 조회
+     *
+     * @author 정은찬
+     * @apiNote 완료된 콘테스트 게시글 목록을 조회한다.
+     */
+    @GetMapping("/finished")
+    public ResponseEntity<PostListResponseDTO> getFinishedContestPostList() {
+        return ResponseEntity.ok(service.getFinishedContestPostList());
+    }
 }

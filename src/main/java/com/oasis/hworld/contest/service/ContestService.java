@@ -24,4 +24,11 @@ public interface ContestService {
      * @author 정은찬
      */
     PostListResponseDTO getOngoingContestPostList();
+
+    /**
+     * 완료된 콘테스트 게시글 목록 조회
+     *
+     * @author 정은찬
+     */
+    PostListResponseDTO getFinishedContestPostList();
 }

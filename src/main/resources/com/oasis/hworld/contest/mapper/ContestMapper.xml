@@ -49,4 +49,39 @@
             M.nickname,
             P.like_count
     </select>
+
+    <!-- 완료된 콘테스트 게시글 목록 조회 -->
+    <select id="selectFinishedContestPostList">
+        SELECT
+            P.post_id,
+            CO.image_url,
+            M.nickname,
+            P.like_count,
+            COUNT(R.reply_id) AS reply_count
+        FROM
+            POST P
+                LEFT JOIN
+            CONTEST C
+            ON
+                P.contest_id = C.contest_id
+                LEFT JOIN
+            MEMBER M
+            ON
+                P.member_id = M.member_id
+                LEFT JOIN
+            COORDINATION CO
+            ON
+                P.coordination_id = CO.coordination_id
+                LEFT JOIN
+            REPLY R
+            ON
+                P.post_id = R.post_id
+        WHERE
+            TO_DATE(#{date}, 'YYYY-MM-DD') > C.end_date
+        GROUP BY
+            P.post_id,
+            CO.image_url,
+            M.nickname,
+            P.like_count
+    </select>
 </mapper>
