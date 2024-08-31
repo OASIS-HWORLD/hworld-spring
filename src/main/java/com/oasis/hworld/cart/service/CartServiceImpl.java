@@ -3,7 +3,7 @@ package com.oasis.hworld.cart.service;
 import com.oasis.hworld.cart.domain.Cart;
 import com.oasis.hworld.cart.dto.CartDetailDTO;
 import com.oasis.hworld.cart.dto.CartItemRequestDTO;
-import com.oasis.hworld.cart.dto.GetCartListResponseDTO;
+import com.oasis.hworld.cart.dto.CartListResponseDTO;
 import com.oasis.hworld.cart.dto.ModifyCartItemCountRequestDTO;
 import com.oasis.hworld.cart.mapper.CartMapper;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class CartServiceImpl implements CartService {
      * @author 조영욱
      */
     @Override
-    public GetCartListResponseDTO getCartList(int memberId) {
+    public CartListResponseDTO getCartList(int memberId) {
         List<CartDetailDTO> CartDetailDTOList = mapper.selectCartByMemberId(memberId);
 
         CartDetailDTOList.forEach(cart -> {
@@ -45,7 +45,7 @@ public class CartServiceImpl implements CartService {
             cart.setSubtotalPrice(subTotalPrice);
         });
 
-        return GetCartListResponseDTO.from(CartDetailDTOList);
+        return CartListResponseDTO.from(CartDetailDTOList);
     }
 
     /**

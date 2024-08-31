@@ -1,13 +1,12 @@
 package com.oasis.hworld.cart.controller;
 
 import com.oasis.hworld.cart.dto.CartItemRequestDTO;
-import com.oasis.hworld.cart.dto.GetCartListResponseDTO;
+import com.oasis.hworld.cart.dto.CartListResponseDTO;
 import com.oasis.hworld.cart.dto.ModifyCartItemCountRequestDTO;
 import com.oasis.hworld.cart.service.CartService;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +38,7 @@ public class CartController {
      * @apiNote 로그인 한 회원의 장바구니를 조회한다.
      */
     @GetMapping("")
-    public ResponseEntity<GetCartListResponseDTO> getCartList() {
+    public ResponseEntity<CartListResponseDTO> getCartList() {
         // todo: memberId 로직 추가
         return ResponseEntity.ok(service.getCartList(1));
     }

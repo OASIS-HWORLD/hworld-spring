@@ -23,15 +23,15 @@ import java.util.List;
 @Setter
 @Builder
 @ToString
-public class GetCartListResponseDTO {
+public class CartListResponseDTO {
 
     // 장바구니 리스트
     private List<CartDetailDTO> cartList;
     // 총 가격
     private int totalPrice;
 
-    public static GetCartListResponseDTO from(List<CartDetailDTO> cartDetailDTOList) {
-        return GetCartListResponseDTO.builder()
+    public static CartListResponseDTO from(List<CartDetailDTO> cartDetailDTOList) {
+        return CartListResponseDTO.builder()
                 .cartList(cartDetailDTOList)
                 .totalPrice(cartDetailDTOList.stream()
                     .map(CartDetailDTO::getSubtotalPrice)

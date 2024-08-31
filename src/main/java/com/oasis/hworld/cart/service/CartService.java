@@ -1,7 +1,7 @@
 package com.oasis.hworld.cart.service;
 
 import com.oasis.hworld.cart.dto.CartItemRequestDTO;
-import com.oasis.hworld.cart.dto.GetCartListResponseDTO;
+import com.oasis.hworld.cart.dto.CartListResponseDTO;
 import com.oasis.hworld.cart.dto.ModifyCartItemCountRequestDTO;
 
 /**
@@ -23,7 +23,7 @@ public interface CartService {
      *
      * @author 조영욱
      */
-    GetCartListResponseDTO getCartList(int memberId);
+    CartListResponseDTO getCartList(int memberId);
 
     /**
      * 장바구니에 상품 추가
