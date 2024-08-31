@@ -42,4 +42,31 @@
         WHERE
             C.member_id = #{memberId}
     </select>
+
+    <!-- 회원 ID와 상품 ID로 장바구니 조회 -->
+    <select id="selectCartByMemberIdAndItemId">
+        SELECT
+            cart_id
+        FROM
+            CART
+        WHERE
+            member_id = #{memberId}
+            AND
+            item_id = #{itemId}
+    </select>
+
+    <!-- 장바구니 추가 -->
+    <insert id="insertCart">
+        INSERT INTO CART(
+            cart_id,
+            member_id,
+            item_id,
+            item_count
+        ) VALUES (
+            SEQ_CART.NEXTVAL,
+            #{memberId},
+            #{itemId},
+            1
+        )
+    </insert>
 </mapper>

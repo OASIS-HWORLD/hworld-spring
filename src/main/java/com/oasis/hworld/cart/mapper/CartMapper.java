@@ -1,6 +1,7 @@
 package com.oasis.hworld.cart.mapper;
 
 import com.oasis.hworld.cart.dto.CartDetailDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,8 @@ public interface CartMapper {
 
     // 회원 ID로 장바구니 조회
     List<CartDetailDTO> selectCartByMemberId(int memberId);
+    // 회원 ID와 상품 ID로 장바구니 조회
+    CartDetailDTO selectCartByMemberIdAndItemId(@Param("memberId") int memberId, @Param("itemId") int itemId);
+    // 장바구니 추가
+    int insertCart(@Param("memberId") int memberId, @Param("itemId") int itemId);
 }

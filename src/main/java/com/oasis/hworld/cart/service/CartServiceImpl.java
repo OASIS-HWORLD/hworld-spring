@@ -1,6 +1,7 @@
 package com.oasis.hworld.cart.service;
 
 import com.oasis.hworld.cart.dto.CartDetailDTO;
+import com.oasis.hworld.cart.dto.CartItemRequestDTO;
 import com.oasis.hworld.cart.dto.GetCartListResponseDTO;
 import com.oasis.hworld.cart.mapper.CartMapper;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +44,21 @@ public class CartServiceImpl implements CartService {
         });
 
         return GetCartListResponseDTO.from(CartDetailDTOList);
+    }
+
+    /**
+     * 장바구니에 상품 추가
+     *
+     * @author 조영욱
+     */
+    @Override
+    public boolean addCart(CartItemRequestDTO dto, int memberId) {
+        int itemId = dto.getItemId();
+        // 장바구니에 이미 존재
+        if (mapper.selectCartByMemberIdAndItemId(memberId, itemId) != null) {
+            return false;
+        }
+
+        return mapper.insertCart(memberId, itemId) == 1;
     }
 }

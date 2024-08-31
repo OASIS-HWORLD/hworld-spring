@@ -1,5 +1,6 @@
 package com.oasis.hworld.cart.controller;
 
+import com.oasis.hworld.cart.dto.CartItemRequestDTO;
 import com.oasis.hworld.cart.dto.GetCartListResponseDTO;
 import com.oasis.hworld.cart.service.CartService;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
@@ -7,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 장바구니 컨트롤러
@@ -39,6 +38,20 @@ public class CartController {
      */
     @GetMapping("")
     public ResponseEntity<GetCartListResponseDTO> getCartList() {
+        // todo: memberId 로직 추가
         return ResponseEntity.ok(service.getCartList(1));
+    }
+
+    /**
+     * 장바구니에 상품 추가
+     *
+     * @author 조영욱
+     */
+    @PostMapping("")
+    public ResponseEntity<CommonResponseDTO> addCart(@RequestBody CartItemRequestDTO dto) {
+        // todo: memberId 로직 추가
+        return service.addCart(dto, 1) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "장바구니에 추가되었습니다.")) :
+                ResponseEntity.ok(new CommonResponseDTO(false, "이미 장바구니에 추가된 상품입니다."));
     }
 }
