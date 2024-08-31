@@ -45,4 +45,20 @@ public class ContestServiceImp implements ContestService {
 
         return PostListResponseDTO.from(postSummaryDTOList);
     }
+
+    /**
+     * 완료된 콘테스트 게시글 목록 조회
+     *
+     * @author 정은찬
+     */
+    public PostListResponseDTO getFinishedContestPostList() {
+        Date currentDate = new Date();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormat.format(currentDate);
+
+        List<PostSummaryDTO> postSummaryDTOList = mapper.selectFinishedContestPostList(formattedDate);
+
+        return PostListResponseDTO.from(postSummaryDTOList);
+    }
 }
