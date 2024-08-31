@@ -4,6 +4,7 @@ import com.oasis.hworld.member.dto.SignUpRequestDTO;
 import com.oasis.hworld.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +16,15 @@ public class AuthServiceImpl implements AuthService{
 
     private final MemberMapper memberMapper;
 
+    private final BCryptPasswordEncoder passwordEncoder;
+
     @Transactional
     @Override
     public int signUp(SignUpRequestDTO signUpRequestDTO) {
         log.info("회원가입 -> " + signUpRequestDTO.toString());
+
+        String encodedPassword = passwordEncoder.encode(signUpRequestDTO.getPassword());
+        signUpRequestDTO.setPassword(encodedPassword);
 
         return memberMapper.insertMember(signUpRequestDTO);
     }
