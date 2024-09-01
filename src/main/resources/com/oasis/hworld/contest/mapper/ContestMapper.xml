@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+* 콘테스트 Mybatis mapper xml
+* @author 정은찬
+* @since 2024.08.31
+* @version 1.0
+*
+* <pre>
+* 수정일        	수정자        수정내용
+* ==========  =========    ======================================================
+* 2024.08.31  	정은찬        최초 생성
+* 2024.09.01  	정은찬        콘테스트 게시글 목록 조회 query parameter 적용
+* </pre>
+-->
+
+<!-- 콘테스트 게시글 목록 조회 -->
+<mapper namespace="com.oasis.hworld.contest.mapper.ContestMapper">
+    <select id="selectContestPostList">
+        SELECT
+            P.post_id,
+            CO.image_url,
+            P.like_count,
+            COUNT(R.reply_id) AS reply_count
+        FROM
+            POST P
+        LEFT JOIN
+            CONTEST C
+            ON
+                P.contest_id = C.contest_id
+        LEFT JOIN
+            MEMBER M
+            ON
+                P.member_id = M.member_id
+        LEFT JOIN
+            COORDINATION CO
+            ON
+                P.coordination_id = CO.coordination_id
+        LEFT JOIN
+            REPLY R
+            ON
+                P.post_id = R.post_id
+        WHERE
+            <if test="contestStatus == 'ongoing'">
+                TO_DATE(#{date}, 'YYYY-MM-DD') BETWEEN C.start_date AND C.end_date
+            </if>
+            <if test="contestStatus == 'finished'">
+                C.end_date &lt; TO_DATE(#{date}, 'YYYY-MM-DD')
+            </if>
+        GROUP BY
+            P.post_id,
+            CO.image_url,
+            P.like_count
+        <choose>
+            <when test="sortBy == 'latest'">
+                ORDER BY MAX(P.created_at) DESC
+            </when>
+            <when test="sortBy == 'recommend'">
+                ORDER BY P.like_count DESC
+            </when>
+        </choose>
+    </select>
+</mapper>
