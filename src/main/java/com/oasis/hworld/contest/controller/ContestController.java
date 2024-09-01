@@ -33,6 +33,7 @@ import java.util.List;
 public class ContestController {
     private final ContestService service;
 
+
     /**
      * 콘테스트 게시글 목록 조회
      *
@@ -40,9 +41,7 @@ public class ContestController {
      * @apiNote 콘테스트 게시글 목록을 파라미터를 통해 진행중, 완료, 최신순, 추천순을 조회한다.
      */
     @GetMapping("/posts")
-    public ResponseEntity<List<PostSummaryDTO>> getContestPostList(
-            @RequestParam("status") String contestStatus,
-            @RequestParam(value = "sortBy", required = false, defaultValue = "latest") String sortBy) {
+    public ResponseEntity<List<PostSummaryDTO>> getContestPostList(@RequestParam("status") String contestStatus, @RequestParam(value = "sortBy", required = false, defaultValue = "latest") String sortBy) {
 
         return ResponseEntity.ok(service.getContestPostList(contestStatus, sortBy));
     }

@@ -19,7 +19,6 @@ import java.util.List;
  * </pre>
  */
 public interface ContestMapper {
-    public List<PostSummaryDTO> selectContestPostList(@Param("date") String date,
-                                                      @Param("sortBy") String sortBy,
-                                                      @Param("contestStatus") String contestStatus);
+    // 콘테스트 게시글 목록 조회
+    public List<PostSummaryDTO> selectContestPostList(@Param("date") String date, @Param("sortBy") String sortBy, @Param("contestStatus") String contestStatus);
 }
