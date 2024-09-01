@@ -35,4 +35,6 @@ public class PostDetailDTO {
     private String nickname;
     // 추천수
     private int likeCount;
+    // 댓글 리스트
+    List<ReplyDTO> replyList;
 }

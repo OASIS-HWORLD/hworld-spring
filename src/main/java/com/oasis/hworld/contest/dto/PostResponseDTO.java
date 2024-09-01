@@ -41,7 +41,7 @@ public class PostResponseDTO {
     // 댓글 리스트
     private List<ReplyDTO> replyList;
 
-    public static PostResponseDTO from(PostDetailDTO postDetailDTO, ItemsDTO itemsDTO, List<ReplyDTO> replyDTOList) {
+    public static PostResponseDTO from(PostDetailDTO postDetailDTO, ItemsDTO itemsDTO) {
         return PostResponseDTO.builder()
                 .postId(postDetailDTO.getPostId())
                 .title(postDetailDTO.getTitle())
@@ -50,7 +50,7 @@ public class PostResponseDTO {
                 .nickname(postDetailDTO.getNickname())
                 .likeCount(postDetailDTO.getLikeCount())
                 .items(itemsDTO)
-                .replyList(replyDTOList)
+                .replyList(postDetailDTO.getReplyList())
                 .build();
     }
 }

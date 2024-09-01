@@ -63,40 +63,47 @@
         </choose>
     </select>
 
-    <!-- 게시글 ID를 통해 게시글 상세 조회 -->
-    <select id="selectContestPostDetailByPostId">
+    <!-- PostDetailDTO와 ReplyDTO 간의 매핑을 정의하는 ResultMap -->
+    <resultMap id="PostDetailResultMap" type="com.oasis.hworld.contest.dto.PostDetailDTO">
+        <id column="post_id" property="postId"/>
+        <result column="title" property="title"/>
+        <result column="post_created_at" property="createdAt"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="post_nickname" property="nickname"/>
+        <result column="like_count" property="likeCount"/>
+        <collection property="replyList"
+                    ofType="com.oasis.hworld.contest.dto.ReplyDTO"
+                    javaType="ArrayList">
+            <result column="reply_content" property="content"/>
+            <result column="reply_nickname" property="nickname"/>
+            <result column="reply_created_at" property="createdAt"/>
+        </collection>
+    </resultMap>
+
+    <!-- 게시글 ID를 통해 게시글 상세 조회   -->
+    <select id="selectContestPostDetailByPostId" resultMap="PostDetailResultMap">
         SELECT
             P.post_id,
             P.title,
-            TO_CHAR(P.created_at, 'YYYY-MM-DD') AS created_at,
+            TO_CHAR(P.created_at, 'YYYY-MM-DD') AS post_created_at,
             CO.image_url,
-            M.nickname,
-            P.like_count
+            M.nickname AS post_nickname,
+            P.like_count,
+            R.content AS reply_content,
+            RM.nickname AS reply_nickname,
+            TO_CHAR(R.created_at, 'YYYY-MM-DD') AS reply_created_at
         FROM
             POST P
-        LEFT JOIN
-            MEMBER M
-            ON
-                P.member_id = M.member_id
-        LEFT JOIN
-            COORDINATION CO
-            ON
-                P.coordination_id = CO.coordination_id
+                LEFT JOIN
+            MEMBER M ON P.member_id = M.member_id
+                LEFT JOIN
+            COORDINATION CO ON P.coordination_id = CO.coordination_id
+                LEFT JOIN
+            REPLY R ON P.post_id = R.post_id
+                LEFT JOIN
+            MEMBER RM ON R.member_id = RM.member_id
         WHERE
             P.post_id = #{postId}
-    </select>
-
-    <!-- 게시글 ID를 통해 댓글 조회 -->
-    <select id="selectReplyListByPostId">
-        SELECT M.nickname, R.content, TO_CHAR(R.created_at, 'YYYY-MM-DD') AS created_at
-        FROM
-            REPLY R
-        LEFT JOIN
-            MEMBER M
-            ON
-                R.member_id = M.member_id
-        WHERE
-            R.post_id = #{postId}
         ORDER BY
             R.created_at DESC
     </select>
