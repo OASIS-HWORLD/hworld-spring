@@ -17,9 +17,10 @@ import java.util.List;
  * @version 1.0
  *
  * <pre>
- * 수정일        	수정자        수정내용
- * ----------  --------    ---------------------------
+ * 수정일        수정자        수정내용
+ * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
+ * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합
  * </pre>
  */
 @Service
@@ -29,35 +30,17 @@ public class ContestServiceImpl implements ContestService {
 
     private final ContestMapper mapper;
 
+
     /**
-     * 진행중인 콘테스트 게시글 목록 조회
+     * 콘테스트 게시글 목록 조회
      *
      * @author 정은찬
      */
-    public List<PostSummaryDTO> getOngoingContestPostList() {
+    public List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy) {
         Date currentDate = new Date();
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(currentDate);
 
-        List<PostSummaryDTO> postSummaryDTOList = mapper.selectOngoingContestPostList(formattedDate);
-
-        return postSummaryDTOList;
-    }
-
-    /**
-     * 완료된 콘테스트 게시글 목록 조회
-     *
-     * @author 정은찬
-     */
-    public List<PostSummaryDTO> getFinishedContestPostList() {
-        Date currentDate = new Date();
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = dateFormat.format(currentDate);
-
-        List<PostSummaryDTO> postSummaryDTOList = mapper.selectFinishedContestPostList(formattedDate);
-
-        return postSummaryDTOList;
+        return mapper.selectContestPostList(formattedDate, sortBy, contestStatus);
     }
 }

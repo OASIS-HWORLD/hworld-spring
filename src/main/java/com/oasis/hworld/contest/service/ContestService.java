@@ -11,9 +11,10 @@ import java.util.List;
  * @version 1.0
  *
  * <pre>
- * 수정일        	수정자        수정내용
- * ----------  --------    ---------------------------
+ * 수정일        수정자        수정내용
+ * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
+ * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합
  * </pre>
  */
 public interface ContestService {
@@ -22,12 +23,5 @@ public interface ContestService {
      *
      * @author 정은찬
      */
-    List<PostSummaryDTO> getOngoingContestPostList();
-
-    /**
-     * 완료된 콘테스트 게시글 목록 조회
-     *
-     * @author 정은찬
-     */
-    List<PostSummaryDTO> getFinishedContestPostList();
+    List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy);
 }

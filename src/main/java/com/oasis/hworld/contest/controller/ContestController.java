@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -19,9 +20,10 @@ import java.util.List;
  * @version 1.0
  *
  * <pre>
- * 수정일        	수정자        수정내용
- * ----------  --------    ---------------------------
+ * 수정일        수정자        수정내용
+ * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
+ * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 통합
  * </pre>
  */
 @RestController
@@ -31,25 +33,16 @@ import java.util.List;
 public class ContestController {
     private final ContestService service;
 
-    /**
-     * 진행중인 콘테스트 게시글 목록 조회
-     *
-     * @author 정은찬
-     * @apiNote 진행중인 콘테스트 게시글 목록을 조회한다.
-     */
-    @GetMapping("/ongoing")
-    public ResponseEntity<List<PostSummaryDTO>> getOngoingContestPostList() {
-        return ResponseEntity.ok(service.getOngoingContestPostList());
-    }
 
     /**
-     * 완료된 콘테스트 게시글 목록 조회
+     * 콘테스트 게시글 목록 조회
      *
      * @author 정은찬
-     * @apiNote 완료된 콘테스트 게시글 목록을 조회한다.
+     * @apiNote 콘테스트 게시글 목록을 파라미터를 통해 진행중, 완료, 최신순, 추천순을 조회한다.
      */
-    @GetMapping("/finished")
-    public ResponseEntity<List<PostSummaryDTO>> getFinishedContestPostList() {
-        return ResponseEntity.ok(service.getFinishedContestPostList());
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostSummaryDTO>> getContestPostList(@RequestParam("status") String contestStatus, @RequestParam(value = "sortBy", required = false, defaultValue = "latest") String sortBy) {
+
+        return ResponseEntity.ok(service.getContestPostList(contestStatus, sortBy));
     }
 }
