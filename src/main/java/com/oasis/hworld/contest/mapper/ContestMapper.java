@@ -1,6 +1,8 @@
 package com.oasis.hworld.contest.mapper;
 
 import com.oasis.hworld.contest.dto.PostSummaryDTO;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 /**
@@ -10,14 +12,13 @@ import java.util.List;
  * @version 1.0
  *
  * <pre>
- * 수정일        	수정자        수정내용
- * ----------  --------    ---------------------------
+ * 수정일        수정자        수정내용
+ * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
+ * 2024.09.01   정은찬        쿼리 파라미터를 통해 콘테스트 게시글 조회 통합
  * </pre>
  */
 public interface ContestMapper {
-    // 해당 날짜에 진행중인 콘테스트 게시글 목록 조회
-    public List<PostSummaryDTO> selectOngoingContestPostList(String date);
-    // 완료된 콘테스트 게시글 목록 조회
-    public List<PostSummaryDTO> selectFinishedContestPostList(String date);
+    // 콘테스트 게시글 목록 조회
+    public List<PostSummaryDTO> selectContestPostList(@Param("date") String date, @Param("sortBy") String sortBy, @Param("contestStatus") String contestStatus);
 }
