@@ -10,12 +10,13 @@
 *
 * <pre>
 * 수정일        	수정자        수정내용
-* ==========  =========    =========
+* ==========  =========    ======================================================
 * 2024.08.31  	정은찬        최초 생성
+* 2024.09.01  	정은찬        콘테스트 게시글 목록 최신순, 추천순 정렬 조회 추가
 * </pre>
 -->
 <mapper namespace="com.oasis.hworld.contest.mapper.ContestMapper">
-    <!-- 진행중인 콘테스트 게시글 목록 조회 -->
+    <!-- 진행중인 콘테스트 게시글 목록 조회 (최신순 정렬) -->
     <select id="selectOngoingContestPostListOrderByLatest">
         SELECT
             P.post_id,
@@ -50,7 +51,42 @@
             MAX(P.created_at) DESC
     </select>
 
-    <!-- 완료된 콘테스트 게시글 목록 조회 -->
+    <!-- 진행중인 콘테스트 게시글 목록 조회 (추천순 정렬) -->
+    <select id="selectOngoingContestPostListOrderByRecommend">
+        SELECT
+            P.post_id,
+            CO.image_url,
+            P.like_count,
+            COUNT(R.reply_id) AS reply_count
+        FROM
+            POST P
+                LEFT JOIN
+            CONTEST C
+            ON
+                P.contest_id = C.contest_id
+                LEFT JOIN
+            MEMBER M
+            ON
+                P.member_id = M.member_id
+                LEFT JOIN
+            COORDINATION CO
+            ON
+                P.coordination_id = CO.coordination_id
+                LEFT JOIN
+            REPLY R
+            ON
+                P.post_id = R.post_id
+        WHERE
+            TO_DATE(#{date}, 'YYYY-MM-DD') BETWEEN C.start_date AND C.end_date
+        GROUP BY
+            P.post_id,
+            CO.image_url,
+            P.like_count
+        ORDER BY
+            MAX(P.like_count) DESC
+    </select>
+
+    <!-- 완료된 콘테스트 게시글 목록 조회 (최신순 정렬) -->
     <select id="selectFinishedContestPostListOrderByLatest">
         SELECT
             P.post_id,
@@ -79,5 +115,36 @@
             P.like_count
         ORDER BY
             MAX(P.created_at) DESC
+    </select>
+
+    <!-- 완료된 콘테스트 게시글 목록 조회 (추천순 정렬) -->
+    <select id="selectFinishedContestPostListOrderByRecommend">
+        SELECT
+            P.post_id,
+            CO.image_url,
+            P.like_count,
+            COUNT(R.reply_id) AS reply_count
+        FROM
+            POST P
+                LEFT JOIN
+            CONTEST C
+            ON
+                P.contest_id = C.contest_id
+                LEFT JOIN
+            COORDINATION CO
+            ON
+                P.coordination_id = CO.coordination_id
+                LEFT JOIN
+            REPLY R
+            ON
+                P.post_id = R.post_id
+        WHERE
+            TO_DATE(#{date}, 'YYYY-MM-DD') > C.end_date
+        GROUP BY
+            P.post_id,
+            CO.image_url,
+            P.like_count
+        ORDER BY
+            MAX(P.like_count) DESC
     </select>
 </mapper>

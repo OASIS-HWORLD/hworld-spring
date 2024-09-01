@@ -17,9 +17,10 @@ import java.util.List;
  * @version 1.0
  *
  * <pre>
- * 수정일        	수정자        수정내용
- * ----------  --------    ---------------------------
+ * 수정일        수정자        수정내용
+ * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
+ * 2024.09.01   정은찬        콘테스트 게시글 목록 조회 최신순, 추천순 메소드 추가
  * </pre>
  */
 @Service
@@ -30,7 +31,7 @@ public class ContestServiceImpl implements ContestService {
     private final ContestMapper mapper;
 
     /**
-     * 진행중인 콘테스트 게시글 목록 조회
+     * 진행중인 콘테스트 게시글 목록 조회 (최신순 정렬)
      *
      * @author 정은찬
      */
@@ -46,7 +47,23 @@ public class ContestServiceImpl implements ContestService {
     }
 
     /**
-     * 완료된 콘테스트 게시글 목록 조회
+     * 진행중인 콘테스트 게시글 목록 조회 (추천순 정렬)
+     *
+     * @author 정은찬
+     */
+    public List<PostSummaryDTO> getOngoingContestPostListOrderByRecommend() {
+        Date currentDate = new Date();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormat.format(currentDate);
+
+        List<PostSummaryDTO> postSummaryDTOList = mapper.selectOngoingContestPostListOrderByRecommend(formattedDate);
+
+        return postSummaryDTOList;
+    }
+
+    /**
+     * 완료된 콘테스트 게시글 목록 조회 (최신순 정렬)
      *
      * @author 정은찬
      */
@@ -57,6 +74,22 @@ public class ContestServiceImpl implements ContestService {
         String formattedDate = dateFormat.format(currentDate);
 
         List<PostSummaryDTO> postSummaryDTOList = mapper.selectFinishedContestPostListOrderByLatest(formattedDate);
+
+        return postSummaryDTOList;
+    }
+
+    /**
+     * 완료된 콘테스트 게시글 목록 조회 (추천순 정렬)
+     *
+     * @author 정은찬
+     */
+    public List<PostSummaryDTO> getFinishedContestPostListOrderByRecommend() {
+        Date currentDate = new Date();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormat.format(currentDate);
+
+        List<PostSummaryDTO> postSummaryDTOList = mapper.selectFinishedContestPostListOrderByRecommend(formattedDate);
 
         return postSummaryDTOList;
     }

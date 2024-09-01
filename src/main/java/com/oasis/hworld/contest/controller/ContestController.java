@@ -19,9 +19,10 @@ import java.util.List;
  * @version 1.0
  *
  * <pre>
- * 수정일        	수정자        수정내용
- * ----------  --------    ---------------------------
+ * 수정일        수정자        수정내용
+ * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
+ * 2024.09.01   정은찬        콘테스트 게시글 목록 조회 최신순, 추천순 메소드 추가
  * </pre>
  */
 @RestController
@@ -32,10 +33,10 @@ public class ContestController {
     private final ContestService service;
 
     /**
-     * 진행중인 콘테스트 게시글 목록 조회 (최신순)
+     * 진행중인 콘테스트 게시글 목록 조회 (최신순 정렬)
      *
      * @author 정은찬
-     * @apiNote 진행중인 콘테스트 게시글 목록을 조회한다.
+     * @apiNote 진행중인 콘테스트 게시글 목록을 최신순으로 조회한다.
      */
     @GetMapping("/ongoing/latest")
     public ResponseEntity<List<PostSummaryDTO>> getOngoingContestPostListOrderByLatest() {
@@ -43,13 +44,35 @@ public class ContestController {
     }
 
     /**
-     * 완료된 콘테스트 게시글 목록 조회
+     * 진행중인 콘테스트 게시글 목록 조회 (추천순 정렬)
      *
      * @author 정은찬
-     * @apiNote 완료된 콘테스트 게시글 목록을 조회한다.
+     * @apiNote 진행중인 콘테스트 게시글 목록을 추천순으로 조회한다.
+     */
+    @GetMapping("/ongoing/recommend")
+    public ResponseEntity<List<PostSummaryDTO>> getOngoingContestPostListOrderByRecommend() {
+        return ResponseEntity.ok(service.getOngoingContestPostListOrderByRecommend());
+    }
+
+    /**
+     * 완료된 콘테스트 게시글 목록 조회 (최신순 정렬)
+     *
+     * @author 정은찬
+     * @apiNote 완료된 콘테스트 게시글 목록을 최신순으로 조회한다.
      */
     @GetMapping("/finished/latest")
     public ResponseEntity<List<PostSummaryDTO>> getFinishedContestPostListOrderByLatest() {
         return ResponseEntity.ok(service.getFinishedContestPostListOrderByLatest());
+    }
+
+    /**
+     * 완료된 콘테스트 게시글 목록 조회 (추천순 정렬)
+     *
+     * @author 정은찬
+     * @apiNote 완료된 콘테스트 게시글 목록을 추천순으로 조회한다.
+     */
+    @GetMapping("/finished/recommend")
+    public ResponseEntity<List<PostSummaryDTO>> getFinishedContestPostListOrderByRecommend() {
+        return ResponseEntity.ok(service.getFinishedContestPostListOrderByRecommend());
     }
 }
