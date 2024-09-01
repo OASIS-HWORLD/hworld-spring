@@ -34,7 +34,7 @@
         LEFT JOIN
             ITEM I
             ON
-                C.item_id = i.item_id
+                C.item_id = I.item_id
         LEFT JOIN
             SHOP S
             ON
