@@ -21,10 +21,16 @@ import java.util.List;
  */
 public interface ContestService {
     /**
-     * 진행중인 콘테스트 게시글 목록 조회
+     * 콘테스트 게시글 목록 조회
      *
      * @author 정은찬
      */
     List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy);
+
+    /**
+     * 게시글 ID를 통해 콘테스트 게시글 상세 조회
+     *
+     * @author 정은찬
+     */
     PostResponseDTO getPostDetail(int postId);
 }

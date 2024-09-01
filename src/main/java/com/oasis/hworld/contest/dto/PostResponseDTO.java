@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * 게시글 상세 Response DTO
- * @author 조영욱
+ * @author 정은찬
  * @since 2024.09.01
  * @version 1.0
  *
