@@ -25,7 +25,7 @@ public interface NoticeService {
      *
      * @author 조영욱
      */
-    List<NoticeSummaryDTO> getNoticeList(int page, int amount);
+    List<NoticeSummaryDTO> getNoticeList(int page, int amount, int category);
 
     /**
      * 공지사항 상세 조회

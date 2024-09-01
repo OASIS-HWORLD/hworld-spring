@@ -40,8 +40,9 @@ public class NoticeController {
     @GetMapping("")
     public ResponseEntity<List<NoticeSummaryDTO>> getNoticeList(
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "amount", defaultValue = "10") int amount) {
-        return ResponseEntity.ok(service.getNoticeList(page, amount));
+            @RequestParam(value = "amount", defaultValue = "10") int amount,
+            @RequestParam(value = "category", defaultValue = "0") int category) {
+        return ResponseEntity.ok(service.getNoticeList(page, amount, category));
     }
 
     /**

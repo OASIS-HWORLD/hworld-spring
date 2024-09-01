@@ -21,7 +21,7 @@ import java.util.List;
 public interface NoticeMapper {
 
     // 공지사항 목록 페이지네이션 조회
-    List<Notice> selectNoticeWithPage(@Param("page") int page, @Param("amount") int amount);
+    List<Notice> selectNoticeWithPage(@Param("page") int page, @Param("amount") int amount, @Param("category") int category);
     // 공지사항 하나 조회
     Notice selectNoticeByNoticeId(int noticeId);
 }

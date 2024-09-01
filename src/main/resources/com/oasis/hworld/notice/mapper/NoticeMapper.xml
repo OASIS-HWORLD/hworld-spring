@@ -25,6 +25,10 @@
             created_at
         FROM
             NOTICE
+        <if test="category != 0">
+            WHERE
+            category = #{category}
+        </if>
         ORDER BY
             created_at DESC
         OFFSET (#{page}-1) * #{amount} ROWS

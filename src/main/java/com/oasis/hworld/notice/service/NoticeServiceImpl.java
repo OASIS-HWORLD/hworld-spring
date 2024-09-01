@@ -37,8 +37,8 @@ public class NoticeServiceImpl implements NoticeService {
      *
      * @author 조영욱
      */
-    public List<NoticeSummaryDTO> getNoticeList(int page, int amount) {
-        List<Notice> noticeList = mapper.selectNoticeWithPage(page, amount);
+    public List<NoticeSummaryDTO> getNoticeList(int page, int amount, int category) {
+        List<Notice> noticeList = mapper.selectNoticeWithPage(page, amount, category);
 
         return NoticeSummaryDTO.from(noticeList);
     }
