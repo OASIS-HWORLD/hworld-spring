@@ -41,7 +41,7 @@ public class CartServiceImpl implements CartService {
         List<CartDetailDTO> CartDetailDTOList = mapper.selectCartByMemberId(memberId);
 
         CartDetailDTOList.forEach(cart -> {
-            int subTotalPrice = cart.getItemPrice()*cart.getItemCount();
+            int subTotalPrice = cart.getItemPrice() * cart.getItemCount();
             cart.setSubtotalPrice(subTotalPrice);
         });
 
