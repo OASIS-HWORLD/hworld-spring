@@ -35,7 +35,7 @@ public class CartController {
      * 회원 장바구니 조회
      *
      * @author 조영욱
-     * @apiNote 로그인 한 회원의 장바구니를 조회한다.
+     * @apiNote 로그인한 회원의 장바구니를 조회한다.
      */
     @GetMapping("")
     public ResponseEntity<CartListResponseDTO> getCartList() {

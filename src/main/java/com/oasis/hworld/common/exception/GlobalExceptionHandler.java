@@ -15,6 +15,7 @@ public class GlobalExceptionHandler {
                 .status(ex.getErrorCode().getStatus())
                 .errorCode(ex.getErrorCode().name())
                 .message(ex.getErrorCode().getMessage())
+                .success(false)
                 .build();
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.valueOf(ex.getErrorCode().getStatus()));
     }
@@ -27,6 +28,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .errorCode("INTERNAL_SERVER_ERROR")
                 .message(ex.getMessage())
+                .success(false)
                 .build();
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
