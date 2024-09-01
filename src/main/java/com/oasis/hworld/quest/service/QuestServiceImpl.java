@@ -1,6 +1,9 @@
 package com.oasis.hworld.quest.service;
 
+import com.oasis.hworld.common.exception.CustomException;
+import com.oasis.hworld.common.exception.ErrorCode;
 import com.oasis.hworld.quest.domain.MemberQuest;
+import com.oasis.hworld.quest.domain.Quest;
 import com.oasis.hworld.quest.dto.QuestDetailDTO;
 import com.oasis.hworld.quest.mapper.QuestMapper;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +11,8 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.oasis.hworld.common.exception.ErrorCode.QUEST_NOT_EXIST;
 
 /**
  * 퀘스트 서비스 구현체
@@ -57,7 +62,9 @@ public class QuestServiceImpl implements QuestService {
      */
     @Override
     public boolean startQuest(int questId, int memberId) {
-        // 퀘스트가 진행 중이거나 완료 시
+        validateQuestExist(questId);
+
+        // 퀘스트가 진행 중이거나 완료 시 false
         if (mapper.selectMemberQuestByQuestIdAndMemberId(questId, memberId) != null) {
             return false;
         }
@@ -72,14 +79,27 @@ public class QuestServiceImpl implements QuestService {
      */
     @Override
     public boolean finishQuest(int questId, int memberId) {
+        validateQuestExist(questId);
+
         MemberQuest memberQuest = mapper.selectMemberQuestByQuestIdAndMemberId(questId, memberId);
 
-        // 퀘스트를 시작하지 않았거나, 이미 끝난 퀘스트
+        // 퀘스트를 시작하지 않았거나, 이미 완료된 퀘스트일 시 false
         if (memberQuest == null || memberQuest.getFinishedAt() != null) {
             return false;
         }
 
         // todo: 포인트 지급 PL/SQL 추가
         return mapper.updateFinishedAt(questId, memberId) == 1;
+    }
+
+    /**
+     * 퀘스트 존재 유효성 검증
+     *
+     * @author 조영욱
+     */
+    private void validateQuestExist(int questId) {
+        if (mapper.selectQuestByQuestId(questId) == null) {
+            throw new CustomException(QUEST_NOT_EXIST);
+        }
     }
 }

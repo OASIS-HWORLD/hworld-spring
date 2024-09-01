@@ -36,6 +36,16 @@
                 MQ.member_id = #{memberId}
     </select>
 
+    <!-- 퀘스트 ID로 퀘스트 조회 -->
+    <select id="selectQuestByQuestId">
+        SELECT
+            quest_id
+        FROM
+            QUEST
+        WHERE
+            quest_id = #{questId}
+    </select>
+
     <select id="selectMemberQuestByQuestIdAndMemberId">
         SELECT
             member_id,

@@ -7,7 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
     DUPLICATE_KEY(409, "중복되는 아이디나 닉네임이 존재합니다."),
-    PASSWORD_NOT_MATCHED(400, "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+    PASSWORD_NOT_MATCHED(400, "비밀번호와 비밀번호 확인이 일치하지 않습니다."),
+    QUEST_NOT_EXIST(400, "존재하지 않는 퀘스트입니다.");
 
     private final int status;
     private final String message;
