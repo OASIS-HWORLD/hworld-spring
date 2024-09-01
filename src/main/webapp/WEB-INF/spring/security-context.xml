@@ -7,17 +7,41 @@
            http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <security:http>
-        <security:csrf disabled="true"/>
-<!--        <security:intercept-url pattern="/members/**" access="permitAll()" />-->
-        <security:form-login/>
-    </security:http>
-    <security:authentication-manager>
+    <!-- JWT Token Provider -->
+    <bean id="jwtTokenProvider" class="com.oasis.hworld.security.jwt.JwtTokenProvider">
+        <property name="tokenSecretKey" value="${TOKEN_SECRET_KEY}" />
+    </bean>
 
-    </security:authentication-manager>
+    <!-- JWT Authentication Filter -->
+    <bean id="jwtAuthenticationFilter"
+          class="com.oasis.hworld.security.jwt.JwtAuthenticationFilter">
+        <constructor-arg ref="jwtTokenProvider" />
+    </bean>
 
     <!-- BCrypt Password Encoder -->
-    <bean id="passwordEncoder"
-          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
+    <!-- CustomUserDetailsService -->
+    <bean id="customUserDetailsService" class="com.oasis.hworld.security.service.CustomUserDetailsService" />
+
+    <security:http>
+        <security:csrf disabled="true"/>
+
+        <!-- JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 이전에 등록 -->
+        <security:custom-filter ref="jwtAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
+
+        <security:intercept-url pattern="/members/login"
+                                access="permitAll" />
+
+        <security:intercept-url pattern="/members/sign-up"
+                                access="permitAll" />
+
+        <security:form-login/>
+    </security:http>
+
+    <security:authentication-manager id="authenticationManager">
+        <security:authentication-provider user-service-ref="customUserDetailsService">
+            <security:password-encoder ref="passwordEncoder" />
+        </security:authentication-provider>
+    </security:authentication-manager>
 </beans>

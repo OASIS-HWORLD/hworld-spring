@@ -1,5 +1,7 @@
 package com.oasis.hworld.member.service;
 
+import com.oasis.hworld.member.dto.LoginRequestDTO;
+import com.oasis.hworld.member.dto.LoginResponseDTO;
 import com.oasis.hworld.member.dto.SignUpRequestDTO;
 
 /**
@@ -22,6 +24,8 @@ public interface AuthService {
      * @author 김지현
      */
     int signUp(SignUpRequestDTO signUpRequestDTO);
+
+    LoginResponseDTO login(LoginRequestDTO loginRequestDTO);
 
     /**
      * 로그인 ID 중복 조회

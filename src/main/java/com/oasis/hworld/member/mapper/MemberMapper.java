@@ -1,5 +1,6 @@
 package com.oasis.hworld.member.mapper;
 
+import com.oasis.hworld.member.domain.Member;
 import com.oasis.hworld.member.dto.SignUpRequestDTO;
 
 /**
@@ -20,8 +21,10 @@ public interface MemberMapper {
     int insertMember(SignUpRequestDTO dto);
 
     // 로그인 ID로 회원 수 조회
-    int selectMemberByLoginId(String loginId);
+    int selectMemberCountByLoginId(String loginId);
 
     // 닉네임으로 회원 수 조회
-    int selectMemberByNickname(String nickname);
+    int selectMemberCountByNickname(String nickname);
+
+    Member selectMemberByLoginId(String loginId);
 }

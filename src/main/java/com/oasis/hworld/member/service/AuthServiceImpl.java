@@ -1,16 +1,23 @@
 package com.oasis.hworld.member.service;
 
 import com.oasis.hworld.common.exception.CustomException;
+import com.oasis.hworld.member.domain.Member;
+import com.oasis.hworld.member.dto.LoginRequestDTO;
+import com.oasis.hworld.member.dto.LoginResponseDTO;
 import com.oasis.hworld.member.dto.SignUpRequestDTO;
 import com.oasis.hworld.member.mapper.MemberMapper;
+import com.oasis.hworld.security.dto.JwtTokenDTO;
+import com.oasis.hworld.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.oasis.hworld.common.exception.ErrorCode.DUPLICATE_KEY;
-import static com.oasis.hworld.common.exception.ErrorCode.PASSWORD_NOT_MATCHED;
+import static com.oasis.hworld.common.exception.ErrorCode.*;
 
 /**
  * 인증/인가 서비스 구현체
@@ -33,6 +40,8 @@ public class AuthServiceImpl implements AuthService{
     private final MemberMapper memberMapper;
 
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final AuthenticationManager authenticationManager;
 
     /**
      * 회원 추가
@@ -49,8 +58,8 @@ public class AuthServiceImpl implements AuthService{
             throw new CustomException(PASSWORD_NOT_MATCHED);
 
         // 로그인 ID, 닉네임 중복 검증
-        if (memberMapper.selectMemberByLoginId(signUpRequestDTO.getLoginId()) != 0
-            || memberMapper.selectMemberByNickname(signUpRequestDTO.getNickname()) != 0)
+        if (memberMapper.selectMemberCountByLoginId(signUpRequestDTO.getLoginId()) != 0
+            || memberMapper.selectMemberCountByNickname(signUpRequestDTO.getNickname()) != 0)
             throw new CustomException(DUPLICATE_KEY);
 
         // 비밀번호 암호화
@@ -58,6 +67,30 @@ public class AuthServiceImpl implements AuthService{
         signUpRequestDTO.setPassword(encodedPassword);
 
         return memberMapper.insertMember(signUpRequestDTO);
+    }
+
+    @Transactional
+    @Override
+    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
+        log.info("로그인 -> " + loginRequestDTO.toString());
+
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginRequestDTO.getLoginId(), loginRequestDTO.getPassword());
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+        Member member = memberMapper.selectMemberByLoginId(loginRequestDTO.getLoginId());
+        if (member == null || !passwordEncoder.matches(loginRequestDTO.getPassword(), member.getPassword())) {
+            throw new CustomException(NOT_VALID_USER_INFORMATION);
+        }
+
+        JwtTokenDTO token = jwtTokenProvider.generateToken(authentication);
+        log.info("토큰 생성 -> " + token.toString());
+
+        return LoginResponseDTO.builder()
+                .memberId(member.getMemberId())
+                .accessToken(token.getAccessToken())
+                .refreshToken(token.getRefreshToken())
+                .build();
     }
 
     /**
@@ -69,7 +102,7 @@ public class AuthServiceImpl implements AuthService{
     public boolean checkIdAvailability(String loginId) {
         log.info("아이디 중복 확인 -> " + loginId);
 
-        return memberMapper.selectMemberByLoginId(loginId) == 0;
+        return memberMapper.selectMemberCountByLoginId(loginId) == 0;
     }
 
     /**
@@ -81,6 +114,6 @@ public class AuthServiceImpl implements AuthService{
     public boolean checkNicknameAvailability(String nickname) {
         log.info("닉네임 중복 확인 -> " + nickname);
 
-        return memberMapper.selectMemberByNickname(nickname) == 0;
+        return memberMapper.selectMemberCountByNickname(nickname) == 0;
     }
 }
