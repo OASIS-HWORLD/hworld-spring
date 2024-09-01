@@ -46,6 +46,7 @@
             quest_id = #{questId}
     </select>
 
+    <!-- 퀘스트 ID와 회원 ID로 회원 퀘스트 조회 -->
     <select id="selectMemberQuestByQuestIdAndMemberId">
         SELECT
             member_id,

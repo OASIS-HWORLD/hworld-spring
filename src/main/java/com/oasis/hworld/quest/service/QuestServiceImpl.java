@@ -2,6 +2,7 @@ package com.oasis.hworld.quest.service;
 
 import com.oasis.hworld.common.exception.CustomException;
 import com.oasis.hworld.quest.domain.MemberQuest;
+import com.oasis.hworld.quest.domain.QuestProgress;
 import com.oasis.hworld.quest.dto.QuestDetailDTO;
 import com.oasis.hworld.quest.mapper.QuestMapper;
 import lombok.RequiredArgsConstructor;
@@ -42,11 +43,11 @@ public class QuestServiceImpl implements QuestService {
 
         questDetailDTOList.forEach(quest -> {
             if (quest.getStatus() == 0) {
-                quest.setProgress("시작가능");
+                quest.setProgress(QuestProgress.START_AVAILABLE.getProgress());
             } else if (quest.getFinishedAt() == null) {
-                quest.setProgress("진행중");
+                quest.setProgress(QuestProgress.IN_PROGRESS.getProgress());
             } else {
-                quest.setProgress("완료");
+                quest.setProgress(QuestProgress.FINISHED.getProgress());
             }
         });
 

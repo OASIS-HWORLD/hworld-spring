@@ -11,7 +11,8 @@ public enum ErrorCode {
     QUEST_NOT_EXIST(400, "존재하지 않는 퀘스트입니다."),
     ITEM_COUNT_OUT_OF_RANGE(400, "1부터 99까지 수량으로만 변경 가능합니다."),
     CART_NOT_EXIST(400, "존재하지 않는 장바구니입니다."),
-    POST_NOT_EXIST(400, "존재하지 않는 게시글입니다.");
+    POST_NOT_EXIST(400, "존재하지 않는 게시글입니다."),
+    NOTICE_NOT_EXIST(400, "존재하지 않는 공지사항입니다.");
 
     private final int status;
     private final String message;
