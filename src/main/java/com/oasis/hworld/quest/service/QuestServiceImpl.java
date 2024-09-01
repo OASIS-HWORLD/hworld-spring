@@ -1,9 +1,7 @@
 package com.oasis.hworld.quest.service;
 
 import com.oasis.hworld.common.exception.CustomException;
-import com.oasis.hworld.common.exception.ErrorCode;
 import com.oasis.hworld.quest.domain.MemberQuest;
-import com.oasis.hworld.quest.domain.Quest;
 import com.oasis.hworld.quest.dto.QuestDetailDTO;
 import com.oasis.hworld.quest.mapper.QuestMapper;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.oasis.hworld.common.exception.ErrorCode.QUEST_NOT_EXIST;
+import static com.oasis.hworld.common.exception.ErrorCode.*;
 
 /**
  * 퀘스트 서비스 구현체
