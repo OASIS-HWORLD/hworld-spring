@@ -16,14 +16,24 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * JWT 토큰 생성 및 검증
+ * @author 김지현
+ * @since 2024.09.01
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        	수정자        수정내용
+ * ----------  --------    ---------------------------
+ * 2024.09.01   김지현        최초 생성
+ * </pre>
+ */
 @RequiredArgsConstructor
 @Component
 @Slf4j
@@ -37,12 +47,22 @@ public class JwtTokenProvider{
 
     private Key key;
 
+    /**
+     * 비밀키 초기화
+     *
+     * @author 김지현
+     */
     @PostConstruct
     public void init() {
         byte[] encodedKey = Base64.getEncoder().encode(tokenSecretKey.getBytes());
         this.key = Keys.hmacShaKeyFor(encodedKey);
     }
 
+    /**
+     * AccessToken과 RefreshToken 생성
+     *
+     * @author 김지현
+     */
     public JwtTokenDTO generateToken(Authentication authentication) {
         String nickname = authentication.getName();
 
@@ -68,6 +88,11 @@ public class JwtTokenProvider{
         return new JwtTokenDTO(accessToken, refreshToken);
     }
 
+    /**
+     * Authentication 객체 생성
+     *
+     * @author 김지현
+     */
     public Authentication getAuthentication(String accessToken) {
         Claims claims = parseClaims(accessToken);
 
@@ -84,6 +109,11 @@ public class JwtTokenProvider{
         return new UsernamePasswordAuthenticationToken(principal, "", authorities);
     }
 
+    /**
+     * AccessToken을 파싱하여 claim 추출
+     *
+     * @author 김지현
+     */
     public Claims parseClaims(String accessToken) {
         try {
             return Jwts.parserBuilder()
@@ -96,6 +126,11 @@ public class JwtTokenProvider{
         }
     }
 
+    /**
+     * HTTP 요청의 Authorization 헤더에서 JWT 토큰 추출
+     *
+     * @author 김지현
+     */
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
@@ -104,6 +139,11 @@ public class JwtTokenProvider{
         return null;
     }
 
+    /**
+     * JWT 토큰의 유효성 검사
+     *
+     * @author 김지현
+     */
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()

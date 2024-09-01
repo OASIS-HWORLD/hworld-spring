@@ -14,6 +14,7 @@ import com.oasis.hworld.member.dto.SignUpRequestDTO;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.08.31  	김지현        최초 생성
+ * 2024.09.01   김지현        로그인 메서드 추가
  * </pre>
  */
 public interface AuthService {
@@ -25,6 +26,11 @@ public interface AuthService {
      */
     int signUp(SignUpRequestDTO signUpRequestDTO);
 
+    /**
+     * 로그인
+     *
+     * @author 김지현
+     */
     LoginResponseDTO login(LoginRequestDTO loginRequestDTO);
 
     /**

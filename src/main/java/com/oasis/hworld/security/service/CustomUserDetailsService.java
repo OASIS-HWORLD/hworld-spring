@@ -12,6 +12,18 @@ import org.springframework.stereotype.Service;
 
 import static com.oasis.hworld.common.exception.ErrorCode.NOT_VALID_USER_INFORMATION;
 
+/**
+ * Spring Security의 UserDetailsService 인터페이스 구현체
+ * @author 김지현
+ * @since 2024.09.01
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        	수정자        수정내용
+ * ----------  --------    ---------------------------
+ * 2024.09.01   김지현        최초 생성
+ * </pre>
+ */
 @Service
 @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {

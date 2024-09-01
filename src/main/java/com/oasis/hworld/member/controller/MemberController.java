@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.08.31  	김지현        최초 생성
+ * 2024.09.01   김지현        로그인 기능 구현
  * </pre>
  */
 @RestController
@@ -46,6 +47,11 @@ public class MemberController {
         return ResponseEntity.ok(authService.signUp(signUpRequestDTO));
     }
 
+    /**
+     * 로그인
+     *
+     * @author 김지현
+     */
     @PostMapping("/login")
     public ResponseEntity<CommonResponseDTO> login(HttpServletResponse response, @RequestBody LoginRequestDTO loginRequestDTO) {
         LoginResponseDTO loginResponseDTO = authService.login(loginRequestDTO);

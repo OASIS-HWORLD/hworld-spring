@@ -9,6 +9,18 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Spring Security의 UserDetails 인터페이스 구현체
+ * @author 김지현
+ * @since 2024.09.01
+ * @version 1.0
+ *
+ * <pre>
+ * 수정일        	수정자        수정내용
+ * ----------  --------    ---------------------------
+ * 2024.09.01   김지현        최초 생성
+ * </pre>
+ */
 public class CustomUserDetails implements UserDetails {
 
     private final Member member;

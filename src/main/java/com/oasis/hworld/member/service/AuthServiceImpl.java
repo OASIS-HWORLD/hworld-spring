@@ -29,6 +29,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.08.31  	김지현        최초 생성
+ * 2024.09.01   김지현        로그인 메서드 추가
  * </pre>
  */
 @Service
@@ -69,20 +70,28 @@ public class AuthServiceImpl implements AuthService{
         return memberMapper.insertMember(signUpRequestDTO);
     }
 
+    /**
+     * 로그인
+     *
+     * @author 김지현
+     */
     @Transactional
     @Override
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
         log.info("로그인 -> " + loginRequestDTO.toString());
 
+        // 로그인 ID, PW 검증
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getLoginId(), loginRequestDTO.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
 
+        // 로그인 ID를 사용한 회원 조회
         Member member = memberMapper.selectMemberByLoginId(loginRequestDTO.getLoginId());
         if (member == null || !passwordEncoder.matches(loginRequestDTO.getPassword(), member.getPassword())) {
             throw new CustomException(NOT_VALID_USER_INFORMATION);
         }
 
+        // 토큰 생성
         JwtTokenDTO token = jwtTokenProvider.generateToken(authentication);
         log.info("토큰 생성 -> " + token.toString());
 
