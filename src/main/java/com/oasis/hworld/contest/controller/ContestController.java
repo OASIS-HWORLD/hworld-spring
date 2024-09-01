@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.List;
  * 수정일        수정자        수정내용
  * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
- * 2024.09.01   정은찬        콘테스트 게시글 목록 조회 최신순, 추천순 메소드 추가
+ * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 통합
  * </pre>
  */
 @RestController
@@ -33,46 +34,16 @@ public class ContestController {
     private final ContestService service;
 
     /**
-     * 진행중인 콘테스트 게시글 목록 조회 (최신순 정렬)
+     * 콘테스트 게시글 목록 조회
      *
      * @author 정은찬
-     * @apiNote 진행중인 콘테스트 게시글 목록을 최신순으로 조회한다.
+     * @apiNote 콘테스트 게시글 목록을 파라미터를 통해 진행중, 완료, 최신순, 추천순을 조회한다.
      */
-    @GetMapping("/ongoing/latest")
-    public ResponseEntity<List<PostSummaryDTO>> getOngoingContestPostListOrderByLatest() {
-        return ResponseEntity.ok(service.getOngoingContestPostListOrderByLatest());
-    }
+    @GetMapping("/posts")
+    public ResponseEntity<List<PostSummaryDTO>> getContestPostList(
+            @RequestParam("status") String contestStatus,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "latest") String sortBy) {
 
-    /**
-     * 진행중인 콘테스트 게시글 목록 조회 (추천순 정렬)
-     *
-     * @author 정은찬
-     * @apiNote 진행중인 콘테스트 게시글 목록을 추천순으로 조회한다.
-     */
-    @GetMapping("/ongoing/recommend")
-    public ResponseEntity<List<PostSummaryDTO>> getOngoingContestPostListOrderByRecommend() {
-        return ResponseEntity.ok(service.getOngoingContestPostListOrderByRecommend());
-    }
-
-    /**
-     * 완료된 콘테스트 게시글 목록 조회 (최신순 정렬)
-     *
-     * @author 정은찬
-     * @apiNote 완료된 콘테스트 게시글 목록을 최신순으로 조회한다.
-     */
-    @GetMapping("/finished/latest")
-    public ResponseEntity<List<PostSummaryDTO>> getFinishedContestPostListOrderByLatest() {
-        return ResponseEntity.ok(service.getFinishedContestPostListOrderByLatest());
-    }
-
-    /**
-     * 완료된 콘테스트 게시글 목록 조회 (추천순 정렬)
-     *
-     * @author 정은찬
-     * @apiNote 완료된 콘테스트 게시글 목록을 추천순으로 조회한다.
-     */
-    @GetMapping("/finished/recommend")
-    public ResponseEntity<List<PostSummaryDTO>> getFinishedContestPostListOrderByRecommend() {
-        return ResponseEntity.ok(service.getFinishedContestPostListOrderByRecommend());
+        return ResponseEntity.ok(service.getContestPostList(contestStatus, sortBy));
     }
 }
