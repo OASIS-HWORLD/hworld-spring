@@ -1,9 +1,6 @@
 package com.oasis.hworld.contest.mapper;
 
-import com.oasis.hworld.contest.dto.ItemsDTO;
-import com.oasis.hworld.contest.dto.PostDetailDTO;
-import com.oasis.hworld.contest.dto.PostSummaryDTO;
-import com.oasis.hworld.contest.dto.ReplyDTO;
+import com.oasis.hworld.contest.dto.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -26,6 +23,6 @@ public interface ContestMapper {
     List<PostSummaryDTO> selectContestPostList(@Param("date") String date, @Param("sortBy") String sortBy, @Param("contestStatus") String contestStatus);
     // 게시글 ID를 통해 게시글 상세 조회
     PostDetailDTO selectContestPostDetailByPostId(@Param("postId") int postId);
-    // 게시글 ID를 통해 코디 아이템 조회
-    ItemsDTO selectItemsByPostId(@Param("postId") int postId);
+    // 게시글 ID를 통해 코디 착용 아이템 조회
+    List<ItemDTO> selectItemsByPostId(@Param("postId") int postId);
 }

@@ -57,8 +57,8 @@ public class ContestServiceImpl implements ContestService {
         if (postDetail == null) {
             throw new CustomException(POST_NOT_EXIST);
         }
-        ItemsDTO itemsDTO = mapper.selectItemsByPostId(postId);
+        List<ItemDTO> itemList = mapper.selectItemsByPostId(postId);
 
-        return PostResponseDTO.from(postDetail, itemsDTO);
+        return PostResponseDTO.from(postDetail, itemList);
     }
 }
