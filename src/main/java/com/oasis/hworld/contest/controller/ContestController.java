@@ -32,14 +32,14 @@ public class ContestController {
     private final ContestService service;
 
     /**
-     * 진행중인 콘테스트 게시글 목록 조회
+     * 진행중인 콘테스트 게시글 목록 조회 (최신순)
      *
      * @author 정은찬
      * @apiNote 진행중인 콘테스트 게시글 목록을 조회한다.
      */
-    @GetMapping("/ongoing")
-    public ResponseEntity<List<PostSummaryDTO>> getOngoingContestPostList() {
-        return ResponseEntity.ok(service.getOngoingContestPostList());
+    @GetMapping("/ongoing/latest")
+    public ResponseEntity<List<PostSummaryDTO>> getOngoingContestPostListOrderByLatest() {
+        return ResponseEntity.ok(service.getOngoingContestPostListOrderByLatest());
     }
 
     /**
@@ -48,8 +48,8 @@ public class ContestController {
      * @author 정은찬
      * @apiNote 완료된 콘테스트 게시글 목록을 조회한다.
      */
-    @GetMapping("/finished")
-    public ResponseEntity<List<PostSummaryDTO>> getFinishedContestPostList() {
-        return ResponseEntity.ok(service.getFinishedContestPostList());
+    @GetMapping("/finished/latest")
+    public ResponseEntity<List<PostSummaryDTO>> getFinishedContestPostListOrderByLatest() {
+        return ResponseEntity.ok(service.getFinishedContestPostListOrderByLatest());
     }
 }

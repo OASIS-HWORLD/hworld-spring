@@ -16,8 +16,8 @@ import java.util.List;
  * </pre>
  */
 public interface ContestMapper {
-    // 해당 날짜에 진행중인 콘테스트 게시글 목록 조회
-    public List<PostSummaryDTO> selectOngoingContestPostList(String date);
-    // 완료된 콘테스트 게시글 목록 조회
-    public List<PostSummaryDTO> selectFinishedContestPostList(String date);
+    // 해당 날짜에 진행중인 콘테스트 게시글 목록 조회 (최신순)
+    public List<PostSummaryDTO> selectOngoingContestPostListOrderByLatest(String date);
+    // 완료된 콘테스트 게시글 목록 조회 (최신순)
+    public List<PostSummaryDTO> selectFinishedContestPostListOrderByLatest(String date);
 }

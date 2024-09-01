@@ -34,13 +34,13 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public List<PostSummaryDTO> getOngoingContestPostList() {
+    public List<PostSummaryDTO> getOngoingContestPostListOrderByLatest() {
         Date currentDate = new Date();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(currentDate);
 
-        List<PostSummaryDTO> postSummaryDTOList = mapper.selectOngoingContestPostList(formattedDate);
+        List<PostSummaryDTO> postSummaryDTOList = mapper.selectOngoingContestPostListOrderByLatest(formattedDate);
 
         return postSummaryDTOList;
     }
@@ -50,13 +50,13 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public List<PostSummaryDTO> getFinishedContestPostList() {
+    public List<PostSummaryDTO> getFinishedContestPostListOrderByLatest() {
         Date currentDate = new Date();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(currentDate);
 
-        List<PostSummaryDTO> postSummaryDTOList = mapper.selectFinishedContestPostList(formattedDate);
+        List<PostSummaryDTO> postSummaryDTOList = mapper.selectFinishedContestPostListOrderByLatest(formattedDate);
 
         return postSummaryDTOList;
     }
