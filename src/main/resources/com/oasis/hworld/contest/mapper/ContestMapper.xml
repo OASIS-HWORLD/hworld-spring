@@ -12,12 +12,12 @@
 * 수정일        	수정자        수정내용
 * ==========  =========    ======================================================
 * 2024.08.31  	정은찬        최초 생성
-* 2024.09.01  	정은찬        콘테스트 게시글 목록 조회 query parameter 적용
+* 2024.09.01  	정은찬        콘테스트 게시글 목록 조회 query parameter 적용, 게시글 상세 조회 추가
 * </pre>
 -->
 
-<!-- 콘테스트 게시글 목록 조회 -->
 <mapper namespace="com.oasis.hworld.contest.mapper.ContestMapper">
+    <!-- 콘테스트 게시글 목록 조회 -->
     <select id="selectContestPostList">
         SELECT
             P.post_id,
@@ -61,5 +61,43 @@
                 ORDER BY P.like_count DESC
             </when>
         </choose>
+    </select>
+
+    <!-- 게시글 ID를 통해 게시글 상세 조회 -->
+    <select id="selectContestPostDetailByPostId">
+        SELECT
+            P.post_id,
+            P.title,
+            TO_CHAR(P.created_at, 'YYYY-MM-DD') AS created_at,
+            CO.image_url,
+            M.nickname,
+            P.like_count
+        FROM
+            POST P
+        LEFT JOIN
+            MEMBER M
+            ON
+                P.member_id = M.member_id
+        LEFT JOIN
+            COORDINATION CO
+            ON
+                P.coordination_id = CO.coordination_id
+        WHERE
+            P.post_id = #{postId}
+    </select>
+
+    <!-- 게시글 ID를 통해 댓글 조회 -->
+    <select id="selectReplyListByPostId">
+        SELECT M.nickname, R.content, TO_CHAR(R.created_at, 'YYYY-MM-DD') AS created_at
+        FROM
+            REPLY R
+        LEFT JOIN
+            MEMBER M
+            ON
+                R.member_id = M.member_id
+        WHERE
+            R.post_id = #{postId}
+        ORDER BY
+            R.created_at DESC
     </select>
 </mapper>
