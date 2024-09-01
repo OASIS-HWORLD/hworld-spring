@@ -36,10 +36,12 @@ public class PostResponseDTO {
     private String nickname;
     // 추천수
     private int likeCount;
+    // 코디 착용 아이템
+    private ItemsDTO items;
     // 댓글 리스트
     private List<ReplyDTO> replyList;
 
-    public static PostResponseDTO from(PostDetailDTO postDetailDTO, List<ReplyDTO> replyList) {
+    public static PostResponseDTO from(PostDetailDTO postDetailDTO, ItemsDTO itemsDTO, List<ReplyDTO> replyDTOList) {
         return PostResponseDTO.builder()
                 .postId(postDetailDTO.getPostId())
                 .title(postDetailDTO.getTitle())
@@ -47,7 +49,8 @@ public class PostResponseDTO {
                 .imageUrl(postDetailDTO.getImageUrl())
                 .nickname(postDetailDTO.getNickname())
                 .likeCount(postDetailDTO.getLikeCount())
-                .replyList(replyList)
+                .items(itemsDTO)
+                .replyList(replyDTOList)
                 .build();
     }
 }

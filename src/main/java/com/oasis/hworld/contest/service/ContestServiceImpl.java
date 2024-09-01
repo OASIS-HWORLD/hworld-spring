@@ -1,10 +1,7 @@
 package com.oasis.hworld.contest.service;
 
 import com.oasis.hworld.common.exception.CustomException;
-import com.oasis.hworld.contest.dto.PostDetailDTO;
-import com.oasis.hworld.contest.dto.PostResponseDTO;
-import com.oasis.hworld.contest.dto.PostSummaryDTO;
-import com.oasis.hworld.contest.dto.ReplyDTO;
+import com.oasis.hworld.contest.dto.*;
 import com.oasis.hworld.contest.mapper.ContestMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -61,8 +58,12 @@ public class ContestServiceImpl implements ContestService {
             throw new CustomException(POST_NOT_EXIST);
         }
 
-        List<ReplyDTO> replyList = mapper.selectReplyListByPostId(postId);
+        ItemsDTO itemsDTO = mapper.selectItemsByPostId(postId);
 
-        return PostResponseDTO.from(postDetail, replyList);
+        List<ReplyDTO> replyDTOList = mapper.selectReplyListByPostId(postId);
+
+        return PostResponseDTO.from(postDetail, itemsDTO, replyDTOList);
     }
+
+
 }

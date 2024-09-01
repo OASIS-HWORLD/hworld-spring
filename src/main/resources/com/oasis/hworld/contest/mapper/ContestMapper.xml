@@ -12,7 +12,7 @@
 * 수정일        	수정자        수정내용
 * ==========  =========    ======================================================
 * 2024.08.31  	정은찬        최초 생성
-* 2024.09.01  	정은찬        콘테스트 게시글 목록 조회 query parameter 적용, 게시글 상세 조회 추가
+* 2024.09.01  	정은찬        콘테스트 게시글 목록 조회 query parameter 적용, 게시글 상세 조회, 게시글 아이템 조회 추가
 * </pre>
 -->
 
@@ -99,5 +99,66 @@
             R.post_id = #{postId}
         ORDER BY
             R.created_at DESC
+    </select>
+
+    <!-- 게시글 ID를 통해 아이템 조회 -->
+    <select id="selectItemsByPostId">
+        SELECT
+            CO.glasses_id,
+            G.name AS glasses_name,
+            GS.name AS glasses_shop_name,
+            G.image_url AS glasses_image_url,
+            CO.cap_id,
+            CAP.name AS cap_name,
+            CS.name AS cap_name,
+            CAP.image_url AS cap_image_url,
+            CO.bag_id,
+            B.name AS bag_name,
+            BS.name AS bag_shop_name,
+            B.image_url AS bag_image_url,
+            CO.necklace_id,
+            N.name AS necklace_name,
+            NS.name AS necklace_shop_name,
+            N.image_url AS necklace_image_url
+        FROM
+            POST P
+        LEFT JOIN
+            COORDINATION CO
+            ON
+                P.coordination_id = CO.coordination_id
+        LEFT JOIN
+            ITEM G
+            ON
+                CO.glasses_id = G.item_id
+        LEFT JOIN
+            SHOP GS
+            ON
+                G.shop_id = GS.shop_id
+        LEFT JOIN
+            ITEM CAP
+            ON
+                CO.cap_id = CAP.item_id
+        LEFT JOIN
+            SHOP CS
+            ON
+                CAP.shop_id = CS.shop_id
+        LEFT JOIN
+            ITEM B
+            ON
+                CO.bag_id = B.item_id
+        LEFT JOIN
+            SHOP BS
+            ON
+                B.shop_id = BS.shop_id
+        LEFT JOIN
+            ITEM N
+            ON
+                CO.necklace_id = N.item_id
+        LEFT JOIN
+            SHOP NS
+            ON
+                N.shop_id = NS.shop_id
+        WHERE
+            P.post_id = #{postId}
     </select>
 </mapper>
