@@ -6,11 +6,14 @@ import com.oasis.hworld.cart.dto.CartItemRequestDTO;
 import com.oasis.hworld.cart.dto.CartListResponseDTO;
 import com.oasis.hworld.cart.dto.ModifyCartItemCountRequestDTO;
 import com.oasis.hworld.cart.mapper.CartMapper;
+import com.oasis.hworld.common.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static com.oasis.hworld.common.exception.ErrorCode.*;
 
 /**
  * 장바구니 서비스 구현체
@@ -56,6 +59,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public boolean addCart(CartItemRequestDTO dto, int memberId) {
         int itemId = dto.getItemId();
+        // todo: 아이템 존재 검증
+
         // 장바구니에 이미 존재
         if (mapper.selectCartByMemberIdAndItemId(memberId, itemId) != null) {
             return false;
@@ -72,11 +77,9 @@ public class CartServiceImpl implements CartService {
     @Override
     public boolean removeItemFromCart(int cartId, int memberId) {
         // 장바구니의 소유자 검증
-        if (!validateCartOwner(cartId, memberId)) {
-            return false;
-        }
+        validateCartOwner(cartId, memberId);
 
-         return mapper.deleteCartByCartId(cartId) == 1;
+        return mapper.deleteCartByCartId(cartId) == 1;
     }
 
     /**
@@ -90,11 +93,12 @@ public class CartServiceImpl implements CartService {
         int itemCount = dto.getItemCount();
 
         // 장바구니의 소유자 검증
-        if (!validateCartOwner(cartId, memberId)) {
-            return false;
-        }
+        validateCartOwner(cartId, memberId);
 
-        // todo: 변경 가능한 상품 개수인지 검증
+        // 변경 가능한 상품 개수인지 검증
+        if (itemCount <= 0 || itemCount > 99) {
+            throw new CustomException(ITEM_COUNT_OUT_OF_RANGE);
+        }
 
         return mapper.updateItemCountByCartId(cartId, itemCount) == 1;
     }
@@ -104,9 +108,11 @@ public class CartServiceImpl implements CartService {
      *
      * @author 조영욱
      */
-    private boolean validateCartOwner(int cartId, int memberId) {
+    private void validateCartOwner(int cartId, int memberId) {
         Cart cart = mapper.selectCartByCartId(cartId);
 
-        return cart != null && cart.getMemberId() == memberId;
+        if (cart == null || cart.getMemberId() != memberId) {
+            throw new CustomException(CART_NOT_EXIST);
+        }
     }
 }
