@@ -24,6 +24,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
+ * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회 메소드 추가
  * </pre>
  */
 @Service
@@ -58,5 +59,16 @@ public class ContestServiceImpl implements ContestService {
             throw new CustomException(POST_NOT_EXIST);
         }
         return postDetail;
+    }
+
+    /**
+     * 회원 ID를 통해 코디 목록 조회
+     *
+     * @author 정은찬
+     */
+    public List<CoordinationResponseDTO> getCoordinationList(int memberId) {
+        List<CoordinationResponseDTO> coordinationList = mapper.selectCoordinationListByMemberId(memberId);
+
+        return coordinationList;
     }
 }

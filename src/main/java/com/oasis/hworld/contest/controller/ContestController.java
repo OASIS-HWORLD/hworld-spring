@@ -1,5 +1,6 @@
 package com.oasis.hworld.contest.controller;
 
+import com.oasis.hworld.contest.dto.CoordinationResponseDTO;
 import com.oasis.hworld.contest.dto.PostDetailResponseDTO;
 import com.oasis.hworld.contest.dto.PostSummaryDTO;
 import com.oasis.hworld.contest.service.ContestService;
@@ -52,5 +53,16 @@ public class ContestController {
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDetailResponseDTO> getPostDetail(@PathVariable("postId") int postId) {
         return ResponseEntity.ok(service.getPostDetail(postId));
+    }
+
+    /**
+     * 코디 목록 조회
+     *
+     * @author 정은찬
+     * @apiNote 코디 목록을 조회한다.
+     */
+    @GetMapping("/coordination/{memberId}")
+    public ResponseEntity<List<CoordinationResponseDTO>> getCoordinationList(@PathVariable("memberId") int memberId) {
+        return ResponseEntity.ok(service.getCoordinationList(memberId));
     }
 }

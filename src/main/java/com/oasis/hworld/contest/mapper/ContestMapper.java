@@ -16,11 +16,14 @@ import java.util.List;
  * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        콘테스트 게시글 목록 조회 query parameter 적용, 게시글 상세 조회, 게시글 코디 착용 아이템 조회 추가
+ * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회 추가
  * </pre>
  */
 public interface ContestMapper {
     // 콘테스트 게시글 목록 조회
     List<PostSummaryDTO> selectContestPostList(@Param("date") String date, @Param("sortBy") String sortBy, @Param("contestStatus") String contestStatus);
-    // 게시글 ID를 통해 게시글 상세 조회
+    // 게시글 ID를 통한 게시글 상세 조회
     PostDetailResponseDTO selectContestPostDetailByPostId(@Param("postId") int postId);
+    // 회원 ID를 통한 저장된 코디 조회
+    List<CoordinationResponseDTO> selectCoordinationListByMemberId(@Param("memberId") int memberId);
 }
