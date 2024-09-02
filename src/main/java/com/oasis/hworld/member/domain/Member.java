@@ -1,9 +1,6 @@
 package com.oasis.hworld.member.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -17,12 +14,14 @@ import java.util.Date;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.08.31  	김지현        최초 생성
+ * 2024.09.01   김지현        권한 목록 필드 추가
  * </pre>
  */
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Member {
 
     // 회원 ID
@@ -43,5 +42,7 @@ public class Member {
     private Date createdAt;
     // 탈퇴일
     private Date deletedAt;
+    // 권한 목록
+    private String roles;
 
 }
