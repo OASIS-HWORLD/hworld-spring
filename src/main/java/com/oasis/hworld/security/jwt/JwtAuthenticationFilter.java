@@ -54,71 +54,73 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("request -> " + request.toString());
         String requestURI = request.getRequestURI();
 
-        if (requestURI.equals("/members/login") || requestURI.equals("/members/sign-up")) {
-            log.info("회원가입 및 로그인 페이지");
+//        if (requestURI.equals("/members/login") || requestURI.equals("/members/sign-up")) {
+//            log.info("회원가입 및 로그인 페이지");
+//
+//            // 다음 필터로 요청 전달
+//            filterChain.doFilter(request, response);
+//        } else {
+//            JwtTokenDTO jwtTokenDTO = jwtTokenProvider.resolveToken(request);
+//
+//            try {
+//                if (jwtTokenDTO.getAccessToken() == null) {
+//                    throw new RuntimeException("토큰이 존재하지 않거나 유효하지 않습니다.");
+//                }
+//
+//                String accessToken = jwtTokenDTO.getAccessToken();
+//                // AccessToken이 유효한지 검사
+//                jwtTokenProvider.validateAccessToken(accessToken);
+//
+//                // 인증 객체 생성
+//                Authentication auth = jwtTokenProvider.getAuthentication(accessToken);
+//
+//                // SecurityContextHolder에 인증 객체 저장
+//                SecurityContextHolder.getContext().setAuthentication(auth);
+//                request.setAttribute("loginId", auth.getName());
+//
+//                // 다음 필터로 요청 전달
+//                filterChain.doFilter(request, response);
+//            } catch (ExpiredJwtException e) {
+//                try {
+//                    // AccessToken 만료 시 RefreshToken을 통해 AccessToken 재발급
+//                    log.info("access token 만료됨");
+//
+//                    if (jwtTokenDTO.getRefreshToken() == null) {
+//                        throw new RuntimeException("토큰이 존재하지 않거나 유효하지 않습니다.");
+//                    }
+//
+//                    String refreshToken = jwtTokenDTO.getRefreshToken();
+//                    // RefreshToken이 유효한지 검사
+//                    jwtTokenProvider.validateRefreshToken(refreshToken);
+//
+//                    // loginId 가져온 후 loginId, refreshToken을 바탕으로 JWT 토큰 재발급
+//                    String loginId = jwtTokenProvider.parseClaims(refreshToken).getSubject();
+//                    log.info("loginId = " + loginId);
+//                    log.info("refresh token = " + refreshToken);
+//                    JwtTokenDTO newJwtTokenDTO = authService.reissueToken(loginId, refreshToken);
+//
+//                    // 인증 객체 생성
+//                    Authentication auth = jwtTokenProvider.getAuthentication(newJwtTokenDTO.getAccessToken());
+//
+//                    // SecurityContextHolder에 인증 객체 저장
+//                    SecurityContextHolder.getContext().setAuthentication(auth);
+//                    request.setAttribute("loginId", auth.getName());
+//
+//                    // header에 token값 세팅
+//                    response.setHeader("auth", "Bearer " + newJwtTokenDTO.getAccessToken());
+//                    response.setHeader("refresh", "Bearer " + newJwtTokenDTO.getRefreshToken());
+//
+//                    // 다음 필터로 요청 전달
+//                    filterChain.doFilter(request, response);
+//                } catch (Exception e2) {
+//                    setErrorResponse(response, FORBIDDEN_REQUEST);
+//                }
+//            } catch (Exception e3) {
+//                setErrorResponse(response, FORBIDDEN_REQUEST);
+//            }
+//        }
 
-            // 다음 필터로 요청 전달
-            filterChain.doFilter(request, response);
-        } else {
-            JwtTokenDTO jwtTokenDTO = jwtTokenProvider.resolveToken(request);
-
-            try {
-                if (jwtTokenDTO.getAccessToken() == null) {
-                    throw new RuntimeException("토큰이 존재하지 않거나 유효하지 않습니다.");
-                }
-
-                String accessToken = jwtTokenDTO.getAccessToken();
-                // AccessToken이 유효한지 검사
-                jwtTokenProvider.validateAccessToken(accessToken);
-
-                // 인증 객체 생성
-                Authentication auth = jwtTokenProvider.getAuthentication(accessToken);
-
-                // SecurityContextHolder에 인증 객체 저장
-                SecurityContextHolder.getContext().setAuthentication(auth);
-                request.setAttribute("loginId", auth.getName());
-
-                // 다음 필터로 요청 전달
-                filterChain.doFilter(request, response);
-            } catch (ExpiredJwtException e) {
-                try {
-                    // AccessToken 만료 시 RefreshToken을 통해 AccessToken 재발급
-                    log.info("access token 만료됨");
-
-                    if (jwtTokenDTO.getRefreshToken() == null) {
-                        throw new RuntimeException("토큰이 존재하지 않거나 유효하지 않습니다.");
-                    }
-
-                    String refreshToken = jwtTokenDTO.getRefreshToken();
-                    // RefreshToken이 유효한지 검사
-                    jwtTokenProvider.validateRefreshToken(refreshToken);
-
-                    // loginId 가져온 후 loginId, refreshToken을 바탕으로 JWT 토큰 재발급
-                    String loginId = jwtTokenProvider.parseClaims(refreshToken).getSubject();
-                    log.info("loginId = " + loginId);
-                    log.info("refresh token = " + refreshToken);
-                    JwtTokenDTO newJwtTokenDTO = authService.reissueToken(loginId, refreshToken);
-
-                    // 인증 객체 생성
-                    Authentication auth = jwtTokenProvider.getAuthentication(newJwtTokenDTO.getAccessToken());
-
-                    // SecurityContextHolder에 인증 객체 저장
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                    request.setAttribute("loginId", auth.getName());
-
-                    // header에 token값 세팅
-                    response.setHeader("auth", "Bearer " + newJwtTokenDTO.getAccessToken());
-                    response.setHeader("refresh", "Bearer " + newJwtTokenDTO.getRefreshToken());
-
-                    // 다음 필터로 요청 전달
-                    filterChain.doFilter(request, response);
-                } catch (Exception e2) {
-                    setErrorResponse(response, FORBIDDEN_REQUEST);
-                }
-            } catch (Exception e3) {
-                setErrorResponse(response, FORBIDDEN_REQUEST);
-            }
-        }
+        filterChain.doFilter(request, response);
     }
 
     public static void setErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
