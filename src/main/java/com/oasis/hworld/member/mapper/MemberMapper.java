@@ -1,7 +1,10 @@
 package com.oasis.hworld.member.mapper;
 
 import com.oasis.hworld.member.domain.Member;
+import com.oasis.hworld.member.dto.PointHistoryResponseDTO;
 import com.oasis.hworld.member.dto.SignUpRequestDTO;
+
+import java.util.List;
 
 /**
  * 회원 Mybatis 인터페이스
@@ -29,4 +32,8 @@ public interface MemberMapper {
 
     // 로그인 ID로 회원 정보 조회
     Member selectMemberByLoginId(String loginId);
+
+    // 회원 ID로 포인트 내역 조회
+    List<PointHistoryResponseDTO> selectPointHistoryByMemberId(int memberId);
+
 }

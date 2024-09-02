@@ -3,6 +3,7 @@ package com.oasis.hworld.member.controller;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import com.oasis.hworld.member.dto.LoginRequestDTO;
 import com.oasis.hworld.member.dto.LoginResponseDTO;
+import com.oasis.hworld.member.dto.PointHistoryResponseDTO;
 import com.oasis.hworld.member.dto.SignUpRequestDTO;
 import com.oasis.hworld.member.service.AuthService;
 import com.oasis.hworld.member.service.MemberService;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 회원 컨트롤러
@@ -82,6 +84,18 @@ public class MemberController {
         return authService.checkNicknameAvailability(nickname) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "사용 가능한 닉네임입니다.")) :
                 ResponseEntity.ok(new CommonResponseDTO(false, "이미 사용 중인 닉네임입니다."));
+    }
+
+    /**
+     * 포인트 사용 내역 조회
+     *
+     * @author 김지현
+     */
+    @GetMapping("/my-points")
+    public ResponseEntity<List<PointHistoryResponseDTO>> getPointHistory() {
+        // todo: memberId 로직 추가
+        int memberId = 1;
+        return ResponseEntity.ok(memberService.getPointHistory(memberId));
     }
 
 }
