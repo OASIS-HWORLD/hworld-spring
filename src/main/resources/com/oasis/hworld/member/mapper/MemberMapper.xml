@@ -50,4 +50,20 @@
             WHERE login_id = #{loginId} AND deleted_at IS NULL
         ]]>
     </select>
+
+    <!-- 회원 ID로 포인트 내역 조회 -->
+    <select id="selectPointHistoryByMemberId">
+        <![CDATA[
+            SELECT
+                CASE
+                   WHEN type = 1 THEN '사용'
+                   WHEN type = 2 THEN '적립'
+                   END AS type,
+                amount,
+                description,
+                TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at
+            FROM POINT_HISTORY
+            WHERE member_id = #{memberId}
+        ]]>
+    </select>
 </mapper>
