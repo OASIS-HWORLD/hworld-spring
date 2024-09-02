@@ -10,10 +10,12 @@ import com.oasis.hworld.contest.service.ContestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import oracle.ucp.proxy.annotation.Post;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.ws.Response;
 import java.util.List;
 
 /**
@@ -82,7 +84,7 @@ public class ContestController {
         // todo : memberId 로직 추가
         return service.addContestPost(7, postRequestDTO) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "콘테스트 게시글이 등록되었습니다.")) :
-                ResponseEntity.ok(new CommonResponseDTO(false, "이미 같은 코디의 게시글이 있습니다."));
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "같은 코디 게시글이 존재합니다."));
     }
 }
 
