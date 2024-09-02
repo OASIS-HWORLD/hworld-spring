@@ -20,9 +20,9 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ItemDTO {
-    int itemId;
-    String itemName;
-    String shopName;
-    String itemImageUrl;
-    String itemType;
+    private int itemId;
+    private String itemName;
+    private String shopName;
+    private String itemImageUrl;
+    private String itemType;
 }
