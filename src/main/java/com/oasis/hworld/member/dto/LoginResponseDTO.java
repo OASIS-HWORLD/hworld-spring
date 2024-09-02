@@ -24,7 +24,5 @@ public class LoginResponseDTO {
     private String accessToken;
     // 리프레시 토큰
     private String refreshToken;
-    // 회원 ID
-    private int memberId;
 
 }

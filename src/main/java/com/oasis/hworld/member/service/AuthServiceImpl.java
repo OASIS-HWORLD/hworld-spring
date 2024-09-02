@@ -98,7 +98,6 @@ public class AuthServiceImpl implements AuthService{
         log.info("토큰 생성 -> " + token.toString());
 
         return LoginResponseDTO.builder()
-                .memberId(member.getMemberId())
                 .accessToken(token.getAccessToken())
                 .refreshToken(token.getRefreshToken())
                 .build();
