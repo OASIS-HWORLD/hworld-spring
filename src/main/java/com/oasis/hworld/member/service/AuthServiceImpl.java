@@ -8,14 +8,21 @@ import com.oasis.hworld.member.dto.SignUpRequestDTO;
 import com.oasis.hworld.member.mapper.MemberMapper;
 import com.oasis.hworld.security.dto.JwtTokenDTO;
 import com.oasis.hworld.security.jwt.JwtTokenProvider;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.util.Date;
 
 import static com.oasis.hworld.common.exception.ErrorCode.*;
 
@@ -80,11 +87,6 @@ public class AuthServiceImpl implements AuthService{
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
         log.info("로그인 -> " + loginRequestDTO.toString());
 
-        // 로그인 ID, PW 검증
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginRequestDTO.getLoginId(), loginRequestDTO.getPassword());
-        Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
         // 로그인 ID를 사용한 회원 조회
         Member member = memberMapper.selectMemberByLoginId(loginRequestDTO.getLoginId());
         if (member == null || !passwordEncoder.matches(loginRequestDTO.getPassword(), member.getPassword())) {
@@ -92,7 +94,7 @@ public class AuthServiceImpl implements AuthService{
         }
 
         // 토큰 생성
-        JwtTokenDTO token = jwtTokenProvider.generateToken(authentication);
+        JwtTokenDTO token = jwtTokenProvider.generateToken(member);
         log.info("토큰 생성 -> " + token.toString());
 
         return LoginResponseDTO.builder()
@@ -125,4 +127,17 @@ public class AuthServiceImpl implements AuthService{
 
         return memberMapper.selectMemberCountByNickname(nickname) == 0;
     }
+
+    @Override
+    public JwtTokenDTO reissueToken(String loginId, String refreshToken) {
+        Member member = memberMapper.selectMemberByLoginId(loginId);
+        log.info("member 조회 : " + member.toString());
+        if (member == null) {
+            throw new CustomException(NOT_VALID_USER_INFORMATION);
+        }
+
+        return jwtTokenProvider.generateToken(member);
+    }
+
+
 }

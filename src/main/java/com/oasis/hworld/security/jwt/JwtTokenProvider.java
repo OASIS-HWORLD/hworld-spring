@@ -5,6 +5,7 @@ import com.oasis.hworld.security.dto.JwtTokenDTO;
 import com.oasis.hworld.security.service.CustomUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,8 @@ public class JwtTokenProvider{
     @Setter
     private static String tokenSecretKey;
 
-    public static final long ACCESS_TOKEN_EXPIRE_TIME = 1800_000L;      // 30분
+//    public static final long ACCESS_TOKEN_EXPIRE_TIME = 1800_000L;      // 30분
+    public static final long ACCESS_TOKEN_EXPIRE_TIME = 10_000L;      // 10초
     public static final long REFRESH_TOKEN_EXPIRE_TIME = 604_800_000L;  // 1주
 
     private Key key;
@@ -63,10 +65,10 @@ public class JwtTokenProvider{
      *
      * @author 김지현
      */
-    public JwtTokenDTO generateToken(Authentication authentication) {
-        String nickname = authentication.getName();
+    public JwtTokenDTO generateToken(Member member) {
+        String loginId = member.getLoginId();
 
-        Claims claims = Jwts.claims().setSubject(nickname);
+        Claims claims = Jwts.claims().setSubject(loginId);
         claims.put("auth", "MEMBER");   // 모든 사용자는 MEMBER로 설정
 
         Date now = new Date();
@@ -131,38 +133,70 @@ public class JwtTokenProvider{
      *
      * @author 김지현
      */
-    public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("auth");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+    public JwtTokenDTO resolveToken(HttpServletRequest request) {
+        log.info("전달받은 request -> " + request.toString());
+        String bearerAccessToken = request.getHeader("auth");
+        String bearerRefreshToken = request.getHeader("refresh");
+
+        log.info("access token : " + bearerAccessToken);
+        log.info("refresh token : " + bearerRefreshToken);
+
+        String accessToken = null;
+        String refreshToken = null;
+
+        if (StringUtils.hasText(bearerAccessToken) && bearerAccessToken.startsWith("Bearer ")) {
+            accessToken = bearerAccessToken.substring(7);
         }
+
+        if (StringUtils.hasText(bearerRefreshToken) && bearerRefreshToken.startsWith("Bearer ")) {
+            refreshToken = bearerRefreshToken.substring(7);
+        }
+
+        if (accessToken != null && refreshToken != null) return new JwtTokenDTO(accessToken, refreshToken);
+
         return null;
     }
 
     /**
-     * JWT 토큰의 유효성 검사
+     * JWT Access의 유효성 검사
      *
      * @author 김지현
      */
-    public boolean validateToken(String token) {
+    public void validateAccessToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token);
-            return true;
-        } catch (SecurityException | MalformedJwtException e) {
+        } catch (SecurityException | MalformedJwtException | SignatureException e) {
             log.error("Invalid or Incorrect AccessToken");
             throw new JwtException("Invalid AccessToken", e);
-        } catch (ExpiredJwtException e) {
+        } catch (ExpiredJwtException expiredJwtException) {
             log.error("Expired AccessToken");
-            throw new JwtException("Expired AccessToken", e);
+            throw expiredJwtException;
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT Token");
             throw new JwtException("Unsupported JWT Token", e);
         } catch (IllegalArgumentException e) {
             log.error("Incorrect AccessToken or Input parameters");
             throw new JwtException("Incorrect AccessToken or Input parameters", e);
+        }
+    }
+
+    public void validateRefreshToken(String token) {
+        if (token == null) {
+            log.error("Invalid RefreshToken");
+            throw new JwtException("Invalid RefreshToken");
+        }
+
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+        } catch (ExpiredJwtException e) {
+            log.error("Expired RefreshToken");
+            throw new JwtException("Expired RefreshToken", e);
+        } catch (JwtException e) {
+            log.error("An error occurred with the RefreshToken", e);
+            throw new JwtException("An error occurred with the RefreshToken");
         }
     }
 

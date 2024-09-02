@@ -3,6 +3,7 @@ package com.oasis.hworld.member.service;
 import com.oasis.hworld.member.dto.LoginRequestDTO;
 import com.oasis.hworld.member.dto.LoginResponseDTO;
 import com.oasis.hworld.member.dto.SignUpRequestDTO;
+import com.oasis.hworld.security.dto.JwtTokenDTO;
 
 /**
  * 인증/인가 서비스 인터페이스
@@ -46,5 +47,7 @@ public interface AuthService {
      * @author 김지현
      */
     boolean checkNicknameAvailability(String nickname);
+
+    JwtTokenDTO reissueToken(String loginId, String refreshToken);
 
 }

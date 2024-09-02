@@ -17,6 +17,7 @@ import lombok.*;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
+@Setter
 @Builder
 @ToString
 public class JwtTokenDTO {
