@@ -10,8 +10,10 @@ import com.oasis.hworld.common.exception.CustomException;
 import com.oasis.hworld.common.exception.ErrorCode;
 import com.oasis.hworld.deliveryaddress.domain.DeliveryAddress;
 import com.oasis.hworld.deliveryaddress.mapper.DeliveryAddressMapper;
+import com.oasis.hworld.payment.domain.CardIssuer;
 import com.oasis.hworld.payment.domain.Order;
 import com.oasis.hworld.payment.domain.OrderItem;
+import com.oasis.hworld.payment.domain.Payment;
 import com.oasis.hworld.payment.dto.ConfirmPaymentRequestDTO;
 import com.oasis.hworld.payment.dto.OrderRequestDTO;
 import com.oasis.hworld.payment.dto.OrderResponseDTO;
@@ -30,6 +32,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -170,17 +174,22 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Transactional
     public boolean confirmPayment(ConfirmPaymentRequestDTO dto) throws Exception {
+        String orderId = dto.getOrderId();
+        int amount = Integer.parseInt(dto.getAmount());
+        String paymentKey = dto.getPaymentKey();
 
-        // todo: 검증 - orderId, amount 비교
+        Order order = paymentMapper.selectOrderByOrderId(orderId);
+
+        // 주문 정보가 없거나, DB에 저장된 주문의 결제금액과 결제 승인 요청의 결제금액이 다르면 예외
+        if (order == null || order.getAmount() != amount) {
+            throw new CustomException(ORDER_NOT_VALID);
+        }
 
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode obj = objectMapper.createObjectNode();
-        obj.put("orderId", dto.getOrderId());
+        obj.put("orderId", orderId);
         obj.put("amount", dto.getAmount());
-        obj.put("paymentKey", dto.getPaymentKey());
-
-        log.info(secretKey);
-        log.info(confirmUrl);
+        obj.put("paymentKey", paymentKey);
         String authorizations = "Basic " + secretKey;
 
         URL url = new URL(confirmUrl);
@@ -198,30 +207,47 @@ public class PaymentServiceImpl implements PaymentService {
 
         InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
 
-        // todo: 결제 성공 및 실패 비즈니스 로직 구현
-        JsonNode jsonObject;
+        JsonNode paymentResponse;
         try (Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8)) {
-            jsonObject = objectMapper.readTree(reader);
+            paymentResponse = objectMapper.readTree(reader);
         }
 
-        log.info(jsonObject.toString());
-        log.info(jsonObject.get(dto.getPaymentKey()));
+        log.info(paymentResponse.toString());
 
+        if (isSuccess) { // 결제 성공
+            // STATUS가 DONE이 아닐 경우
+            if (!paymentResponse.get("status").asText().equals("DONE")) {
+                return false;
+            }
+            log.info("결제 성공");
+            String methodDetail = "알 수 없음";
+            int installmentsMonth = 0;
+            if (!paymentResponse.get("card").isNull()) {
+                // todo: 카드사 코드 to 카드사 이름
+                methodDetail = CardIssuer.codeToName(paymentResponse.get("card").get("issuerCode").asText());
+                installmentsMonth = paymentResponse.get("card").get("installmentPlanMonths").asInt();
+            }
+            else if (!paymentResponse.get("easyPay").isNull()) {
+                methodDetail = paymentResponse.get("easyPay").get("provider").asText();
+            }
 
-        if (isSuccess) { // 결제 성공 시
+            log.info(methodDetail);
 
+            Payment payment = Payment.builder()
+                    .paymentKey(paymentKey)
+                    .orderId(orderId)
+                    .status(paymentResponse.get("status").asText())
+                    .totalAmount(amount)
+                    .method(paymentResponse.get("method").asText())
+                    .methodDetail(methodDetail)
+                    .installmentsMonth(installmentsMonth)
+                    .build();
 
-            // todo: payment 테이블 insert
-            // paymentKey
-            // orderId
-            // orderName
-            // status
-            // approvedAt
-            // method
+            // payment 테이블 insert
+            paymentMapper.insertPayment(payment);
 
         } else { // 결제 실패 시
-
-
+            log.info("결제 실패");
         }
 
         return isSuccess;

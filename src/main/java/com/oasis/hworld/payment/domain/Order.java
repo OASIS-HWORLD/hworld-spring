@@ -1,8 +1,6 @@
 package com.oasis.hworld.payment.domain;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
@@ -21,6 +19,8 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order {
     // 주문 ID
     private String orderId;

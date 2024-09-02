@@ -18,8 +18,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ConfirmPaymentRequestDTO {
-
+    // 주문 ID
     private String orderId;
+    // 결제 금액
     private String amount;
+    // 결체 키
     private String paymentKey;
 }

@@ -34,6 +34,7 @@
     <select id="selectDeliveryAddressByDeliveryAddressId">
         SELECT
             delivery_address_id,
+            member_id,
             name,
             phone,
             email,

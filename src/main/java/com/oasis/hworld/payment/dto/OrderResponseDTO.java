@@ -18,7 +18,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderResponseDTO {
+    // 주문 ID
     private String orderId;
+    // 주문 이름
     private String orderName;
+    // 결제 금액
     private int amount;
 }

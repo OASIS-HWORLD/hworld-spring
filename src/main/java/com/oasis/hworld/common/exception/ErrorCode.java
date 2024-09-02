@@ -14,7 +14,8 @@ public enum ErrorCode {
     NOTICE_NOT_EXIST(400, "존재하지 않는 공지사항입니다."),
     DELIVERY_ADDRESS_NOT_EXIST(400, "배송지가 존재하지 않습니다."),
     CART_ITEM_NOT_VALID(400, "주문을 생성할 수 없습니다."),
-    TOO_MUCH_POINT_USAGE(400, "포인트 사용 가능량을 초과하였습니다.");
+    TOO_MUCH_POINT_USAGE(400, "포인트 사용 가능량을 초과하였습니다."),
+    ORDER_NOT_VALID(400, "주문 정보가 올바르지 않습니다.");
 
     private final int status;
     private final String message;

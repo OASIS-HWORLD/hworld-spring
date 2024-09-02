@@ -2,6 +2,7 @@ package com.oasis.hworld.payment.mapper;
 
 import com.oasis.hworld.payment.domain.Order;
 import com.oasis.hworld.payment.domain.OrderItem;
+import com.oasis.hworld.payment.domain.Payment;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,8 +20,12 @@ import java.util.List;
  * </pre>
  */
 public interface PaymentMapper {
-
+    // 주문 추가
     int insertOrder(Order order);
-
+    // 주문 상품 리스트 추가
     int insertOrderItemList(@Param("orderItemList") List<OrderItem> orderItemList, @Param("orderId") String orderId);
+    // 주문 ID로 주문 조회
+    Order selectOrderByOrderId(String orderId);
+    // 결제 추가
+    int insertPayment(Payment payment);
 }
