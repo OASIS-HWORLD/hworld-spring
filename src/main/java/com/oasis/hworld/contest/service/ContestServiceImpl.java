@@ -28,7 +28,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
  * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드, 게시글 추천 여부 확인 메소드 추가
- * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드 추가
+ * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드 추가
  * </pre>
  */
 @Service
@@ -137,6 +137,25 @@ public class ContestServiceImpl implements ContestService {
         params.put("postId", postId);
 
         mapper.insertRecommendAndUpdateLikeCount(params);
+        int result = (Integer) params.get("totalRowsAffected");
+
+        log.info("result :  " + result);
+        return result >= 2;
+    }
+
+    /**
+     * 콘테스트 게시글 추천 취소하기
+     *
+     * @author 정은찬
+     */
+    @Transactional
+    public boolean removeRecommend(int memberId, int postId) {
+        // 추천 삭제 및 게시글 추천수 업데이트를 위한 매개변수 설정
+        Map<String, Object> params = new HashMap<>();
+        params.put("memberId", memberId);
+        params.put("postId", postId);
+
+        mapper.deleteRecommendAndUpdateLikeCount(params);
         int result = (Integer) params.get("totalRowsAffected");
 
         log.info("result :  " + result);

@@ -258,4 +258,14 @@
                 #{totalRowsAffected, mode=OUT, jdbcType=INTEGER}
               )}
     </select>
+
+    <!-- 콘테스트 게시글 추천 삭제 및 추천수 업데이트 -->
+    <!-- 추천 삭제 및 게시글 추천수 감소를 처리하는 저장 프로시저 -->
+    <select id="deleteRecommendAndUpdateLikeCount" parameterType="map" statementType="CALLABLE">
+        {CALL delete_recommend_and_update_like_count(
+        #{memberId, mode=IN, jdbcType=INTEGER},
+        #{postId, mode=IN, jdbcType=INTEGER},
+        #{totalRowsAffected, mode=OUT, jdbcType=INTEGER}
+        )}
+    </select>
 </mapper>
