@@ -1,13 +1,9 @@
 package com.oasis.hworld.member.controller;
 
 import com.oasis.hworld.common.dto.CommonResponseDTO;
-import com.oasis.hworld.member.dto.LoginRequestDTO;
-import com.oasis.hworld.member.dto.LoginResponseDTO;
-import com.oasis.hworld.member.dto.PointHistoryResponseDTO;
-import com.oasis.hworld.member.dto.SignUpRequestDTO;
+import com.oasis.hworld.member.dto.*;
 import com.oasis.hworld.member.service.AuthService;
 import com.oasis.hworld.member.service.MemberService;
-import com.oasis.hworld.security.dto.JwtTokenDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.MediaType;
@@ -96,6 +92,18 @@ public class MemberController {
         // todo: memberId 로직 추가
         int memberId = 1;
         return ResponseEntity.ok(memberService.getPointHistory(memberId));
+    }
+
+    /**
+     * 회원 게시글 목록 조회
+     *
+     * @author 김지현
+     */
+    @GetMapping("/my-posts")
+    public ResponseEntity<List<PostListResponseDTO>> getMemberPost(@RequestParam("orderBy") String orderBy) {
+        // todo: memberId 로직 추가
+        int memberId = 1;
+        return ResponseEntity.ok(memberService.getMemberPost(memberId, orderBy));
     }
 
 }
