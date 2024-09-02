@@ -63,7 +63,7 @@
         </choose>
     </select>
 
-    <!-- PostDetailDTO, ReplyDTO, ItemDTO 간의 매핑을 정의하는 ResultMap -->
+    <!-- PostDetailResponseDTO, ReplyDTO, ItemDTO 간의 매핑을 정의하는 ResultMap -->
     <resultMap id="PostDetailResultMap" type="com.oasis.hworld.contest.dto.PostDetailResponseDTO">
         <id column="post_id" property="postId"/>
         <result column="title" property="title"/>
