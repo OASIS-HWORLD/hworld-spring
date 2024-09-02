@@ -38,7 +38,7 @@ public interface ContestService {
      *
      * @author 정은찬
      */
-    List<CoordinationResponseDTO> getCoordinationList(int member_id);
+    List<CoordinationResponseDTO> getCoordinationList(int memberId);
 
     /**
      * 콘테스트 게시글 등록
