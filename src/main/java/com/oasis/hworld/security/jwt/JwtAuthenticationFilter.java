@@ -56,9 +56,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 //        if (requestURI.equals("/members/login") || requestURI.equals("/members/sign-up")) {
 //            log.info("회원가입 및 로그인 페이지");
-//
-//            // 다음 필터로 요청 전달
-//            filterChain.doFilter(request, response);
 //        } else {
 //            JwtTokenDTO jwtTokenDTO = jwtTokenProvider.resolveToken(request);
 //
