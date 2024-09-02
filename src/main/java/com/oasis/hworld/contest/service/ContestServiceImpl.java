@@ -51,14 +51,12 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public PostResponseDTO getPostDetail(int postId) {
-        PostDetailDTO postDetail = mapper.selectContestPostDetailByPostId(postId);
+    public PostDetailResponseDTO getPostDetail(int postId) {
+        PostDetailResponseDTO postDetail = mapper.selectContestPostDetailByPostId(postId);
 
         if (postDetail == null) {
             throw new CustomException(POST_NOT_EXIST);
         }
-        List<ItemDTO> itemList = mapper.selectItemsByPostId(postId);
-
-        return PostResponseDTO.from(postDetail, itemList);
+        return postDetail;
     }
 }

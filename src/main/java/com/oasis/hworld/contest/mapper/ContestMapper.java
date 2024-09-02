@@ -22,7 +22,5 @@ public interface ContestMapper {
     // 콘테스트 게시글 목록 조회
     List<PostSummaryDTO> selectContestPostList(@Param("date") String date, @Param("sortBy") String sortBy, @Param("contestStatus") String contestStatus);
     // 게시글 ID를 통해 게시글 상세 조회
-    PostDetailDTO selectContestPostDetailByPostId(@Param("postId") int postId);
-    // 게시글 ID를 통해 코디 착용 아이템 조회
-    List<ItemDTO> selectItemsByPostId(@Param("postId") int postId);
+    PostDetailResponseDTO selectContestPostDetailByPostId(@Param("postId") int postId);
 }

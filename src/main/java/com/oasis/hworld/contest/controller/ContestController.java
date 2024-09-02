@@ -1,7 +1,6 @@
 package com.oasis.hworld.contest.controller;
 
-import com.oasis.hworld.contest.dto.PostDetailDTO;
-import com.oasis.hworld.contest.dto.PostResponseDTO;
+import com.oasis.hworld.contest.dto.PostDetailResponseDTO;
 import com.oasis.hworld.contest.dto.PostSummaryDTO;
 import com.oasis.hworld.contest.service.ContestService;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +50,7 @@ public class ContestController {
      * @apiNote 콘테스트 게시글을 상세 조회한다.
      */
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<PostResponseDTO> getPostDetail(@PathVariable("postId") int postId) {
+    public ResponseEntity<PostDetailResponseDTO> getPostDetail(@PathVariable("postId") int postId) {
         return ResponseEntity.ok(service.getPostDetail(postId));
     }
 }

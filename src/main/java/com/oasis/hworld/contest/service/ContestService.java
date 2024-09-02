@@ -1,7 +1,6 @@
 package com.oasis.hworld.contest.service;
 
-import com.oasis.hworld.contest.dto.PostDetailDTO;
-import com.oasis.hworld.contest.dto.PostResponseDTO;
+import com.oasis.hworld.contest.dto.PostDetailResponseDTO;
 import com.oasis.hworld.contest.dto.PostSummaryDTO;
 
 import java.util.List;
@@ -32,5 +31,5 @@ public interface ContestService {
      *
      * @author 정은찬
      */
-    PostResponseDTO getPostDetail(int postId);
+    PostDetailResponseDTO getPostDetail(int postId);
 }
