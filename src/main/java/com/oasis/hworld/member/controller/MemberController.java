@@ -1,14 +1,19 @@
 package com.oasis.hworld.member.controller;
 
 import com.oasis.hworld.common.dto.CommonResponseDTO;
+import com.oasis.hworld.member.dto.LoginRequestDTO;
+import com.oasis.hworld.member.dto.LoginResponseDTO;
 import com.oasis.hworld.member.dto.SignUpRequestDTO;
 import com.oasis.hworld.member.service.AuthService;
 import com.oasis.hworld.member.service.MemberService;
+import com.oasis.hworld.security.dto.JwtTokenDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 회원 컨트롤러
@@ -20,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.08.31  	김지현        최초 생성
+ * 2024.09.01   김지현        로그인 기능 구현
  * </pre>
  */
 @RestController
@@ -39,6 +45,19 @@ public class MemberController {
     @PostMapping("/sign-up")
     public ResponseEntity<Integer> signup(@RequestBody SignUpRequestDTO signUpRequestDTO) {
         return ResponseEntity.ok(authService.signUp(signUpRequestDTO));
+    }
+
+    /**
+     * 로그인
+     *
+     * @author 김지현
+     */
+    @PostMapping("/login")
+    public ResponseEntity<CommonResponseDTO> login(HttpServletResponse response, @RequestBody LoginRequestDTO loginRequestDTO) {
+        LoginResponseDTO loginResponseDTO = authService.login(loginRequestDTO);
+        response.setHeader("auth", "Bearer " + loginResponseDTO.getAccessToken());
+        response.setHeader("refresh", "Bearer " + loginResponseDTO.getRefreshToken());
+        return ResponseEntity.ok(new CommonResponseDTO(true, "로그인 성공"));
     }
 
     /**

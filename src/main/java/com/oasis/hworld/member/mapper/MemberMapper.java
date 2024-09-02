@@ -1,5 +1,6 @@
 package com.oasis.hworld.member.mapper;
 
+import com.oasis.hworld.member.domain.Member;
 import com.oasis.hworld.member.dto.SignUpRequestDTO;
 
 /**
@@ -10,8 +11,9 @@ import com.oasis.hworld.member.dto.SignUpRequestDTO;
  *
  * <pre>
  * 수정일        	수정자        수정내용
- * ----------  --------    ---------------------------
+ * ----------  --------    ---------------------------------
  * 2024.08.31  	김지현        최초 생성
+ * 2024.09.01   김지현        로그인 ID로 회원 정보 조회 메서드 추가
  * </pre>
  */
 public interface MemberMapper {
@@ -20,8 +22,11 @@ public interface MemberMapper {
     int insertMember(SignUpRequestDTO dto);
 
     // 로그인 ID로 회원 수 조회
-    int selectMemberByLoginId(String loginId);
+    int selectMemberCountByLoginId(String loginId);
 
     // 닉네임으로 회원 수 조회
-    int selectMemberByNickname(String nickname);
+    int selectMemberCountByNickname(String nickname);
+
+    // 로그인 ID로 회원 정보 조회
+    Member selectMemberByLoginId(String loginId);
 }
