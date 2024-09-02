@@ -2,10 +2,7 @@ package com.oasis.hworld.contest.controller;
 
 import com.oasis.hworld.cart.dto.CartItemRequestDTO;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
-import com.oasis.hworld.contest.dto.CoordinationResponseDTO;
-import com.oasis.hworld.contest.dto.PostDetailResponseDTO;
-import com.oasis.hworld.contest.dto.PostRequestDTO;
-import com.oasis.hworld.contest.dto.PostSummaryDTO;
+import com.oasis.hworld.contest.dto.*;
 import com.oasis.hworld.contest.service.ContestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -29,7 +26,7 @@ import java.util.List;
  * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
- * 2024.09.02   정은찬        코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드 추가
+ * 2024.09.02   정은찬        코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록 메소드 추가
  * </pre>
  */
 @RestController
@@ -85,6 +82,20 @@ public class ContestController {
         return service.addContestPost(7, postRequestDTO) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "콘테스트 게시글이 등록되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "같은 코디 게시글이 존재합니다."));
+    }
+
+    /**
+     * 콘테스트 게시글 댓글 등록
+     *
+     * @author 정은찬
+     * @apiNote 콘테스트 게시글에 댓글을 등록한다.
+     */
+    @PostMapping("/posts/reply")
+    ResponseEntity<CommonResponseDTO> addReply(@RequestBody ReplyRequestDTO replyRequestDTO) {
+        // todo : memberId 로직 추가
+        return service.addReply(1, replyRequestDTO) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "댓글이 등록되었습니다.")) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "댓글이 등록되지 않았습니다."));
     }
 }
 

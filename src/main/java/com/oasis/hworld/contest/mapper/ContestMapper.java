@@ -17,7 +17,7 @@ import java.util.List;
  * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        콘테스트 게시글 목록 조회 query parameter 적용, 게시글 상세 조회, 게시글 코디 착용 아이템 조회 추가
- * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회, 진행중인 콘테스트 게시글 등록 추가
+ * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회, 진행중인 콘테스트 게시글 등록, 댓글 등록 추가
  * </pre>
  */
 public interface ContestMapper {
@@ -35,4 +35,7 @@ public interface ContestMapper {
 
     // 진행중인 콘테스트 게시글 등록
     int insertContestPost(@Param("memberId") int memberId, @Param("postRequestDTO") PostRequestDTO postRequestDTO);
+
+    // 콘테스트 게시글 댓글 등록
+    int insertReply(@Param("memberId") int memberId, @Param("replyRequestDTO") ReplyRequestDTO replyRequestDTO);
 }
