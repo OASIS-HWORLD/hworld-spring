@@ -31,14 +31,15 @@
         <security:custom-filter ref="jwtAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
 
         <!-- 모든 URL에 대해 접근 허용 -->
-        <security:intercept-url pattern="/**" access="permitAll" />
+<!--        <security:intercept-url pattern="/**" access="permitAll" />-->
 
 
-<!--        <security:intercept-url pattern="/members/login"-->
-<!--                                access="permitAll" />-->
+        <security:intercept-url pattern="/members/login"
+                                access="permitAll" />
 
-<!--        <security:intercept-url pattern="/members/sign-up"-->
-<!--                                access="permitAll" />-->
+        <security:intercept-url pattern="/members/sign-up"
+                                access="permitAll" />
+
 
         <security:form-login/>
     </security:http>

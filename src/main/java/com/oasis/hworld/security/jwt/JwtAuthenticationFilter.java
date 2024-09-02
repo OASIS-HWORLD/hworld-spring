@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -39,17 +40,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String token = jwtTokenProvider.resolveToken(request);
+        String requestURI = request.getRequestURI();
 
-        // 추출한 토큰이 유효한지 검사
-        if (token != null && jwtTokenProvider.validateToken(token)) {
-            // 인증 객체 생성
-            Authentication auth = jwtTokenProvider.getAuthentication(token);
-            // SecurityContextHolder에 인증 객체 저장
-            SecurityContextHolder.getContext().setAuthentication(auth);
+        if (requestURI.equals("/members/login") || requestURI.equals("/members/sign-up")) {
+            log.info("회원가입 및 로그인 페이지");
+        } else {
+            if (token == null) try {
+                throw new Exception();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+            // 추출한 토큰이 유효한지 검사
+            if (jwtTokenProvider.validateToken(token)) {
+                // 인증 객체 생성
+                Authentication auth = jwtTokenProvider.getAuthentication(token);
+                // SecurityContextHolder에 인증 객체 저장
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
         }
 
         // 다음 필터로 요청 전달
         filterChain.doFilter(request, response);
+
     }
 
 }
