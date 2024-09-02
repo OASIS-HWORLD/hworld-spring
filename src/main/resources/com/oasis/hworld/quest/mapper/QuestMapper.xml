@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+* 퀘스트 Mybatis mapper xml
+* @author 조영욱
+* @since 2024.09.01
+* @version 1.0
+*
+* <pre>
+* 수정일        	수정자        수정내용
+* ==========  =========    =========
+* 2024.09.01  	조영욱        최초 생성
+* </pre>
+-->
+<mapper namespace="com.oasis.hworld.quest.mapper.QuestMapper">
+
+    <!-- 회원 ID로 퀘스트 목록 조회 -->
+    <select id="selectQuestByMemberId">
+        SELECT
+            Q.quest_id,
+            Q.title,
+            Q.content,
+            Q.start_date,
+            Q.end_date,
+            MQ.status,
+            MQ.finished_at
+        FROM
+            QUEST Q
+        LEFT JOIN
+            MEMBER_QUEST MQ
+            ON
+                Q.quest_id = MQ.quest_id
+            AND
+                MQ.member_id = #{memberId}
+    </select>
+
+    <!-- 퀘스트 ID로 퀘스트 조회 -->
+    <select id="selectQuestByQuestId">
+        SELECT
+            quest_id
+        FROM
+            QUEST
+        WHERE
+            quest_id = #{questId}
+    </select>
+
+    <!-- 퀘스트 ID와 회원 ID로 회원 퀘스트 조회 -->
+    <select id="selectMemberQuestByQuestIdAndMemberId">
+        SELECT
+            member_id,
+            quest_id,
+            status,
+            finished_at
+        FROM
+            MEMBER_QUEST
+        WHERE
+            member_id = #{memberId}
+        AND
+            quest_id = #{questId}
+    </select>
+
+
+    <!-- 회원 퀘스트 추가 -->
+    <insert id="insertMemberQuest">
+        INSERT INTO MEMBER_QUEST(
+            member_id,
+            quest_id
+        ) VALUES (
+            #{memberId},
+            #{questId}
+        )
+    </insert>
+
+    <!-- 회원 퀘스트 종료 날짜 현재로 변경 -->
+    <update id="updateFinishedAt">
+        UPDATE
+            MEMBER_QUEST
+        SET
+            finished_at = SYSDATE
+        WHERE
+            member_id = #{memberId}
+        AND
+            quest_id = #{questId}
+    </update>
+</mapper>
