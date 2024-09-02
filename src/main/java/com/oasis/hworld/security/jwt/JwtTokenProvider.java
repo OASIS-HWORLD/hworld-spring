@@ -43,8 +43,7 @@ public class JwtTokenProvider{
     @Setter
     private static String tokenSecretKey;
 
-//    public static final long ACCESS_TOKEN_EXPIRE_TIME = 1800_000L;      // 30분
-    public static final long ACCESS_TOKEN_EXPIRE_TIME = 10_000L;      // 10초
+    public static final long ACCESS_TOKEN_EXPIRE_TIME = 1800_000L;      // 30분
     public static final long REFRESH_TOKEN_EXPIRE_TIME = 604_800_000L;  // 1주
 
     private Key key;
