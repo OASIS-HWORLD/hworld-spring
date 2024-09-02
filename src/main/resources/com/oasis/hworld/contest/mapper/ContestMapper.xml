@@ -13,6 +13,7 @@
 * ==========  =========    ======================================================
 * 2024.08.31  	정은찬        최초 생성
 * 2024.09.01  	정은찬        콘테스트 게시글 목록 조회 query parameter 적용, 게시글 상세 조회, 게시글 코디 착용 아이템 조회 추가
+* 2024.09.02    정은찬        회원 ID를 통한 코디 목록 조회, 진행중인 콘테스트 게시글 등록 추가 추가
 * </pre>
 -->
 
@@ -89,7 +90,7 @@
         </collection>
     </resultMap>
 
-    <!-- 게시글 ID를 통해 게시글 상세 조회   -->
+    <!-- 게시글 ID를 통한 게시글 상세 조회   -->
     <select id="selectContestPostDetailByPostId" resultMap="PostDetailResultMap">
         SELECT
             P.post_id,
@@ -142,4 +143,73 @@
         ORDER BY
             R.created_at DESC
     </select>
+
+    <!-- CoordinationResponseDTO, CoordinationItemDTO 간의 매핑을 정의하는 ResultMap -->
+    <resultMap id="CoordinationResultMap" type="com.oasis.hworld.contest.dto.CoordinationResponseDTO">
+        <id column="coordination_id" property="coordinationId"/>
+        <result column="title" property="title"/>
+        <result column="coordination_image_url" property="coordinationImageUrl"/>
+        <collection property="itemList"
+                    ofType="com.oasis.hworld.contest.dto.CoordinationItemDTO"
+                    javaType="ArrayList">
+            <result column="item_name" property="itemName"/>
+            <result column="item_image_url" property="itemImageUrl"/>
+            <result column="item_type" property="itemType"/>
+        </collection>
+    </resultMap>
+
+    <!-- 회원 ID를 통한 코디 조회   -->
+    <select id="selectCoordinationListByMemberId" resultMap="CoordinationResultMap">
+        SELECT CO.coordination_id,
+               CO.title,
+               CO.image_url AS coordination_image_url,
+               I.name AS item_name,
+               I.image_url AS item_image_url,
+               CASE
+                   WHEN I.item_id = CO.glasses_id THEN '안경'
+                   WHEN I.item_id = CO.cap_id THEN '모자'
+                   WHEN I.item_id = CO.bag_id THEN '가방'
+                   WHEN I.item_id = CO.necklace_id THEN '목걸이'
+                   END AS item_type
+        FROM
+            COORDINATION CO
+        LEFT JOIN
+            ITEM I
+            ON
+                I.item_id IN (CO.glasses_id, CO.cap_id, CO.bag_id, CO.necklace_id)
+        WHERE
+            CO.member_id = #{memberId}
+    </select>
+
+    <!-- 회원 ID와 코디 ID를 통한 게시글 ID 조회   -->
+    <select id = "selectContestPostByMemberIdAndCoordinationId">
+        SELECT
+            P.post_id
+        FROM
+            POST P
+        WHERE
+            P.member_id = #{memberId} AND P.coordination_id = #{coordinationId}
+    </select>
+
+    <!-- 진행중인 콘테스트 게시글 등록 -->
+    <insert id="insertContestPost" parameterType="map">
+        INSERT INTO POST(
+            post_id,
+            member_id,
+            contest_id,
+            coordination_id,
+            title,
+            created_at
+        )
+        VALUES (
+            SEQ_POST.NEXTVAL,
+            #{memberId},
+            (SELECT C.contest_id
+            FROM CONTEST C
+            WHERE sysdate BETWEEN C.start_date AND C.end_date),
+            #{postRequestDTO.coordinationId},
+            #{postRequestDTO.title},
+            sysdate
+        )
+    </insert>
 </mapper>

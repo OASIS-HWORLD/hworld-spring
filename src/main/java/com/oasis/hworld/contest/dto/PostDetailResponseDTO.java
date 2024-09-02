@@ -35,7 +35,7 @@ public class PostDetailResponseDTO {
     // 추천수
     private int likeCount;
     // 아이템 리스트
-    List<ItemDTO> itemList;
+    private List<ItemDTO> itemList;
     // 댓글 리스트
-    List<ReplyDTO> replyList;
+    private List<ReplyDTO> replyList;
 }
