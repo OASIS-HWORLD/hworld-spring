@@ -1,5 +1,6 @@
 package com.oasis.hworld.contest.mapper;
 
+import com.oasis.hworld.contest.domain.Post;
 import com.oasis.hworld.contest.dto.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,7 +31,7 @@ public interface ContestMapper {
     List<CoordinationResponseDTO> selectCoordinationListByMemberId(@Param("memberId") int memberId);
 
     // 회원 ID와 코디 ID를 통한 콘테스트 게시글 조회
-    PostIdDTO selectContestPostByMemberIdAndCoordinationId(@Param("memberId") int memberId, @Param("coordinationId") int coordinationId);
+    Post selectContestPostByMemberIdAndCoordinationId(@Param("memberId") int memberId, @Param("coordinationId") int coordinationId);
 
     // 진행중인 콘테스트 게시글 등록
     int insertContestPost(@Param("memberId") int memberId, @Param("postRequestDTO") PostRequestDTO postRequestDTO);
