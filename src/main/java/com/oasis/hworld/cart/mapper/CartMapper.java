@@ -32,4 +32,6 @@ public interface CartMapper {
     int deleteCartByCartId(int cartId);
     // 장바구니의 상품 개수 변경
     int updateItemCountByCartId(@Param("cartId") int cartId, @Param("itemCount") int itemCount);
+    // 장바구니 ID 리스트로 장바구니 조회
+    List<CartDetailDTO> selectCartByCartIdList(@Param("cartIdList") List<Integer> cartIdList);
 }

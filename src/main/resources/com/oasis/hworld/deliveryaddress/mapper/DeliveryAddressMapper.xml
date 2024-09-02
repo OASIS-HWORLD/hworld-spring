@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+* 배송지 Mybatis mapper xml
+* @author 조영욱
+* @since 2024.09.02
+* @version 1.0
+*
+* <pre>
+* 수정일        	수정자        수정내용
+* ==========  =========    =========
+* 2024.09.02  	조영욱        최초 생성
+* </pre>
+-->
+<mapper namespace="com.oasis.hworld.deliveryaddress.mapper.DeliveryAddressMapper">
+    <!-- 회원 ID로 배송지 목록 조회 -->
+    <select id="selectDeliveryAddressByMemberId">
+        SELECT
+            delivery_address_id,
+            name,
+            phone,
+            email,
+            location,
+            created_at
+        FROM
+            delivery_address
+        WHERE
+            member_id = #{memberId}
+    </select>
+
+    <!-- 배송지 ID로 배송지 조회 -->
+    <select id="selectDeliveryAddressByDeliveryAddressId">
+        SELECT
+            delivery_address_id,
+            name,
+            phone,
+            email,
+            location,
+            created_at
+        FROM
+            delivery_address
+        WHERE
+            delivery_address_id = #{deliveryAddressId}
+    </select>
+</mapper>

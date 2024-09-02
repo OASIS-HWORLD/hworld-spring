@@ -30,6 +30,8 @@ public class CartDetailDTO {
     private String itemName;
     // 상품 가격
     private int itemPrice;
+    // 상품 옵션
+    private String itemOption;
     // 상품 이미지 URL
     private String itemImageUrl;
     // 상품 디테일 이미지 URL
