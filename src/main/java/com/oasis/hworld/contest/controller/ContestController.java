@@ -26,7 +26,7 @@ import java.util.List;
  * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
- * 2024.09.02   정은찬        코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드 추가
+ * 2024.09.02   정은찬        코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드, 게시글 추천 여부 확인 메소드 추가
  * </pre>
  */
 @RestController
@@ -110,6 +110,19 @@ public class ContestController {
         return service.removeReply(1, replyId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "댓글이 삭제되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "댓글이 삭제되지 않았습니다."));
+    }
+
+    /**
+     * 콘테스트 게시글 추천 여부 확인
+     *
+     * @author 정은찬
+     * @apiNote 콘테스트 게시글 추천 여부를 확인한다.
+     */
+    @GetMapping("/recommend/{postId}")
+    ResponseEntity<Boolean> checkRecommend(@PathVariable int postId) {
+        // todo : memberId 로직 추가
+        return ResponseEntity.ok(service.checkRecommend(10, postId));
+
     }
 }
 

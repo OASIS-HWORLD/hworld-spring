@@ -1,6 +1,7 @@
 package com.oasis.hworld.contest.mapper;
 
 import com.oasis.hworld.contest.domain.Post;
+import com.oasis.hworld.contest.domain.Recommend;
 import com.oasis.hworld.contest.dto.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,7 +18,7 @@ import java.util.List;
  * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        콘테스트 게시글 목록 조회 query parameter 적용, 게시글 상세 조회, 게시글 코디 착용 아이템 조회 추가
- * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회, 진행중인 콘테스트 게시글 등록, 댓글 등록/삭제 추가
+ * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회, 진행중인 콘테스트 게시글 등록, 댓글 등록/삭제, 게시글 추천 조회 추가
  * </pre>
  */
 public interface ContestMapper {
@@ -41,4 +42,8 @@ public interface ContestMapper {
 
     // 콘테스트 게시글 댓글 삭제
     int deleteReply(@Param("memberId") int memberId, @Param("replyId") int replyId);
+
+    // 회원 ID와 게시글 ID를 통한 콘테스트 게시글 추천 조회
+    Recommend selectRecommendByMemberIdAndPostId(@Param("memberId") int memberId, @Param("postId") int postId);
+
 }
