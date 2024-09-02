@@ -5,6 +5,7 @@ import com.oasis.hworld.quest.dto.QuestDetailDTO;
 import com.oasis.hworld.quest.service.QuestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +54,7 @@ public class QuestController {
         // todo: memberId 로직 추가
         return service.startQuest(questId, 1) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "퀘스트가 시작되었습니다.")) :
-                ResponseEntity.ok(new CommonResponseDTO(false, "퀘스트를 시작할 수 없습니다."));
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "퀘스트를 시작할 수 없습니다."));
     }
 
     /**
@@ -66,7 +67,7 @@ public class QuestController {
         // todo: memberId 로직 추가
         return service.finishQuest(questId, 1) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "퀘스트가 종료되었습니다.")) :
-                ResponseEntity.ok(new CommonResponseDTO(false, "퀘스트를 종료할 수 없습니다."));
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "퀘스트를 종료할 수 없습니다."));
     }
 
 }
