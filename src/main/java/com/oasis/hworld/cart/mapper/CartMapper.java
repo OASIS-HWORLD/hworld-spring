@@ -2,6 +2,7 @@ package com.oasis.hworld.cart.mapper;
 
 import com.oasis.hworld.cart.domain.Cart;
 import com.oasis.hworld.cart.dto.CartDetailDTO;
+import com.oasis.hworld.cart.dto.CartOrderDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -33,5 +34,5 @@ public interface CartMapper {
     // 장바구니의 상품 개수 변경
     int updateItemCountByCartId(@Param("cartId") int cartId, @Param("itemCount") int itemCount);
     // 장바구니 ID 리스트로 장바구니 조회
-    List<CartDetailDTO> selectCartByCartIdList(@Param("cartIdList") List<Integer> cartIdList);
+    List<CartOrderDTO> selectCartByCartIdList(@Param("cartIdList") List<Integer> cartIdList);
 }

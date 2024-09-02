@@ -1,6 +1,10 @@
 package com.oasis.hworld.payment.mapper;
 
 import com.oasis.hworld.payment.domain.Order;
+import com.oasis.hworld.payment.domain.OrderItem;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 결제 Mybatis 인터페이스
@@ -17,4 +21,6 @@ import com.oasis.hworld.payment.domain.Order;
 public interface PaymentMapper {
 
     int insertOrder(Order order);
+
+    int insertOrderItemList(@Param("orderItemList") List<OrderItem> orderItemList, @Param("orderId") String orderId);
 }

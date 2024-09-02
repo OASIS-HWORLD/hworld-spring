@@ -39,4 +39,23 @@
         )
     </insert>
 
+    <update id="insertOrderItemList">
+        INSERT ALL
+        <foreach collection="orderItemList" item="orderItem" separator=" ">
+            INTO ORDER_ITEM (
+                order_id,
+                item_id,
+                price,
+                item_count,
+                item_option
+            ) VALUES (
+                #{orderId},
+                #{orderItem.itemId},
+                #{orderItem.price},
+                #{orderItem.itemCount},
+                #{orderItem.itemOption}
+            )
+        </foreach>
+        SELECT * FROM DUAL
+    </update>
 </mapper>

@@ -18,7 +18,19 @@ import com.oasis.hworld.payment.dto.OrderResponseDTO;
  */
 public interface PaymentService {
 
-    boolean confirmPayment(ConfirmPaymentRequestDTO dto) throws Exception;
+    /**
+     * 주문 생성
+     *
+     * @author 조영욱
+     * @apiNote 주문서 생성 요청 시 주문을 생성한다.
+     */
+    OrderResponseDTO addOrder(OrderRequestDTO dto, int memberId);
 
-    OrderResponseDTO addOrder(OrderRequestDTO dto);
+    /**
+     * 결제 승인
+     *
+     * @author 조영욱
+     * @apiNote 사용자 결제 이후 결제 승인을 요청한다 (실 결제는 결제 승인까지 완료 후 이루어진다)
+     */
+    boolean confirmPayment(ConfirmPaymentRequestDTO dto) throws Exception;
 }

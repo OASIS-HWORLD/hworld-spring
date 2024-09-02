@@ -4,7 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.oasis.hworld.cart.dto.CartDetailDTO;
+import com.oasis.hworld.cart.dto.CartOrderDTO;
 import com.oasis.hworld.cart.mapper.CartMapper;
+import com.oasis.hworld.common.exception.CustomException;
+import com.oasis.hworld.common.exception.ErrorCode;
 import com.oasis.hworld.deliveryaddress.domain.DeliveryAddress;
 import com.oasis.hworld.deliveryaddress.mapper.DeliveryAddressMapper;
 import com.oasis.hworld.payment.domain.Order;
@@ -30,6 +33,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static com.oasis.hworld.common.exception.ErrorCode.*;
 
 /**
  * 결제 서비스 구현체
@@ -57,6 +62,111 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${PAYMENT_CONFIRM_URL}")
     private String confirmUrl;
 
+    /**
+     * 주문 생성
+     *
+     * @author 조영욱
+     * @apiNote 주문서 생성 요청 시 주문을 생성한다.
+     */
+    @Override
+    @Transactional
+    public OrderResponseDTO addOrder(OrderRequestDTO dto, int memberId) {
+        int deliveryAddressId = dto.getDeliveryAddressId();
+        int pointUsage = dto.getPointUsage();
+
+        // Request로 들어온 배송지 조회
+        DeliveryAddress deliveryAddress = deliveryAddressMapper.selectDeliveryAddressByDeliveryAddressId(deliveryAddressId);
+        // 배송지가 존재하지 않거나, 배송지가 본인 것이 아니면 예외
+        if (deliveryAddress == null || deliveryAddress.getMemberId() != memberId) {
+            throw new CustomException(DELIVERY_ADDRESS_NOT_EXIST);
+        }
+
+        // Request로 들어온 장바구니 조회
+        List<Integer> cartIdList = dto.getCartIdList();
+        List<CartOrderDTO> cartList = cartMapper.selectCartByCartIdList(cartIdList);
+
+        // cartList 비어있다면 예외
+        if (cartList.isEmpty()) {
+            throw new CustomException(ErrorCode.CART_ITEM_NOT_VALID);
+        }
+
+        int priceBeforeDiscount = 0;
+        int totalItemCount = 0;
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for (CartOrderDTO cart : cartList) {
+            // cart의 memberId와 현재 요청자가 다르면 예외
+            if (cart.getMemberId() != memberId) {
+                throw new CustomException(ErrorCode.CART_ITEM_NOT_VALID);
+            }
+
+            int itemPrice = cart.getItemPrice() * cart.getItemCount();
+
+            // orderId는 order 테이블의 시퀀스를 사용하기 때문에 나중에 추가
+            OrderItem orderItem = OrderItem.builder()
+                    .orderId(null)
+                    .itemId(cart.getItemId())
+                    .price(itemPrice)
+                    .itemCount(cart.getItemCount())
+                    .itemOption(cart.getItemOption())
+                    .build();
+
+            orderItemList.add(orderItem);
+
+            priceBeforeDiscount += itemPrice;
+            totalItemCount += cart.getItemCount();
+        }
+
+        // 포인트 사용은 총 금액의 10% 이하로만 사용 가능
+        if (priceBeforeDiscount < pointUsage * 10) {
+            throw new CustomException(TOO_MUCH_POINT_USAGE);
+        }
+
+        // orderId 생성
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String orderIdPrefix = dateFormat.format(currentDate);
+
+        // orderName 생성
+        String orderName = totalItemCount > 1 ?
+                cartList.get(0).getItemName() + " 외 " + (totalItemCount-1) + "건" :
+                cartList.get(0).getItemName();
+
+        Order order = Order.builder()
+                .orderId(orderIdPrefix)
+                .orderName(orderName)
+                .ordererName(deliveryAddress.getName())
+                .ordererPhone(deliveryAddress.getPhone())
+                .location(deliveryAddress.getLocation())
+                .amount(priceBeforeDiscount - pointUsage)
+                .priceBeforeDiscount(priceBeforeDiscount)
+                .pointUsage(pointUsage)
+                .build();
+
+        // order 테이블에 insert
+        paymentMapper.insertOrder(order);
+
+        // order 추가 시 생성된 orderId로 orderItem 추가
+        paymentMapper.insertOrderItemList(orderItemList, order.getOrderId());
+
+        /*
+         * orderId: 2024090222034(YYYYMMDDHHMISS)000001(SEQ)
+         * orderName: (상품명) 외 (나머지상품개수)건
+         * amount: 결제금액
+         */
+        OrderResponseDTO response = new OrderResponseDTO();
+        response.setOrderId(order.getOrderId());
+        response.setOrderName(orderName);
+        response.setAmount(order.getAmount());
+
+        return response;
+    }
+
+    /**
+     * 결제 승인
+     *
+     * @author 조영욱
+     * @apiNote 사용자 결제 이후 결제 승인을 요청한다 (실 결제는 결제 승인까지 완료 후 이루어진다)
+     */
     @Override
     @Transactional
     public boolean confirmPayment(ConfirmPaymentRequestDTO dto) throws Exception {
@@ -117,80 +227,4 @@ public class PaymentServiceImpl implements PaymentService {
         return isSuccess;
     }
 
-    public OrderResponseDTO addOrder(OrderRequestDTO dto) {
-        // todo: 배송지 본인건지, 카트 본인건지 검증
-
-        int deliveryAddressId = dto.getDeliveryAddressId();
-        // 배송지 id로 주문자 이름, 전화번호, 주소 가져오기
-        DeliveryAddress deliveryAddress = deliveryAddressMapper.selectDeliveryAddressByDeliveryAddressId(deliveryAddressId);
-
-        int pointUsage = dto.getPointUsage();
-        List<Integer> cartIdList = dto.getCartIdList();
-        List<CartDetailDTO> cartList = cartMapper.selectCartByCartIdList(cartIdList);
-
-        int priceBeforeDiscount = 0;
-        int totalItemCount = 0;
-        List<OrderItem> orderItemList = new ArrayList<>();
-        for (CartDetailDTO cart : cartList) {
-            int itemPrice = cart.getItemPrice() * cart.getItemCount();
-
-            // orderId를 제외한 나머지 필드 저장
-            OrderItem orderItem = OrderItem.builder()
-                    .itemId(cart.getItemId())
-                    .price(itemPrice)
-                    .itemCount(cart.getItemCount())
-                    .itemOption(cart.getItemOption())
-                    .build();
-
-            orderItemList.add(orderItem);
-
-            // ㅇ
-            priceBeforeDiscount += itemPrice;
-            totalItemCount += cart.getItemCount();
-        }
-
-        // todo: 포인트 사용 가능량 검증
-
-
-
-        // orderId 생성
-        Date currentDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
-        String orderIdPrefix = dateFormat.format(currentDate);
-        // orderName 생성
-        String orderName = totalItemCount > 1 ?
-                cartList.get(0).getItemName() + " 외 " + (totalItemCount-1) + "건" :
-                cartList.get(0).getItemName();
-
-
-        Order order = Order.builder()
-                .orderId(orderIdPrefix)
-                .orderName(orderName)
-                .ordererName(deliveryAddress.getName())
-                .ordererPhone(deliveryAddress.getPhone())
-                .location(deliveryAddress.getLocation())
-                .amount(priceBeforeDiscount - pointUsage)
-                .priceBeforeDiscount(priceBeforeDiscount)
-                .pointUsage(pointUsage)
-                .build();
-
-        // order 테이블에 insert
-        paymentMapper.insertOrder(order);
-        log.info(order);
-        log.info(order.getOrderId());
-
-
-        /*
-         * 리턴 해줘야될거
-         * orderId: 2024090222034(YYYYMMDDHHMISS)000001(SEQ)
-         * orderName: (상품명) 외 (나머지상품개수)건
-         * amount: 결제금액
-         * */
-        OrderResponseDTO response = new OrderResponseDTO();
-        response.setOrderId(order.getOrderId());
-        response.setOrderName(orderName);
-        response.setAmount(order.getAmount());
-
-        return response;
-    }
 }
