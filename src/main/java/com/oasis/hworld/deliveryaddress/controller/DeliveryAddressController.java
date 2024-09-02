@@ -1,4 +1,4 @@
-package com.oasis.hworld.deliveryaddress.controller.controller;
+package com.oasis.hworld.deliveryaddress.controller;
 
 import com.oasis.hworld.deliveryaddress.service.DeliveryAddressService;
 import lombok.RequiredArgsConstructor;
