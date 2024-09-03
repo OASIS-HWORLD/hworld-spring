@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+* 상점 Mybatis mapper xml
+* @author 정은찬
+* @since 2024.09.03
+* @version 1.0
+*
+* <pre>
+* 수정일        	수정자        수정내용
+* ==========  =========    ======================================================
+* 2024.09.03    정은찬        최초 생성
+* </pre>
+-->
+
+<!-- 상점 ID와 카테고리 ID를 통한 아이템 리스트 조회 -->
+<mapper namespace="com.oasis.hworld.shop.mapper.ShopMapper">
+    <select id="selectItemListByShopIdAndCategoryId">
+        SELECT
+            I.name AS item_name,
+            I.image_url AS item_image_url,
+            I.category_id,
+            IO.item_option_id,
+            IO.item_option,
+            S.shop_id,
+            S.name AS shop_name
+        FROM
+            ITEM I
+        LEFT JOIN ITEM_OPTION IO    ON  I.item_id = IO.item_id
+        LEFT JOIN SHOP S            ON I.shop_id = S.shop_id
+        WHERE
+            S.shop_id=#{shopId}
+        AND I.category_id=#{categoryId}
+    </select>
+</mapper>

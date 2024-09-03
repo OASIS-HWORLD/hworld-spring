@@ -1,4 +1,4 @@
-package com.oasis.hworld.contest.domain;
+package com.oasis.hworld.common.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public enum ItemCategory {
     private final String categoryName;
 
     public static String getCategoryName(int categoryId) {
-        for (com.oasis.hworld.contest.domain.ItemCategory category : com.oasis.hworld.contest.domain.ItemCategory.values()) {
+        for (ItemCategory category : ItemCategory.values()) {
             if (category.getCategoryId() == categoryId) {
                 return category.getCategoryName();
             }
