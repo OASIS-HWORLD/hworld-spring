@@ -50,14 +50,12 @@
                 order_id,
                 item_option_id,
                 price,
-                item_count,
-                item_option
+                item_count
             ) VALUES (
                 #{orderId},
                 #{orderItem.itemOptionId},
                 #{orderItem.price},
-                #{orderItem.itemCount},
-                #{orderItem.itemOption}
+                #{orderItem.itemCount}
             )
         </foreach>
         SELECT * FROM DUAL

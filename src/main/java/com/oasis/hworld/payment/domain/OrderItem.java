@@ -29,6 +29,4 @@ public class OrderItem {
     private int price;
     // 상품 개수
     private int itemCount;
-    // 주문 옵션
-    private String itemOption;
 }
