@@ -1,5 +1,6 @@
 package com.oasis.hworld.member.service;
 
+import com.oasis.hworld.member.dto.PostListResponseDTO;
 import com.oasis.hworld.member.dto.PointHistoryResponseDTO;
 import com.oasis.hworld.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,16 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<PointHistoryResponseDTO> getPointHistory(int memberId) {
         return memberMapper.selectPointHistoryByMemberId(memberId);
+    }
+
+    /**
+     * 회원 게시글 목록 조회
+     *
+     * @author 김지현
+     */
+    @Override
+    public List<PostListResponseDTO> getMemberPost(int memberId, String orderBy) {
+        return memberMapper.selectPostByMemberId(memberId, orderBy);
     }
 
 }
