@@ -1,10 +1,8 @@
 package com.oasis.hworld.character.service;
 
+import com.oasis.hworld.character.domain.CharacterItem;
 import com.oasis.hworld.character.domain.CharacterState;
-import com.oasis.hworld.character.dto.AddCharacterRequestDTO;
-import com.oasis.hworld.character.dto.CharacterItemResponseDTO;
-import com.oasis.hworld.character.dto.CharacterStateRequestDTO;
-import com.oasis.hworld.character.dto.CharacterStateResponseDTO;
+import com.oasis.hworld.character.dto.*;
 import com.oasis.hworld.character.mapper.CharacterMapper;
 import com.oasis.hworld.common.exception.CustomException;
 import com.oasis.hworld.common.exception.ErrorCode;
@@ -70,6 +68,7 @@ public class CharacterServiceImpl implements CharacterService {
      *
      * @author 조영욱
      */
+    @Override
     public boolean modifyCharacterState(CharacterStateRequestDTO dto, int memberId) {
         return mapper.updateCharacterState(dto, memberId) == 1;
     }
@@ -79,6 +78,7 @@ public class CharacterServiceImpl implements CharacterService {
      *
      * @author 조영욱
      */
+    @Override
     public boolean addCharacter(AddCharacterRequestDTO dto, int memberId) {
         CharacterState characterState = mapper.selectCharacterStateByMemberId(memberId);
 
@@ -87,5 +87,46 @@ public class CharacterServiceImpl implements CharacterService {
             throw new CustomException(CHARACTER_ALREADY_EXIST);
         }
         return mapper.insertCharacterState(dto, memberId) == 1;
+    }
+
+    /**
+     * 상품 장착
+     *
+     * @author 조영욱
+     * @apiNote 캐릭터에 상품을 장착한다.
+     */
+    @Override
+    public boolean equipItem(EquipItemRequestDTO dto, int memberId) {
+        int itemOptionId = dto.getItemOptionId();
+
+        CharacterState characterState = mapper.selectCharacterStateByMemberId(memberId);
+
+        // 캐릭터가 존재하지 않으면 예외
+        if (characterState == null) {
+            throw new CustomException(CHARACTER_NOT_EXIST);
+        }
+
+        Integer categoryId = mapper.selectCategoryIdByItemOptionId(itemOptionId);
+
+        if (categoryId == null) {
+            throw new CustomException(ITEM_NOT_EXIST);
+        }
+
+        // 카테고리 ID로 같은 카테고리에 장착중인 캐릭터 상품 조회
+        CharacterItem characterItem = mapper.selectCharacterItemByCategoryIdAndMemberId(categoryId, memberId);
+        log.info(characterItem);
+
+        if (characterItem == null) {
+            // 같은 부위의 상품 착용 중이지 않을 시 착용 상품 insert
+            characterItem = new CharacterItem();
+            characterItem.setMemberId(memberId);
+            characterItem.setCategoryId(categoryId);
+            characterItem.setItemOptionId(itemOptionId);
+            return mapper.insertCharacterItem(characterItem) == 1;
+        } else {
+            // 이미 같은 부위의 상품 착용 중일 시, 착용 상품 update
+            characterItem.setItemOptionId(itemOptionId);
+            return mapper.updateCharacterItem(characterItem) == 1;
+        }
     }
 }

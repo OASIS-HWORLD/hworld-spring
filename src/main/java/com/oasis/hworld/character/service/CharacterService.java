@@ -1,10 +1,7 @@
 package com.oasis.hworld.character.service;
 
 import com.oasis.hworld.character.domain.CharacterState;
-import com.oasis.hworld.character.dto.AddCharacterRequestDTO;
-import com.oasis.hworld.character.dto.CharacterItemResponseDTO;
-import com.oasis.hworld.character.dto.CharacterStateRequestDTO;
-import com.oasis.hworld.character.dto.CharacterStateResponseDTO;
+import com.oasis.hworld.character.dto.*;
 
 import java.util.List;
 
@@ -51,4 +48,12 @@ public interface CharacterService {
      * @author 조영욱
      */
     boolean addCharacter(AddCharacterRequestDTO dto, int memberId);
+
+    /**
+     * 상품 장착
+     *
+     * @author 조영욱
+     * @apiNote 캐릭터에 상품을 장착한다.
+     */
+    boolean equipItem(EquipItemRequestDTO dto, int memberId);
 }

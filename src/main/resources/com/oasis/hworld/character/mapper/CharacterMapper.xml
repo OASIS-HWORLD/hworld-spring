@@ -66,4 +66,54 @@
             #{dto.characterType}
         )
     </insert>
+
+    <!-- 카테고리 ID와 회원 ID로 장착중인 캐릭터 상품 조회 -->
+    <select id="selectCharacterItemByCategoryIdAndMemberId">
+        SELECT
+            category_id,
+            member_id,
+            item_option_id
+        FROM
+            CHARACTER_ITEM
+        WHERE
+            category_id = #{categoryId}
+        AND
+            member_id = #{memberId}
+    </select>
+
+    <!-- 캐릭터 장착 상품 변경 -->
+    <update id="updateCharacterItem">
+        UPDATE
+            CHARACTER_ITEM
+        SET
+            item_option_id = #{itemOptionId}
+        WHERE
+            member_id = #{memberId}
+        AND
+            category_id = #{categoryId}
+    </update>
+
+    <!-- 캐릭터 장착 상품 추가 -->
+    <insert id="insertCharacterItem">
+        INSERT INTO CHARACTER_ITEM (
+            category_id,
+            member_id,
+            item_option_id
+        ) VALUES (
+            #{categoryId},
+            #{memberId},
+            #{itemOptionId}
+        )
+    </insert>
+
+    <!-- 상품 옵션 ID로 카테고리 ID 조회 -->
+    <select id="selectCategoryIdByItemOptionId">
+        SELECT
+            I.category_id
+        FROM
+            ITEM_OPTION IO
+                INNER JOIN ITEM I ON IO.item_id = I.item_id
+        WHERE
+            IO.item_option_id = #{itemOptionId}
+    </select>
 </mapper>

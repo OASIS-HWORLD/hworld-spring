@@ -1,5 +1,6 @@
 package com.oasis.hworld.character.mapper;
 
+import com.oasis.hworld.character.domain.CharacterItem;
 import com.oasis.hworld.character.domain.CharacterState;
 import com.oasis.hworld.character.dto.AddCharacterRequestDTO;
 import com.oasis.hworld.character.dto.CharacterItemResponseDTO;
@@ -29,4 +30,12 @@ public interface CharacterMapper {
     int updateCharacterState(@Param("dto") CharacterStateRequestDTO dto, @Param("memberId") int memberId);
     // 캐릭터 생성
     int insertCharacterState(@Param("dto") AddCharacterRequestDTO dto, @Param("memberId") int memberId);
+    // 카테고리 ID와 회원 ID로 장착중인 캐릭터 상품 조회
+    CharacterItem selectCharacterItemByCategoryIdAndMemberId(@Param("categoryId") int categoryId, @Param("memberId") int memberId);
+    // 캐릭터 장착 상품 변경
+    int updateCharacterItem(CharacterItem characterItem);
+    // 상품 옵션 ID로 카테고리 ID 조회
+    Integer selectCategoryIdByItemOptionId(int itemOptionId);
+    // 캐릭터 장착 상품 추가
+    int insertCharacterItem(CharacterItem characterItem);
 }
