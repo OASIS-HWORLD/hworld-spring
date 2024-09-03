@@ -20,24 +20,42 @@
         <selectKey keyProperty="coordinationId" resultType="int" order="BEFORE">
             SELECT SEQ_COORDINATION.NEXTVAL FROM dual
         </selectKey>
-        <![CDATA[
-            INSERT INTO COORDINATION (coordination_id, member_id, title, image_url)
-            VALUES (#{coordinationId}, #{memberId}, #{title}, #{imageUrl})
-        ]]>
+        INSERT INTO COORDINATION (coordination_id, member_id, title, image_url)
+        VALUES (#{coordinationId}, #{memberId}, #{title}, #{imageUrl})
     </insert>
 
     <!-- 코디 아이템 추가 -->
     <insert id="insertCoordinationItem">
-        <![CDATA[
-            INSERT INTO COORDINATION_ITEM (category_id, coordination_id, item_option_id)
-            VALUES (
-                (SELECT category_id
-                 FROM ITEM I
-                     INNER JOIN ITEM_OPTION IO ON I.item_id = IO.item_id
-                 WHERE IO.item_option_id = #{itemOptionId}),
-                #{coordinationId},
-                #{itemOptionId}
-            )
-        ]]>
+        INSERT INTO COORDINATION_ITEM (category_id, coordination_id, item_option_id)
+        VALUES (
+            (SELECT category_id
+             FROM ITEM I
+                 INNER JOIN ITEM_OPTION IO ON I.item_id = IO.item_id
+             WHERE IO.item_option_id = #{itemOptionId}),
+            #{coordinationId},
+            #{itemOptionId}
+        )
+    </insert>
+
+    <!-- 캐릭터 장착 조회 -->
+    <select id="selectCharacterItemByCoordinationItem">
+        SELECT COUNT(item_option_id)
+        FROM CHARACTER_ITEM
+        WHERE category_id = #{categoryId}
+          AND member_id = #{memberId}
+    </select>
+
+    <!-- 캐릭터 장착 상품 변경 -->
+    <update id="updateCharacterItemByCoordination">
+        UPDATE CHARACTER_ITEM
+        SET item_option_id = #{itemOptionId}
+        WHERE member_id = #{memberId}
+          AND category_id = #{categoryId}
+    </update>
+
+    <!-- 캐릭터 장착 상품 추가 -->
+    <insert id="insertCharacterItemByCoordination">
+        INSERT INTO CHARACTER_ITEM (category_id, member_id, item_option_id)
+        VALUES (#{categoryId}, #{memberId}, #{itemOptionId})
     </insert>
 </mapper>

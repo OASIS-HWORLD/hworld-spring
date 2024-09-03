@@ -1,6 +1,8 @@
 package com.oasis.hworld.coordination.mapper;
 
+import com.oasis.hworld.character.domain.CharacterItem;
 import com.oasis.hworld.coordination.domain.Coordination;
+import com.oasis.hworld.coordination.domain.CoordinationItem;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,5 +26,14 @@ public interface CoordinationMapper {
 
     // 코디 아이템 추가
     int insertCoordinationItem(@Param("coordinationId") int coordinationId, @Param("itemOptionId") int itemOptionId);
+
+    // 캐릭터 장착 여부 조회
+    int selectCharacterItemByCoordinationItem(@Param("categoryId") int categoryId, @Param("memberId") int memberId);
+
+    // 캐릭터 장착 아이템 변경
+    int updateCharacterItemByCoordination(CharacterItem characterItem);
+
+    // 캐릭터 장착 아이템 추가
+    int insertCharacterItemByCoordination(CharacterItem characterItem);
 
 }

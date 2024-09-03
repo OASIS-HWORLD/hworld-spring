@@ -1,5 +1,7 @@
 package com.oasis.hworld.coordination.service;
 
+import com.oasis.hworld.coordination.domain.CoordinationItem;
+import com.oasis.hworld.coordination.dto.CoordinationItemRequestDTO;
 import com.oasis.hworld.coordination.dto.CoordinationRequestDTO;
 
 import java.util.List;
@@ -24,5 +26,12 @@ public interface CoordinationService {
      * @author 김지현
      */
     boolean addCoordination(CoordinationRequestDTO coordinationRequestDTO, int memberId);
+
+    /**
+     * 저장된 코디 적용
+     *
+     * @author 김지현
+     */
+    boolean applyCoordination(List<CoordinationItemRequestDTO> coordinationItemList, int memberId);
 
 }
