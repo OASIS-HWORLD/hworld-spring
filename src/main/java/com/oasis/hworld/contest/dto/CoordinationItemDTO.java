@@ -22,5 +22,5 @@ import lombok.ToString;
 public class CoordinationItemDTO {
     private String itemName;
     private String itemImageUrl;
-    private String itemType;
+    private int categoryId;
 }
