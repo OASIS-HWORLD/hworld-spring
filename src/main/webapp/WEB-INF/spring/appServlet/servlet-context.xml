@@ -4,6 +4,7 @@
 			 xmlns:beans="http://www.springframework.org/schema/beans"
 			 xmlns:context="http://www.springframework.org/schema/context"
 			 xmlns:aop="http://www.springframework.org/schema/aop"
+			 xmlns:mvc="http://www.springframework.org/schema/mvc"
 			 xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
@@ -35,6 +36,14 @@
 			</beans:list>
 		</beans:property>
 	</beans:bean>
+
+	<!-- MVC 활성화 -->
+	<mvc:annotation-driven>
+		<mvc:argument-resolvers>
+			<!-- MemberIdArgumentResolver 빈 등록 -->
+			<beans:bean class="com.oasis.hworld.common.resolver.MemberIdArgumentResolver"/>
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
 
 	<context:component-scan base-package="com.oasis.hworld" />
 
