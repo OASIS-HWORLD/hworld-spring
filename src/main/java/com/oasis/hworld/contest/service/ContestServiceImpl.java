@@ -29,7 +29,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
  * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드, 게시글 추천 여부 확인 메소드 추가
- * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드 추가
+ * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드, 게시글 목록 조회 / 상세보기 메소드 추천여부 확인 추가
  * </pre>
  */
 @Service
@@ -44,7 +44,10 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy, int memberId) {
+    public List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy, Integer memberId) {
+        // memberId가 null이면 기본값으로 0을 할당 (람다식에 넣을 경우 final 변수 지정 필요)
+        final int finalMemberId = (memberId == null) ? 0 : memberId;
+
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(currentDate);
@@ -53,7 +56,7 @@ public class ContestServiceImpl implements ContestService {
 
         postSummaryList.forEach(postSummary -> {
             int postId = postSummary.getPostId();
-            if(checkRecommend(memberId, postId)) {
+            if(checkRecommend(finalMemberId, postId)) {
                 postSummary.setIsRecommended(true);
             } else {
                 postSummary.setIsRecommended(false);
@@ -68,13 +71,16 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public PostDetailResponseDTO getPostDetail(int postId, int memberId) {
+    public PostDetailResponseDTO getPostDetail(int postId, Integer memberId) {
         PostDetailResponseDTO postDetail = mapper.selectContestPostDetailByPostId(postId);
+
+        if(memberId == null) {
+            memberId = 0;
+        }
 
         if(postDetail == null) {
             throw new CustomException(POST_NOT_EXIST);
         }
-
         if(checkRecommend(memberId, postId)) {
             postDetail.setIsRecommended(true);
         } else {
