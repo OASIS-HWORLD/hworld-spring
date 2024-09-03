@@ -72,8 +72,8 @@
         SELECT
             P.post_id,
             C.image_url,
-            P.like_count,
-            COUNT(reply_id) AS reply_count,
+            P.recommend_count,
+            P.reply_count,
             P.rank,
             P.created_at
         FROM POST P
@@ -84,18 +84,12 @@
             AND R.deleted_at IS NULL
         WHERE P.deleted_at IS NULL
           AND P.member_id = #{memberId}
-        GROUP BY
-            P.post_id,
-            C.image_url,
-            P.like_count,
-            P.rank,
-            P.created_at
         ORDER BY
             <if test="orderBy == 'latest'">
                 P.created_at DESC
             </if>
             <if test="orderBy == 'recommend'">
-                P.like_count DESC
+                P.recommend_count DESC
             </if>
     </select>
 </mapper>
