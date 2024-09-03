@@ -29,5 +29,7 @@ public class CoordinationItemListResponseDTO {
     private int itemId;
     // 상품 이미지 url
     private String imageUrl;
+    // 상품 상세 이미지 url
+    private String detailImageUrl;
 
 }
