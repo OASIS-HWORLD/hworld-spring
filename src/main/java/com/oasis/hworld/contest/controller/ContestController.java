@@ -27,6 +27,7 @@ import java.util.List;
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
  * 2024.09.02   정은찬        코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드 추가
+ * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드 추가
  * </pre>
  */
 @RestController
@@ -110,6 +111,34 @@ public class ContestController {
         return service.removeReply(1, replyId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "댓글이 삭제되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "댓글이 삭제되지 않았습니다."));
+    }
+
+    /**
+     * 콘테스트 게시글 추천하기
+     *
+     * @author 정은찬
+     * @apiNote 콘테스트 게시글을 추천한다.
+     */
+    @PostMapping("/recommend/{postId}")
+    ResponseEntity<CommonResponseDTO> addRecommend(@PathVariable int postId) {
+        // todo : memberId 로직 추가
+        return service.addRecommend(1, postId) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "게시글을 추천했습니다.")) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 추천을 실패했습니다."));
+    }
+
+    /**
+     * 콘테스트 게시글 추천 취소하기
+     *
+     * @author 정은찬
+     * @apiNote 콘테스트 게시글 추천을 취소한다.
+     */
+    @DeleteMapping("/recommend/{postId}")
+    ResponseEntity<CommonResponseDTO> removeRecommend(@PathVariable int postId) {
+        // todo : memberId 로직 추가
+        return service.removeRecommend(1, postId) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "게시글 추천을 취소했습니다.")) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 추천 취소를 실패했습니다."));
     }
 }
 

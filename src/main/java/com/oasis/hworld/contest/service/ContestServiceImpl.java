@@ -6,10 +6,13 @@ import com.oasis.hworld.contest.mapper.ContestMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.oasis.hworld.common.exception.ErrorCode.*;
 
@@ -24,7 +27,8 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * ----------  --------    ------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
- * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드 추가
+ * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드, 게시글 추천 여부 확인 메소드 추가
+ * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드 추가
  * </pre>
  */
 @Service
@@ -104,5 +108,57 @@ public class ContestServiceImpl implements ContestService {
      */
     public boolean removeReply(int memberId, int postId) {
         return mapper.deleteReply(memberId, postId) == 1;
+    }
+
+    /**
+     * 콘테스트 게시글 추천 여부 확인
+     *
+     * @author 정은찬
+     */
+    public boolean checkRecommend(int memberId, int postId) {
+        return mapper.selectRecommendByMemberIdAndPostId(memberId, postId) != null;
+    }
+
+    /**
+     * 콘테스트 게시글 추천하기
+     *
+     * @author 정은찬
+     */
+    @Transactional
+    public boolean addRecommend(int memberId, int postId) {
+        // 이미 추천한 게시글
+        if(mapper.selectRecommendByMemberIdAndPostId(memberId, postId) != null) {
+            return false;
+        }
+
+        // 추천 등록 및 게시글 추천수 업데이트를 위한 매개변수 설정
+        Map<String, Object> params = new HashMap<>();
+        params.put("memberId", memberId);
+        params.put("postId", postId);
+
+        mapper.insertRecommendAndUpdateLikeCount(params);
+        int result = (Integer) params.get("totalRowsAffected");
+
+        log.info("result :  " + result);
+        return result >= 2;
+    }
+
+    /**
+     * 콘테스트 게시글 추천 취소하기
+     *
+     * @author 정은찬
+     */
+    @Transactional
+    public boolean removeRecommend(int memberId, int postId) {
+        // 추천 삭제 및 게시글 추천수 업데이트를 위한 매개변수 설정
+        Map<String, Object> params = new HashMap<>();
+        params.put("memberId", memberId);
+        params.put("postId", postId);
+
+        mapper.deleteRecommendAndUpdateLikeCount(params);
+        int result = (Integer) params.get("totalRowsAffected");
+
+        log.info("result :  " + result);
+        return result >= 2;
     }
 }
