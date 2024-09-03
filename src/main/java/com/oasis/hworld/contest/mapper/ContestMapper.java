@@ -49,10 +49,10 @@ public interface ContestMapper {
     Recommend selectRecommendByMemberIdAndPostId(@Param("memberId") int memberId, @Param("postId") int postId);
 
     // 콘테스트 게시글 추천 등록 및 추천수 업데이트
-    void insertRecommendAndUpdateLikeCount(Map<String, Object> params);
+    void insertRecommendAndUpdateRecommendCount(Map<String, Object> params);
 
     // 콘테스트 게시글 추천 삭제 및 추천수 업데이트
-    void deleteRecommendAndUpdateLikeCount(Map<String, Object> params);
+    void deleteRecommendAndUpdateRecommendCount(Map<String, Object> params);
 
     // 콘테스트 게시글 댓글수 업데이트 (증가)
     int updateIncreaseReplyCount(@Param("postId") int postId);

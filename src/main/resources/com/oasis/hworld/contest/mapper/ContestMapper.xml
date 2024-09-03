@@ -24,7 +24,7 @@
         SELECT
             P.post_id,
             CO.image_url,
-            P.like_count,
+            P.recommend_count,
             P.reply_count
         FROM
             POST P
@@ -54,14 +54,14 @@
         GROUP BY
             P.post_id,
             CO.image_url,
-            P.like_count
+            P.recommend_count
             P.reply_count
         <choose>
             <when test="sortBy == 'latest'">
                 ORDER BY MAX(P.created_at) DESC
             </when>
             <when test="sortBy == 'recommend'">
-                ORDER BY P.like_count DESC
+                ORDER BY P.recommend_count DESC
             </when>
         </choose>
     </select>
@@ -73,7 +73,7 @@
         <result column="post_created_at" property="createdAt"/>
         <result column="image_url" property="imageUrl"/>
         <result column="post_nickname" property="nickname"/>
-        <result column="like_count" property="likeCount"/>
+        <result column="recommend_count" property="recommendCount"/>
         <collection property="itemList"
                     ofType="com.oasis.hworld.contest.dto.ItemDTO"
                     javaType="ArrayList">
@@ -100,7 +100,7 @@
             TO_CHAR(P.created_at, 'YYYY-MM-DD') AS post_created_at,
             CO.image_url,
             M.nickname AS post_nickname,
-            P.like_count,
+            P.recommend_count,
             I.item_id,
             I.name AS item_name,
             S.name AS shop_name,
@@ -252,8 +252,8 @@
 
     <!-- 콘테스트 게시글 추천 등록 및 추천수 업데이트 -->
     <!-- 추천 등록 및 게시글 추천수 업데이트를 처리하는 저장 프로시저 -->
-    <select id="insertRecommendAndUpdateLikeCount" parameterType="map" statementType="CALLABLE">
-        {CALL insert_recommend_and_update_like_count(
+    <select id="insertRecommendAndUpdateRecommendCount" parameterType="map" statementType="CALLABLE">
+        {CALL insert_recommend_and_update_recommend_count(
                 #{memberId, mode=IN, jdbcType=INTEGER},
                 #{postId, mode=IN, jdbcType=INTEGER},
                 #{totalRowsAffected, mode=OUT, jdbcType=INTEGER}
@@ -262,8 +262,8 @@
 
     <!-- 콘테스트 게시글 추천 삭제 및 추천수 업데이트 -->
     <!-- 추천 삭제 및 게시글 추천수 감소를 처리하는 저장 프로시저 -->
-    <select id="deleteRecommendAndUpdateLikeCount" parameterType="map" statementType="CALLABLE">
-        {CALL delete_recommend_and_update_like_count(
+    <select id="deleteRecommendAndUpdateRecommendCount" parameterType="map" statementType="CALLABLE">
+        {CALL delete_recommend_and_update_recommend_count(
         #{memberId, mode=IN, jdbcType=INTEGER},
         #{postId, mode=IN, jdbcType=INTEGER},
         #{totalRowsAffected, mode=OUT, jdbcType=INTEGER}

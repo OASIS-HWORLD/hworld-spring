@@ -147,7 +147,7 @@ public class ContestServiceImpl implements ContestService {
         params.put("memberId", memberId);
         params.put("postId", postId);
 
-        mapper.insertRecommendAndUpdateLikeCount(params);
+        mapper.insertRecommendAndUpdateRecommendCount(params);
         int result = (Integer) params.get("totalRowsAffected");
 
         log.info("result :  " + result);
@@ -166,7 +166,7 @@ public class ContestServiceImpl implements ContestService {
         params.put("memberId", memberId);
         params.put("postId", postId);
 
-        mapper.deleteRecommendAndUpdateLikeCount(params);
+        mapper.deleteRecommendAndUpdateRecommendCount(params);
         int result = (Integer) params.get("totalRowsAffected");
 
         log.info("result :  " + result);
