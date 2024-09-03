@@ -52,4 +52,12 @@ public interface MemberService {
      * @author 김지현
      */
     List<OrdersListResponseDTO> getMemberOrders(int memberId);
+
+    /**
+     * 회원 주문 내역 상세 조회
+     *
+     * @author 김지현
+     */
+    OrdersDetailResponseDTO getMemberOrdersDetail(String orderId);
+
 }

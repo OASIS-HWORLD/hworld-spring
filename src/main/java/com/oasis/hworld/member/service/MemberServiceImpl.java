@@ -75,4 +75,14 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.selectOrdersByMemberId(memberId);
     }
 
+    /**
+     * 회원 주문 내역 상세 조회
+     *
+     * @author 김지현
+     */
+    @Override
+    public OrdersDetailResponseDTO getMemberOrdersDetail(String orderId) {
+        return memberMapper.selectOrdersDetailByOrderId(orderId);
+    }
+
 }

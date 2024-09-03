@@ -139,4 +139,14 @@ public class MemberController {
         int memberId = 1;
         return ResponseEntity.ok(memberService.getMemberOrders(memberId));
     }
+
+    /**
+     * 회원 주문 내역 상세 조회
+     *
+     * @author 김지현
+     */
+    @GetMapping("/my-orders/{orderId}")
+    public ResponseEntity<OrdersDetailResponseDTO> getMemberOrdersDetail(@PathVariable("orderId") String orderId) {
+        return ResponseEntity.ok(memberService.getMemberOrdersDetail(orderId));
+    }
 }
