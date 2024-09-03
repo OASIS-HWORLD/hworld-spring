@@ -1,6 +1,6 @@
 package com.oasis.hworld.character.controller;
 
-import com.oasis.hworld.deliveryaddress.service.DeliveryAddressService;
+import com.oasis.hworld.character.service.CharacterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.MediaType;
@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
  * </pre>
  */
 @RestController
-@RequestMapping(value="/delivery-addresses", produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value="/characters", produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
 @Log4j
 @RequiredArgsConstructor
 public class CharacterController {
 
-    private final DeliveryAddressService service;
+    private final CharacterService service;
 
 }
