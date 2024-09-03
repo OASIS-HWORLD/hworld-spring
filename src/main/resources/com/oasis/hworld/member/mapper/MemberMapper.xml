@@ -73,7 +73,7 @@
             P.post_id,
             C.image_url,
             P.recommend_count,
-            COUNT(reply_id) AS reply_count,
+            P.reply_count,
             P.rank,
             P.created_at
         FROM POST P
@@ -84,12 +84,6 @@
             AND R.deleted_at IS NULL
         WHERE P.deleted_at IS NULL
           AND P.member_id = #{memberId}
-        GROUP BY
-            P.post_id,
-            C.image_url,
-            P.recommend_count,
-            P.rank,
-            P.created_at
         ORDER BY
             <if test="orderBy == 'latest'">
                 P.created_at DESC
