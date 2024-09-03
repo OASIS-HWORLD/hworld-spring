@@ -1,5 +1,6 @@
 package com.oasis.hworld.member.service;
 
+import com.oasis.hworld.member.dto.CoordinationListResponseDTO;
 import com.oasis.hworld.member.dto.PostListResponseDTO;
 import com.oasis.hworld.member.dto.PointHistoryResponseDTO;
 
@@ -33,4 +34,10 @@ public interface MemberService {
      */
     List<PostListResponseDTO> getMemberPost(int memberId, String orderBy);
 
+    /**
+     * 회원 코디 목록 조회
+     *
+     * @author 김지현
+     */
+    List<CoordinationListResponseDTO> getMemberCoordination(int memberId);
 }

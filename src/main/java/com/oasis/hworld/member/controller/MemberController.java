@@ -106,4 +106,15 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMemberPost(memberId, orderBy));
     }
 
+    /**
+     * 회원 코디 목록 조회
+     *
+     * @author 김지현
+     */
+    @GetMapping("/my-coordinations")
+    public ResponseEntity<List<CoordinationListResponseDTO>> getMemberCoordination() {
+        // todo: memberId 로직 추가
+        int memberId = 1;
+        return ResponseEntity.ok(memberService.getMemberCoordination(memberId));
+    }
 }
