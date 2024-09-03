@@ -3,7 +3,7 @@ package com.oasis.hworld.character.domain;
 import lombok.Data;
 
 /**
- * 캐릭터 상태 VO
+ * 캐릭터 장착 상품 VO
  * @author 조영욱
  * @since 2024.09.03
  * @version 1.0
@@ -15,15 +15,11 @@ import lombok.Data;
  * </pre>
  */
 @Data
-public class CharacterState {
+public class CharacterItem {
     // 회원 ID
     private int memberId;
-    // 속도
-    private int speed;
-    // 마우스 감도
-    private int mouseSensitivity;
-    // 소리 크기
-    private int sound;
-    // 캐릭터 타입
-    private int characterType;
+    // 상품 카테고리 ID
+    private int categoryId;
+    // 상품 옵션 ID
+    private int itemOptionId;
 }
