@@ -46,6 +46,11 @@ public class DeliveryAddressController {
         return ResponseEntity.ok(service.getDeliveryAddressList(1));
     }
 
+    /**
+     * 배송지 추가
+     *
+     * @author 조영욱
+     */
     @PostMapping("")
     public ResponseEntity<CommonResponseDTO> addDeliveryAddress(@RequestBody DeliveryAddressRequestDTO dto) {
         // todo: memberId 로직 추가
@@ -54,6 +59,11 @@ public class DeliveryAddressController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "배송지 추가를 실패하였습니다."));
     }
 
+    /**
+     * 배송지 삭제
+     *
+     * @author 조영욱
+     */
     @DeleteMapping("/{deliveryAddressId}")
     public ResponseEntity<CommonResponseDTO> removeDeliveryAddress(@PathVariable("deliveryAddressId") int deliveryAddressId) {
         // todo: memberId 로직 추가
