@@ -12,6 +12,7 @@
 * 수정일        	수정자        수정내용
 * ==========  =========    =========
 * 2024.09.02  	조영욱        최초 생성
+* 2024.09.03    조영욱        배송지 추가, 삭제 구현
 * </pre>
 -->
 <mapper namespace="com.oasis.hworld.deliveryaddress.mapper.DeliveryAddressMapper">
@@ -25,7 +26,7 @@
             location,
             created_at
         FROM
-            delivery_address
+            DELIVERY_ADDRESS
         WHERE
             member_id = #{memberId}
     </select>
@@ -41,8 +42,37 @@
             location,
             created_at
         FROM
-            delivery_address
+            DELIVERY_ADDRESS
         WHERE
             delivery_address_id = #{deliveryAddressId}
     </select>
+
+    <!-- 배송지 추가 -->
+    <insert id="insertDeliveryAddress">
+        INSERT INTO DELIVERY_ADDRESS (
+            delivery_address_id,
+            member_id,
+            name,
+            phone,
+            email,
+            location,
+            created_at
+        ) VALUES (
+            SEQ_DELIVERY_ADDRESS.NEXTVAL,
+            #{memberId},
+            #{dto.name},
+            #{dto.phone},
+            #{dto.email},
+            #{dto.location},
+            SYSDATE
+        )
+    </insert>
+
+    <!-- 배송지 삭제 -->
+    <delete id="deleteDeliveryAddress">
+        DELETE FROM
+            DELIVERY_ADDRESS
+        WHERE
+            delivery_address_id = #{deliveryAddressId}
+    </delete>
 </mapper>
