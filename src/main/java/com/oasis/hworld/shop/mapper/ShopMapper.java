@@ -21,4 +21,7 @@ public interface ShopMapper {
 
     // 상점 ID와 카테고리 ID를 통한 아이템 리스트 조회
     List<ShopItemDTO> selectItemListByShopIdAndCategoryId(@Param("shopId") int shopId, @Param("categoryId") int categoryId);
+
+    // 카테고리 ID를 통한 아이템 리스트 조회
+    List<ShopItemDTO> selectItemListByCategoryId(@Param("categoryId") int categoryId);
 }

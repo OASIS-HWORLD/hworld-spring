@@ -15,8 +15,9 @@
 * </pre>
 -->
 
-<!-- 상점 ID와 카테고리 ID를 통한 아이템 리스트 조회 -->
+
 <mapper namespace="com.oasis.hworld.shop.mapper.ShopMapper">
+    <!-- 상점 ID와 카테고리 ID를 통한 아이템 리스트 조회 -->
     <select id="selectItemListByShopIdAndCategoryId">
         SELECT
             I.name AS item_name,
@@ -33,5 +34,23 @@
         WHERE
             S.shop_id=#{shopId}
         AND I.category_id=#{categoryId}
+    </select>
+
+    <!-- 카테고리 ID를 통한 아이템 리스트 조회 -->
+    <select id="selectItemListByCategoryId">
+        SELECT
+            I.name AS item_name,
+            I.image_url AS item_image_url,
+            I.category_id,
+            IO.item_option_id,
+            IO.item_option,
+            S.shop_id,
+            S.name AS shop_name
+        FROM
+            ITEM I
+                LEFT JOIN ITEM_OPTION IO    ON  I.item_id = IO.item_id
+                LEFT JOIN SHOP S            ON I.shop_id = S.shop_id
+        WHERE
+            I.category_id=#{categoryId}
     </select>
 </mapper>

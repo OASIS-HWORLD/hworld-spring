@@ -23,4 +23,11 @@ public interface ShopService {
      * @author 정은찬
      */
     List<ShopItemDTO> getShopOneItemList(int shopId, int categoryId);
+
+    /**
+     * 모든 상점의 상품 목록 조회
+     *
+     * @author 정은찬
+     */
+    List<ShopItemDTO> getShopAllItemList(int categoryId);
 }

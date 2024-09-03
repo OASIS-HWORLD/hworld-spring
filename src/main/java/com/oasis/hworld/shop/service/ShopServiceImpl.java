@@ -42,4 +42,19 @@ public class ShopServiceImpl implements ShopService {
         return shopItemList;
     }
 
+    /**
+     * 모든 상점의 상품 목록 조회
+     *
+     * @author 정은찬
+     */
+    public List<ShopItemDTO> getShopAllItemList(int categoryId) {
+        List<ShopItemDTO> shopItemList = mapper.selectItemListByCategoryId(categoryId);
+
+        shopItemList.forEach(shopItem -> {
+            shopItem.setCategoryName(ItemCategory.getCategoryName(shopItem.getCategoryId()));
+        });
+
+        return shopItemList;
+    }
+
 }

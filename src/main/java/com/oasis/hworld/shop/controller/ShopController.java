@@ -44,4 +44,15 @@ public class ShopController {
     public ResponseEntity<List<ShopItemDTO>> getShopOneItemList(@RequestParam("shopId") int shopId, @RequestParam("categoryId") int categoryId) {
         return ResponseEntity.ok(service.getShopOneItemList(shopId, categoryId));
     }
+
+    /**
+     * 모든 상점의 상품 목록 조회
+     *
+     * @author 정은찬
+     * @apiNote 한 상점의 상품 목록을 조회한다.
+     */
+    @GetMapping("/all")
+    public ResponseEntity<List<ShopItemDTO>> getShopOneItemList(@RequestParam("categoryId") int categoryId) {
+        return ResponseEntity.ok(service.getShopAllItemList(categoryId));
+    }
 }
