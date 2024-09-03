@@ -1,6 +1,6 @@
 package com.oasis.hworld.cart.controller;
 
-import com.oasis.hworld.cart.dto.CartItemRequestDTO;
+import com.oasis.hworld.cart.dto.CartItemOptionRequestDTO;
 import com.oasis.hworld.cart.dto.CartListResponseDTO;
 import com.oasis.hworld.cart.dto.ModifyCartItemCountRequestDTO;
 import com.oasis.hworld.cart.service.CartService;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.08.31  	조영욱        최초 생성
+ * 2024.09.03   조영욱        Item -> ItemOption 변경
  * </pre>
  */
 @RestController
@@ -50,7 +51,7 @@ public class CartController {
      * @author 조영욱
      */
     @PostMapping("")
-    public ResponseEntity<CommonResponseDTO> addCart(@RequestBody CartItemRequestDTO dto) {
+    public ResponseEntity<CommonResponseDTO> addCart(@RequestBody CartItemOptionRequestDTO dto) {
         // todo: memberId 로직 추가
         return service.addCart(dto, 1) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "장바구니에 추가되었습니다.")) :

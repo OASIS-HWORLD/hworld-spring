@@ -12,6 +12,7 @@
 * 수정일        	수정자        수정내용
 * ==========  =========    =========
 * 2024.09.02  	조영욱        최초 생성
+* 2024.09.03    조영욱        Item -> ItemOption 변경
 * </pre>
 -->
 <mapper namespace="com.oasis.hworld.payment.mapper.PaymentMapper">
@@ -45,13 +46,13 @@
         <foreach collection="orderItemList" item="orderItem" separator=" ">
             INTO ORDER_ITEM (
                 order_id,
-                item_id,
+                item_option_id,
                 price,
                 item_count,
                 item_option
             ) VALUES (
                 #{orderId},
-                #{orderItem.itemId},
+                #{orderItem.itemOptionId},
                 #{orderItem.price},
                 #{orderItem.itemCount},
                 #{orderItem.itemOption}

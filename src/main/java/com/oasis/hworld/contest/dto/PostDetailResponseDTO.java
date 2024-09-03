@@ -34,7 +34,7 @@ public class PostDetailResponseDTO {
     // 작성자 닉네임
     private String nickname;
     // 추천수
-    private int likeCount;
+    private int recommendCount;
     // 추천 여부
     private Boolean isRecommended;
     // 아이템 리스트

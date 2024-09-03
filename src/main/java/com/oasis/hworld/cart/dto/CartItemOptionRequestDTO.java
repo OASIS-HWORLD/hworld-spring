@@ -13,11 +13,12 @@ import lombok.Setter;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.08.31  	조영욱        최초 생성
+ * 2024.09.03   조영욱        Item -> ItemOption 변경
  * </pre>
  */
 @Getter
 @Setter
-public class CartItemRequestDTO {
-    // 상품 ID
-    private int itemId;
+public class CartItemOptionRequestDTO {
+    // 상품 옵션 ID
+    private int itemOptionId;
 }
