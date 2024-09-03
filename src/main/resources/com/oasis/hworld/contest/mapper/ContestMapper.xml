@@ -156,7 +156,7 @@
                     javaType="ArrayList">
             <result column="item_name" property="itemName"/>
             <result column="item_image_url" property="itemImageUrl"/>
-            <result column="item_type" property="itemType"/>
+            <result column="category_id" property="categoryId"/>
         </collection>
     </resultMap>
 
@@ -167,22 +167,28 @@
                CO.image_url AS coordination_image_url,
                I.name AS item_name,
                I.image_url AS item_image_url,
-               CASE
-                   WHEN I.item_id = CO.glasses_id THEN '안경'
-                   WHEN I.item_id = CO.cap_id THEN '모자'
-                   WHEN I.item_id = CO.bag_id THEN '가방'
-                   WHEN I.item_id = CO.necklace_id THEN '목걸이'
-                   END AS item_type
+               I.category_id
         FROM
             COORDINATION CO
         LEFT JOIN
+            COORDINATION_ITEM COI
+            ON
+                CO.coordination_id = COI.coordination_id
+        LEFT JOIN
+            ITEM_OPTION IO
+            ON
+                COI.item_option_id = IO.item_option_id
+        LEFT JOIN
             ITEM I
             ON
-                I.item_id IN (CO.glasses_id, CO.cap_id, CO.bag_id, CO.necklace_id)
+                IO.item_id = I.item_id
+        LEFT JOIN
+            SHOP S
+            ON
+                I.shop_id = S.shop_id
         WHERE
             CO.member_id = #{memberId}
     </select>
-
     <!-- 회원 ID와 코디 ID를 통한 게시글 ID 조회   -->
     <select id="selectContestPostByMemberIdAndCoordinationId">
         SELECT
