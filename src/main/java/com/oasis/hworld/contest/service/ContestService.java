@@ -26,14 +26,14 @@ public interface ContestService {
      *
      * @author 정은찬
      */
-    List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy, Integer memberId);
+    List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy, int memberId);
 
     /**
      * 게시글 ID를 통해 콘테스트 게시글 상세 조회
      *
      * @author 정은찬
      */
-    PostDetailResponseDTO getPostDetail(int postId, Integer memberId);
+    PostDetailResponseDTO getPostDetail(int postId, int memberId);
 
     /**
      * 회원 ID를 통해 코디 목록 조회
