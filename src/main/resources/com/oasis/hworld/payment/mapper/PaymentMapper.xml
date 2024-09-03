@@ -21,6 +21,7 @@
     <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
         INSERT INTO ORDERS (
             order_id,
+            member_id,
             order_name,
             orderer_name,
             orderer_phone,
@@ -30,6 +31,7 @@
             point_usage
         ) VALUES (
             #{orderId} || LPAD(SEQ_ORDER.NEXTVAL, 6, '0'),
+            #{memberId},
             #{orderName},
             #{ordererName},
             #{ordererPhone},

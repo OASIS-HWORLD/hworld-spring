@@ -135,6 +135,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         Order order = Order.builder()
                 .orderId(orderIdPrefix)
+                .memberId(memberId)
                 .orderName(orderName)
                 .ordererName(deliveryAddress.getName())
                 .ordererPhone(deliveryAddress.getPhone())

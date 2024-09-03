@@ -24,6 +24,8 @@ import java.util.Date;
 public class Order {
     // 주문 ID
     private String orderId;
+    // 회원 ID
+    private int memberId;
     // 주문 이름
     private String orderName;
     // 주문자 이름
