@@ -1,5 +1,6 @@
 package com.oasis.hworld.member.service;
 
+import com.oasis.hworld.member.dto.CoordinationItemListResponseDTO;
 import com.oasis.hworld.member.dto.CoordinationListResponseDTO;
 import com.oasis.hworld.member.dto.PostListResponseDTO;
 import com.oasis.hworld.member.dto.PointHistoryResponseDTO;
@@ -58,4 +59,14 @@ public class MemberServiceImpl implements MemberService {
     public List<CoordinationListResponseDTO> getMemberCoordination(int memberId) {
         return memberMapper.selectCoordinationByMemberId(memberId);
     }
+
+    /**
+     * 코디에 사용된 아이템 조회
+     *
+     * @author 김지현
+     */
+    public List<CoordinationItemListResponseDTO> getCoordinationItem(int coordinationId) {
+        return memberMapper.selectCoordinationItemByCoordinationId(coordinationId);
+    }
+
 }

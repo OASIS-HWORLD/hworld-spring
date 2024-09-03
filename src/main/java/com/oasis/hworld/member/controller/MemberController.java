@@ -117,4 +117,14 @@ public class MemberController {
         int memberId = 1;
         return ResponseEntity.ok(memberService.getMemberCoordination(memberId));
     }
+
+    /**
+     * 코디에 사용된 아이템 조회
+     *
+     * @author 김지현
+     */
+    @GetMapping("/my-coordinations/{coordinationId}")
+    public ResponseEntity<List<CoordinationItemListResponseDTO>> getCoordinationItem(@PathVariable("coordinationId") int coordinationId) {
+        return ResponseEntity.ok(memberService.getCoordinationItem(coordinationId));
+    }
 }

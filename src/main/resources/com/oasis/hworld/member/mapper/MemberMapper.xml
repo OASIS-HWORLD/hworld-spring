@@ -107,4 +107,17 @@
             WHERE member_id = #{memberId}
         ]]>
     </select>
+
+    <!-- 코디 ID로 아이템 목록 조회 -->
+    <select id="selectCoordinationItemByCoordinationId">
+        <![CDATA[
+            SELECT CI.category_id,
+                   IO.item_id,
+                   I.image_url
+            FROM COORDINATION_ITEM CI
+            LEFT JOIN ITEM_OPTION IO    ON CI.item_option_id = IO.item_option_id
+            LEFT JOIN ITEM I            ON IO.item_id = I.item_id
+            WHERE CI.coordination_id = #{coordinationId}
+        ]]>
+    </select>
 </mapper>
