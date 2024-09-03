@@ -16,6 +16,7 @@ import java.util.List;
  * 수정일        수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.01  	정은찬        최초 생성
+ * 2024.09.03   정은찬        추천 여부 변수 추가
  * </pre>
  */
 @Setter
@@ -34,6 +35,8 @@ public class PostDetailResponseDTO {
     private String nickname;
     // 추천수
     private int likeCount;
+    // 추천 여부
+    private Boolean isRecommended;
     // 아이템 리스트
     private List<ItemDTO> itemList;
     // 댓글 리스트

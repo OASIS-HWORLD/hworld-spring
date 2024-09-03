@@ -14,6 +14,7 @@ import lombok.ToString;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.08.31  	정은찬        최초 생성
+ * 2024.09.03   정은찬        추천 여부 변수 추가
  * </pre>
  */
 @Setter
@@ -28,4 +29,6 @@ public class PostSummaryDTO {
     private int likeCount;
     // 댓글수
     private int replyCount;
+    // 추천 여부
+    private Boolean isRecommended;
 }
