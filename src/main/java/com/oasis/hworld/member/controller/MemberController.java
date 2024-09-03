@@ -127,4 +127,16 @@ public class MemberController {
     public ResponseEntity<List<CoordinationItemListResponseDTO>> getCoordinationItem(@PathVariable("coordinationId") int coordinationId) {
         return ResponseEntity.ok(memberService.getCoordinationItem(coordinationId));
     }
+
+    /**
+     * 회원 주문 내역 전체 조회
+     *
+     * @author 김지현
+     */
+    @GetMapping("/my-orders")
+    public ResponseEntity<List<OrdersListResponseDTO>> getMemberOrders() {
+        // todo: memberId 로직 추가
+        int memberId = 1;
+        return ResponseEntity.ok(memberService.getMemberOrders(memberId));
+    }
 }

@@ -115,4 +115,17 @@
             WHERE CI.coordination_id = #{coordinationId}
         ]]>
     </select>
+
+    <!-- 회원 ID로 주문 내역 조회 -->
+    <select id="selectOrdersByMemberId">
+        <![CDATA[
+            SELECT O.order_id,
+                   P.approved_at,
+                   O.order_name,
+                   P.total_amount
+            FROM ORDERS O
+            LEFT JOIN PAYMENT P ON O.order_id = P.order_id
+            WHERE O.member_id = #{memberId}
+        ]]>
+    </select>
 </mapper>

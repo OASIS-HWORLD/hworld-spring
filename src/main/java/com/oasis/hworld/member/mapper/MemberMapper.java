@@ -45,4 +45,7 @@ public interface MemberMapper {
     // 코디 ID로 아이템 목록 조회
     List<CoordinationItemListResponseDTO> selectCoordinationItemByCoordinationId(int coordinationId);
 
+    // 회원 ID로 주문 내역 조회
+    List<OrdersListResponseDTO> selectOrdersByMemberId(int memberId);
+
 }
