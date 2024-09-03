@@ -114,19 +114,6 @@ public class ContestController {
     }
 
     /**
-     * 콘테스트 게시글 추천 여부 확인
-     *
-     * @author 정은찬
-     * @apiNote 콘테스트 게시글 추천 여부를 확인한다.
-     */
-    @GetMapping("/recommend/{postId}")
-    ResponseEntity<Boolean> checkRecommend(@PathVariable int postId) {
-        // todo : memberId 로직 추가
-        return ResponseEntity.ok(service.checkRecommend(10, postId));
-
-    }
-
-    /**
      * 콘테스트 게시글 추천하기
      *
      * @author 정은찬
