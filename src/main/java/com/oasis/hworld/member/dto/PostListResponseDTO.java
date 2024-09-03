@@ -17,6 +17,7 @@ import java.util.Date;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.02  	김지현        최초 생성
+ * 2024.09.03   김지현        recommendCount 필드 이름 변경
  * </pre>
  */
 @AllArgsConstructor
@@ -30,7 +31,7 @@ public class PostListResponseDTO {
     // 코디 이미지 url
     private String imageUrl;
     // 추천수
-    private int likeCount;
+    private int recommendCount;
     // 댓글수
     private int replyCount;
     // 최종 등수

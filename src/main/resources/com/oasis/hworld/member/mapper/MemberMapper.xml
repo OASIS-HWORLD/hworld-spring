@@ -72,7 +72,7 @@
         SELECT
             P.post_id,
             C.image_url,
-            P.like_count,
+            P.recommend_count,
             COUNT(reply_id) AS reply_count,
             P.rank,
             P.created_at
@@ -87,7 +87,7 @@
         GROUP BY
             P.post_id,
             C.image_url,
-            P.like_count,
+            P.recommend_count,
             P.rank,
             P.created_at
         ORDER BY
@@ -95,7 +95,7 @@
                 P.created_at DESC
             </if>
             <if test="orderBy == 'recommend'">
-                P.like_count DESC
+                P.recommend_count DESC
             </if>
     </select>
 </mapper>
