@@ -1,5 +1,6 @@
 package com.oasis.hworld.contest.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,5 +23,6 @@ import lombok.ToString;
 public class CoordinationItemDTO {
     private String itemName;
     private String itemImageUrl;
-    private String itemType;
+    private int categoryId;
+    private String categoryName;
 }

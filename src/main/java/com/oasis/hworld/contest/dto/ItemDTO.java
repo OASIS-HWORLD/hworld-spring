@@ -24,5 +24,6 @@ public class ItemDTO {
     private String itemName;
     private String shopName;
     private String itemImageUrl;
-    private String itemType;
+    private int categoryId;
+    private String categoryName;
 }

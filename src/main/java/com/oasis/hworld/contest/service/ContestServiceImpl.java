@@ -1,6 +1,7 @@
 package com.oasis.hworld.contest.service;
 
 import com.oasis.hworld.common.exception.CustomException;
+import com.oasis.hworld.contest.domain.ItemCategory;
 import com.oasis.hworld.contest.dto.*;
 import com.oasis.hworld.contest.mapper.ContestMapper;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +82,10 @@ public class ContestServiceImpl implements ContestService {
     public PostDetailResponseDTO getPostDetail(int postId, int memberId) {
         PostDetailResponseDTO postDetail = mapper.selectContestPostDetailByPostId(postId);
 
+        postDetail.getItemList().forEach( itemDTO -> {
+                    itemDTO.setCategoryName(ItemCategory.getCategoryName(itemDTO.getCategoryId()));
+                }
+        );
         if(postDetail == null) {
             throw new CustomException(POST_NOT_EXIST);
         }
@@ -101,6 +106,11 @@ public class ContestServiceImpl implements ContestService {
     public List<CoordinationResponseDTO> getCoordinationList(int memberId) {
         List<CoordinationResponseDTO> coordinationList = mapper.selectCoordinationListByMemberId(memberId);
 
+        coordinationList.forEach(coordination -> {
+            coordination.getItemList().forEach(item -> {
+                item.setCategoryName(ItemCategory.getCategoryName(item.getCategoryId()));
+            });
+        });
         return coordinationList;
     }
 
