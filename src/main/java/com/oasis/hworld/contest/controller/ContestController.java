@@ -151,7 +151,7 @@ public class ContestController {
         // todo : memberId 로직 추가
         return service.removeRecommend(1, postId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "게시글 추천을 취소했습니다.")) :
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 추천 추소를 실패했습니다."));
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 추천 취소를 실패했습니다."));
     }
 }
 
