@@ -55,7 +55,7 @@ public class DeliveryAddressController {
     }
 
     @DeleteMapping("/{deliveryAddressId}")
-    public ResponseEntity<CommonResponseDTO> addDeliveryAddress(@PathVariable("deliveryAddressId") int deliveryAddressId) {
+    public ResponseEntity<CommonResponseDTO> removeDeliveryAddress(@PathVariable("deliveryAddressId") int deliveryAddressId) {
         // todo: memberId 로직 추가
         return service.removeDeliveryAddress(deliveryAddressId, 1) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "배송지를 삭제하였습니다.")) :
