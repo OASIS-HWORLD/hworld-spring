@@ -1,6 +1,7 @@
 package com.oasis.hworld.contest.service;
 
 import com.oasis.hworld.common.exception.CustomException;
+import com.oasis.hworld.contest.domain.ItemCategory;
 import com.oasis.hworld.contest.dto.*;
 import com.oasis.hworld.contest.mapper.ContestMapper;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.oasis.hworld.common.exception.ErrorCode.*;
 
@@ -29,7 +31,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
  * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드, 게시글 추천 여부 확인 메소드 추가
- * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드 추가, 댓글 등록/삭제 메소드 수정
+ * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드, 게시글 목록 조회 / 상세보기 메소드 추천여부 확인 추가
  * </pre>
  */
 @Service
@@ -44,12 +46,32 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy) {
+    public List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy, int memberId) {
+
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(currentDate);
 
-        return mapper.selectContestPostList(formattedDate, sortBy, contestStatus);
+        List<PostSummaryDTO> postSummaryList = mapper.selectContestPostList(formattedDate, sortBy, contestStatus);
+
+        // 모든 postId 추출
+        List<Integer> postIds = postSummaryList.stream()
+                .map(PostSummaryDTO::getPostId)
+                .collect(Collectors.toList());
+
+        // 추천받은 postId 목록 조회
+        List<Integer> recommendedPostIds = mapper.getRecommendedPosts(memberId, postIds);
+
+        // 각 PostSummary 객체에 대한 추천 여부 설정
+        postSummaryList.forEach(postSummary -> {
+            if (recommendedPostIds.contains(postSummary.getPostId())) {
+                postSummary.setIsRecommended(true);
+            } else {
+                postSummary.setIsRecommended(false);
+            }
+        });
+
+        return postSummaryList;
     }
 
     /**
@@ -57,12 +79,22 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public PostDetailResponseDTO getPostDetail(int postId) {
+    public PostDetailResponseDTO getPostDetail(int postId, int memberId) {
         PostDetailResponseDTO postDetail = mapper.selectContestPostDetailByPostId(postId);
 
-        if (postDetail == null) {
+        postDetail.getItemList().forEach( itemDTO -> {
+                    itemDTO.setCategoryName(ItemCategory.getCategoryName(itemDTO.getCategoryId()));
+                }
+        );
+        if(postDetail == null) {
             throw new CustomException(POST_NOT_EXIST);
         }
+        if(checkRecommend(memberId, postId)) {
+            postDetail.setIsRecommended(true);
+        } else {
+            postDetail.setIsRecommended(false);
+        }
+
         return postDetail;
     }
 
@@ -74,6 +106,11 @@ public class ContestServiceImpl implements ContestService {
     public List<CoordinationResponseDTO> getCoordinationList(int memberId) {
         List<CoordinationResponseDTO> coordinationList = mapper.selectCoordinationListByMemberId(memberId);
 
+        coordinationList.forEach(coordination -> {
+            coordination.getItemList().forEach(item -> {
+                item.setCategoryName(ItemCategory.getCategoryName(item.getCategoryId()));
+            });
+        });
         return coordinationList;
     }
 
@@ -126,7 +163,7 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public boolean checkRecommend(int memberId, int postId) {
+    private boolean checkRecommend(int memberId, int postId) {
         return mapper.selectRecommendByMemberIdAndPostId(memberId, postId) != null;
     }
 
@@ -138,7 +175,7 @@ public class ContestServiceImpl implements ContestService {
     @Transactional
     public boolean addRecommend(int memberId, int postId) {
         // 이미 추천한 게시글
-        if(mapper.selectRecommendByMemberIdAndPostId(memberId, postId) != null) {
+        if(checkRecommend(memberId, postId)) {
             return false;
         }
 

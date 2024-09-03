@@ -42,8 +42,9 @@ public class ContestController {
      */
     @GetMapping("/posts")
     public ResponseEntity<List<PostSummaryDTO>> getContestPostList(@RequestParam("status") String contestStatus, @RequestParam(value = "sortBy", required = false, defaultValue = "latest") String sortBy) {
-
-        return ResponseEntity.ok(service.getContestPostList(contestStatus, sortBy));
+        // todo : memberId 로직 추가
+        int memberId = 1;
+        return ResponseEntity.ok(service.getContestPostList(contestStatus, sortBy, memberId));
     }
 
     /**
@@ -54,7 +55,9 @@ public class ContestController {
      */
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostDetailResponseDTO> getPostDetail(@PathVariable("postId") int postId) {
-        return ResponseEntity.ok(service.getPostDetail(postId));
+        // todo : memberId 로직 추가
+        int memberId = 1;
+        return ResponseEntity.ok(service.getPostDetail(postId, memberId));
     }
 
     /**
