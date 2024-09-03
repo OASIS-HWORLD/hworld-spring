@@ -1,9 +1,7 @@
 package com.oasis.hworld.member.mapper;
 
 import com.oasis.hworld.member.domain.Member;
-import com.oasis.hworld.member.dto.PostListResponseDTO;
-import com.oasis.hworld.member.dto.PointHistoryResponseDTO;
-import com.oasis.hworld.member.dto.SignUpRequestDTO;
+import com.oasis.hworld.member.dto.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -40,4 +38,11 @@ public interface MemberMapper {
 
     // 회원 ID로 게시글 목록 조회
     List<PostListResponseDTO> selectPostByMemberId(@Param("memberId") int memberId, @Param("orderBy") String orderBy);
+
+    // 회원 ID로 코디 목록 조회
+    List<CoordinationListResponseDTO> selectCoordinationByMemberId(int memberId);
+
+    // 코디 ID로 아이템 목록 조회
+    List<CoordinationItemListResponseDTO> selectCoordinationItemByCoordinationId(int coordinationId);
+
 }
