@@ -2,7 +2,7 @@ package com.oasis.hworld.cart.service;
 
 import com.oasis.hworld.cart.domain.Cart;
 import com.oasis.hworld.cart.dto.CartDetailDTO;
-import com.oasis.hworld.cart.dto.CartItemRequestDTO;
+import com.oasis.hworld.cart.dto.CartItemOptionRequestDTO;
 import com.oasis.hworld.cart.dto.CartListResponseDTO;
 import com.oasis.hworld.cart.dto.ModifyCartItemCountRequestDTO;
 import com.oasis.hworld.cart.mapper.CartMapper;
@@ -25,6 +25,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.08.31  	조영욱        최초 생성
+ * 2024.09.03   조영욱        Item -> ItemOption 변경
  * </pre>
  */
 @Service
@@ -57,16 +58,16 @@ public class CartServiceImpl implements CartService {
      * @author 조영욱
      */
     @Override
-    public boolean addCart(CartItemRequestDTO dto, int memberId) {
-        int itemId = dto.getItemId();
+    public boolean addCart(CartItemOptionRequestDTO dto, int memberId) {
+        int itemOptionId = dto.getItemOptionId();
         // todo: 아이템 존재 검증
 
         // 장바구니에 이미 존재
-        if (mapper.selectCartByMemberIdAndItemId(memberId, itemId) != null) {
+        if (mapper.selectCartByMemberIdAndItemOptionId(memberId, itemOptionId) != null) {
             return false;
         }
 
-        return mapper.insertCart(memberId, itemId) == 1;
+        return mapper.insertCart(memberId, itemOptionId) == 1;
     }
 
     /**

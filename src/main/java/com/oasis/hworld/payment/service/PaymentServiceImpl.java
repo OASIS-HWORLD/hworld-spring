@@ -3,7 +3,6 @@ package com.oasis.hworld.payment.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.oasis.hworld.cart.dto.CartDetailDTO;
 import com.oasis.hworld.cart.dto.CartOrderDTO;
 import com.oasis.hworld.cart.mapper.CartMapper;
 import com.oasis.hworld.common.exception.CustomException;
@@ -32,8 +31,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +47,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.02  	조영욱        최초 생성
+ * 2024.09.03   조영욱        Item -> ItemOption 변경
  * </pre>
  */
 @Service
@@ -108,7 +106,7 @@ public class PaymentServiceImpl implements PaymentService {
             // orderId는 order 테이블의 시퀀스를 사용하기 때문에 나중에 추가
             OrderItem orderItem = OrderItem.builder()
                     .orderId(null)
-                    .itemId(cart.getItemId())
+                    .itemOptionId(cart.getItemOptionId())
                     .price(itemPrice)
                     .itemCount(cart.getItemCount())
                     .itemOption(cart.getItemOption())

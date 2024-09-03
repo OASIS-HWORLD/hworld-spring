@@ -72,8 +72,8 @@
         SELECT
             P.post_id,
             C.image_url,
-            P.like_count,
-            COUNT(reply_id) AS reply_count,
+            P.recommend_count,
+            P.reply_count,
             P.rank,
             P.created_at
         FROM POST P
@@ -84,18 +84,35 @@
             AND R.deleted_at IS NULL
         WHERE P.deleted_at IS NULL
           AND P.member_id = #{memberId}
-        GROUP BY
-            P.post_id,
-            C.image_url,
-            P.like_count,
-            P.rank,
-            P.created_at
         ORDER BY
             <if test="orderBy == 'latest'">
                 P.created_at DESC
             </if>
             <if test="orderBy == 'recommend'">
-                P.like_count DESC
+                P.recommend_count DESC
             </if>
+    </select>
+
+    <!-- 회원 ID로 코디 목록 조회 -->
+    <select id="selectCoordinationByMemberId">
+        <![CDATA[
+            SELECT coordination_id, title, image_url
+            FROM COORDINATION
+            WHERE member_id = #{memberId}
+        ]]>
+    </select>
+
+    <!-- 코디 ID로 아이템 목록 조회 -->
+    <select id="selectCoordinationItemByCoordinationId">
+        <![CDATA[
+            SELECT CI.category_id,
+                   IO.item_id,
+                   I.image_url,
+                   I.detail_image_url
+            FROM COORDINATION_ITEM CI
+            LEFT JOIN ITEM_OPTION IO    ON CI.item_option_id = IO.item_option_id
+            LEFT JOIN ITEM I            ON IO.item_id = I.item_id
+            WHERE CI.coordination_id = #{coordinationId}
+        ]]>
     </select>
 </mapper>

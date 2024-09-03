@@ -25,7 +25,7 @@ public class PostSummaryDTO {
     // 코디 이미지 url
     private String imageUrl;
     // 추천수
-    private int likeCount;
+    private int recommendCount;
     // 댓글수
     private int replyCount;
 }
