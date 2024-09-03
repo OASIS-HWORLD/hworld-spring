@@ -1,9 +1,10 @@
-package com.oasis.hworld.character.domain;
+package com.oasis.hworld.character.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
- * 캐릭터 상태 VO
+ * 캐릭터 상태 변경 Request DTO
  * @author 조영욱
  * @since 2024.09.03
  * @version 1.0
@@ -14,16 +15,13 @@ import lombok.Data;
  * 2024.09.03  	조영욱        최초 생성
  * </pre>
  */
-@Data
-public class CharacterState {
-    // 회원 ID
-    private int memberId;
-    // 속도
+@Getter
+@Setter
+public class CharacterStateRequestDTO {
+    // 캐릭터 이동속도
     private int speed;
     // 마우스 감도
     private int mouseSensitivity;
     // 소리 크기
     private int sound;
-    // 캐릭터 타입
-    private int characterType;
 }

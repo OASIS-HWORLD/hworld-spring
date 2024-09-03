@@ -33,6 +33,4 @@ public class CartOrderDTO {
     private String itemName;
     // 상품 가격
     private int itemPrice;
-    // 상품 옵션
-    private String itemOption;
 }

@@ -109,7 +109,6 @@ public class PaymentServiceImpl implements PaymentService {
                     .itemOptionId(cart.getItemOptionId())
                     .price(itemPrice)
                     .itemCount(cart.getItemCount())
-                    .itemOption(cart.getItemOption())
                     .build();
 
             orderItemList.add(orderItem);
@@ -135,6 +134,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         Order order = Order.builder()
                 .orderId(orderIdPrefix)
+                .memberId(memberId)
                 .orderName(orderName)
                 .ordererName(deliveryAddress.getName())
                 .ordererPhone(deliveryAddress.getPhone())
