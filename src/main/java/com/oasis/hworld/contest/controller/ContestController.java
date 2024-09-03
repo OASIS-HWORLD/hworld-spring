@@ -20,11 +20,11 @@ import java.util.List;
  *
  * <pre>
  * 수정일        수정자        수정내용
- * ----------  --------    ------------------------------------------------------
+ * ----------  --------    ------------------------------------------------------------------------------------------------------------
  * 2024.08.31  	정은찬        최초 생성
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
  * 2024.09.02   정은찬        코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드 추가
- * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드 추가, 댓글 삭제 메소드 수정
+ * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드 추가, 댓글 삭제 메소드 수정, 게시글 삭제 메소드 추가
  * </pre>
  */
 @RestController
@@ -139,6 +139,21 @@ public class ContestController {
         return service.removeRecommend(1, postId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "게시글 추천을 취소했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 추천 취소를 실패했습니다."));
+    }
+
+    /**
+     * 콘테스트 게시글 삭제하기
+     *
+     * @author 정은찬
+     * @apiNote 콘테스트 게시글을 삭제한다.
+     */
+    @DeleteMapping("/posts/{postId}")
+    ResponseEntity<CommonResponseDTO> removePost(@PathVariable int postId) {
+        // todo : memberId 로직 추가
+        int memberId = 1;
+        return service.removePost(memberId, postId) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "게시글을 삭제했습니다.")) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 삭제를 실패했습니다."));
     }
 }
 
