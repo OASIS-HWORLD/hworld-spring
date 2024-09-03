@@ -19,7 +19,9 @@ public enum ErrorCode {
     TOO_MUCH_POINT_USAGE(400, "포인트 사용 가능량을 초과하였습니다."),
     ORDER_NOT_VALID(400, "주문 정보가 올바르지 않습니다."),
     POST_NOT_EXIST(400, "존재하지 않는 게시글입니다."),
-    TOO_MANY_DELIVERY_ADDRESSES(400, "배송지는 최대 10개까지 저장 가능합니다.");
+    TOO_MANY_DELIVERY_ADDRESSES(400, "배송지는 최대 10개까지 저장 가능합니다."),
+    CHARACTER_ALREADY_EXIST(400, "캐릭터가 이미 존재합니다."),
+    CHARACTER_NOT_EXIST(400, "캐릭터가 존재하지 않습니다.");
 
 
     private final int status;
