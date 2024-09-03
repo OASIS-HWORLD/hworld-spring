@@ -20,6 +20,8 @@
     <select id="selectCartByMemberId">
         SELECT
             C.cart_id,
+            IO.item_option_id,
+            IO.item_option,
             I.item_id,
             C.item_count,
             I.name AS item_name,
@@ -32,9 +34,13 @@
         FROM
             CART C
         LEFT JOIN
+            ITEM_OPTION IO
+            ON
+                C.item_option_id = IO.item_option_id
+        LEFT JOIN
             ITEM I
             ON
-                C.item_id = I.item_id
+                IO.item_id = I.item_id
         LEFT JOIN
             SHOP S
             ON
@@ -44,7 +50,7 @@
     </select>
 
     <!-- 회원 ID와 상품 ID로 장바구니 조회 -->
-    <select id="selectCartByMemberIdAndItemId">
+    <select id="selectCartByMemberIdAndItemOptionId">
         SELECT
             cart_id
         FROM
@@ -52,7 +58,7 @@
         WHERE
             member_id = #{memberId}
             AND
-            item_id = #{itemId}
+            item_option_id = #{itemOptionId}
     </select>
 
     <!-- 장바구니 ID로 장바구니 조회 -->
@@ -71,12 +77,12 @@
         INSERT INTO CART(
             cart_id,
             member_id,
-            item_id,
+            item_option_id,
             item_count
         ) VALUES (
             SEQ_CART.NEXTVAL,
             #{memberId},
-            #{itemId},
+            #{itemOptionId},
             1
         )
     </insert>
@@ -104,6 +110,7 @@
         SELECT
             C.cart_id,
             C.member_id,
+            IO.item_option_id,
             I.item_id,
             C.item_count,
             I.name AS item_name,
@@ -111,9 +118,13 @@
         FROM
             CART C
         LEFT JOIN
+            ITEM_OPTION IO
+            ON
+                C.item_option_id = IO.item_option_id
+        LEFT JOIN
             ITEM I
             ON
-                C.item_id = I.item_id
+                IO.item_id = I.item_id
         WHERE
             C.cart_id IN
             <foreach collection="cartIdList" item="cartId" open="(" close=")" separator=",">

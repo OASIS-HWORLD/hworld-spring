@@ -22,8 +22,8 @@ import lombok.Setter;
 public class OrderItem {
     // 주문 ID
     private String orderId;
-    // 상품 ID
-    private int itemId;
+    // 상품 옵션 ID
+    private int itemOptionId;
     // 주문 당시 상품 가격 (개수 적용)
     private int price;
     // 상품 개수

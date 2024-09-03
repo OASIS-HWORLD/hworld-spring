@@ -24,11 +24,11 @@ public interface CartMapper {
     // 회원 ID로 장바구니 조회
     List<CartDetailDTO> selectCartByMemberId(int memberId);
     // 회원 ID와 상품 ID로 장바구니 조회
-    Cart selectCartByMemberIdAndItemId(@Param("memberId") int memberId, @Param("itemId") int itemId);
+    Cart selectCartByMemberIdAndItemOptionId(@Param("memberId") int memberId, @Param("itemOptionId") int itemOptionId);
     // 장바구니 ID로 장바구니 조회
     Cart selectCartByCartId(int cartId);
     // 장바구니 추가
-    int insertCart(@Param("memberId") int memberId, @Param("itemId") int itemId);
+    int insertCart(@Param("memberId") int memberId, @Param("itemOptionId") int itemOptionId);
     // 장바구니에서 삭제
     int deleteCartByCartId(int cartId);
     // 장바구니의 상품 개수 변경

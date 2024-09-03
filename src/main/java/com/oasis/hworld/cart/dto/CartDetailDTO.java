@@ -22,6 +22,8 @@ import lombok.ToString;
 public class CartDetailDTO {
     // 장바구니 ID
     private int cartId;
+    // 상품 옵션 ID
+    private int itemOptionId;
     // 상품 ID
     private int itemId;
     // 상품 개수

@@ -108,7 +108,7 @@ public class PaymentServiceImpl implements PaymentService {
             // orderId는 order 테이블의 시퀀스를 사용하기 때문에 나중에 추가
             OrderItem orderItem = OrderItem.builder()
                     .orderId(null)
-                    .itemId(cart.getItemId())
+                    .itemOptionId(cart.getItemOptionId())
                     .price(itemPrice)
                     .itemCount(cart.getItemCount())
                     .itemOption(cart.getItemOption())

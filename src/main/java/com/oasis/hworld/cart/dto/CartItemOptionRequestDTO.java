@@ -17,7 +17,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class CartItemRequestDTO {
-    // 상품 ID
-    private int itemId;
+public class CartItemOptionRequestDTO {
+    // 상품 옵션 ID
+    private int itemOptionId;
 }
