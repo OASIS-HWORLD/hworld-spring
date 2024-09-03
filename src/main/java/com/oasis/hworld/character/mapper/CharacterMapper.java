@@ -38,4 +38,6 @@ public interface CharacterMapper {
     Integer selectCategoryIdByItemOptionId(int itemOptionId);
     // 캐릭터 장착 상품 추가
     int insertCharacterItem(CharacterItem characterItem);
+    // 캐릭터 상품 장착 해제
+    int deleteCharacterItem(@Param("categoryId") int categoryId, @Param("memberId") int memberId);
 }

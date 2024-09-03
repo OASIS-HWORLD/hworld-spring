@@ -1,6 +1,5 @@
 package com.oasis.hworld.character.controller;
 
-import com.oasis.hworld.character.domain.CharacterState;
 import com.oasis.hworld.character.dto.*;
 import com.oasis.hworld.character.service.CharacterService;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
@@ -103,5 +102,21 @@ public class CharacterController {
         return service.equipItem(dto, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "상품 장착에 성공했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "상품 장착에 실패했습니다."));
+    }
+
+    /**
+     * 상품 해제
+     *
+     * @author 조영욱
+     * @apiNote 캐릭터가 장착중인 상품을 해제한다.
+     */
+    @DeleteMapping("/item/{categoryId}")
+    public ResponseEntity<CommonResponseDTO> unequipItem(@PathVariable("categoryId") int categoryId) {
+        // todo: memberId 로직 추가
+        int memberId = 1;
+
+        return service.unequipItem(categoryId, memberId) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "장착을 해제했습니다.")) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "해당 상품을 장착중이지 않습니다."));
     }
 }

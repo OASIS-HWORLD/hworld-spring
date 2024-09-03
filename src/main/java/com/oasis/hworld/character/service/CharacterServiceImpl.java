@@ -5,12 +5,10 @@ import com.oasis.hworld.character.domain.CharacterState;
 import com.oasis.hworld.character.dto.*;
 import com.oasis.hworld.character.mapper.CharacterMapper;
 import com.oasis.hworld.common.exception.CustomException;
-import com.oasis.hworld.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 
 import static com.oasis.hworld.common.exception.ErrorCode.*;
@@ -128,5 +126,15 @@ public class CharacterServiceImpl implements CharacterService {
             characterItem.setItemOptionId(itemOptionId);
             return mapper.updateCharacterItem(characterItem) == 1;
         }
+    }
+
+    /**
+     * 상품 해제
+     *
+     * @author 조영욱
+     * @apiNote 캐릭터가 장착중인 상품을 해제한다.
+     */
+    public boolean unequipItem(int categoryId, int memberId) {
+        return mapper.deleteCharacterItem(categoryId, memberId) == 1;
     }
 }

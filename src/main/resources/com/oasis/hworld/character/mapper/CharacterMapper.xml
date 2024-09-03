@@ -36,7 +36,7 @@
             IO.item_option_id,
             IO.item_option,
             I.item_id,
-            I.name
+            I.name AS item_name
         FROM
             CHARACTER_ITEM CI
             LEFT JOIN ITEM_OPTION IO ON CI.item_option_id = IO.item_option_id
@@ -116,4 +116,14 @@
         WHERE
             IO.item_option_id = #{itemOptionId}
     </select>
+
+    <!-- 캐릭터 상품 장착 해제 -->
+    <delete id="deleteCharacterItem">
+        DELETE FROM
+            CHARACTER_ITEM
+        WHERE
+            category_id = #{categoryId}
+        AND
+            member_id = #{memberId}
+    </delete>
 </mapper>

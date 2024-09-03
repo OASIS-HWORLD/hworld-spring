@@ -29,5 +29,5 @@ public class CharacterItemResponseDTO {
     // 상품 ID
     private int itemId;
     // 상품 이름
-    private int itemName;
+    private String itemName;
 }

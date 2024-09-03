@@ -1,6 +1,5 @@
 package com.oasis.hworld.character.service;
 
-import com.oasis.hworld.character.domain.CharacterState;
 import com.oasis.hworld.character.dto.*;
 
 import java.util.List;
@@ -56,4 +55,12 @@ public interface CharacterService {
      * @apiNote 캐릭터에 상품을 장착한다.
      */
     boolean equipItem(EquipItemRequestDTO dto, int memberId);
+
+    /**
+     * 상품 해제
+     *
+     * @author 조영욱
+     * @apiNote 캐릭터가 장착중인 상품을 해제한다.
+     */
+    boolean unequipItem(int categoryId, int memberId);
 }
