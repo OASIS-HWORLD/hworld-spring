@@ -25,7 +25,7 @@
             P.post_id,
             CO.image_url,
             P.like_count,
-            COUNT(R.reply_id) AS reply_count
+            P.reply_count
         FROM
             POST P
         LEFT JOIN
@@ -55,6 +55,7 @@
             P.post_id,
             CO.image_url,
             P.like_count
+            P.reply_count
         <choose>
             <when test="sortBy == 'latest'">
                 ORDER BY MAX(P.created_at) DESC
@@ -268,4 +269,18 @@
         #{totalRowsAffected, mode=OUT, jdbcType=INTEGER}
         )}
     </select>
+
+    <!-- 콘테스트 댓글수 업데이트 (증가) -->
+    <update id="updateIncreaseReplyCount">
+        UPDATE POST
+        SET reply_count = reply_count + 1
+        WHERE post_id = #{postId}
+    </update>
+
+    <!-- 콘테스트 댓글수 업데이트 (감소) -->
+    <update id="updateDecreaseReplyCount">
+        UPDATE POST
+        SET reply_count = reply_count - 1
+        WHERE post_id = #{postId}
+    </update>
 </mapper>
