@@ -1,6 +1,8 @@
 package com.oasis.hworld.deliveryaddress.mapper;
 
 import com.oasis.hworld.deliveryaddress.domain.DeliveryAddress;
+import com.oasis.hworld.deliveryaddress.dto.DeliveryAddressRequestDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,6 +16,7 @@ import java.util.List;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.02  	조영욱        최초 생성
+ * 2024.09.03   조영욱        배송지 추가, 삭제 구현
  * </pre>
  */
 public interface DeliveryAddressMapper {
@@ -22,5 +25,8 @@ public interface DeliveryAddressMapper {
     List<DeliveryAddress> selectDeliveryAddressByMemberId(int memberId);
     // 배송지 ID로 배송지 조회
     DeliveryAddress selectDeliveryAddressByDeliveryAddressId(int deliveryAddressId);
-
+    // 배송지 추가
+    int insertDeliveryAddress(@Param("dto") DeliveryAddressRequestDTO dto, @Param("memberId") int memberId);
+    // 배송지 삭제
+    int deleteDeliveryAddress(int deliveryAddressId);
 }

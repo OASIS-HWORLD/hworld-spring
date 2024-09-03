@@ -14,6 +14,7 @@ import lombok.ToString;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.02  	조영욱        최초 생성
+ * 2024.09.03   조영욱        Item -> ItemOption 변경
  * </pre>
  */
 @Getter
@@ -24,8 +25,8 @@ public class CartOrderDTO {
     private int cartId;
     // 회원 ID
     private int memberId;
-    // 상품 ID
-    private int itemId;
+    // 상품 옵션 ID
+    private int itemOptionId;
     // 상품 개수
     private int itemCount;
     // 상품 이름

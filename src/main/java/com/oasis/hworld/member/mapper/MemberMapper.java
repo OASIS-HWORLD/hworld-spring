@@ -1,8 +1,10 @@
 package com.oasis.hworld.member.mapper;
 
 import com.oasis.hworld.member.domain.Member;
+import com.oasis.hworld.member.dto.PostListResponseDTO;
 import com.oasis.hworld.member.dto.PointHistoryResponseDTO;
 import com.oasis.hworld.member.dto.SignUpRequestDTO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -36,4 +38,6 @@ public interface MemberMapper {
     // 회원 ID로 포인트 내역 조회
     List<PointHistoryResponseDTO> selectPointHistoryByMemberId(int memberId);
 
+    // 회원 ID로 게시글 목록 조회
+    List<PostListResponseDTO> selectPostByMemberId(@Param("memberId") int memberId, @Param("orderBy") String orderBy);
 }
