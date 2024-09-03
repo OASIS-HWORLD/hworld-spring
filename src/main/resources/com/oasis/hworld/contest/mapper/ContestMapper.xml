@@ -45,6 +45,8 @@
             ON
                 P.post_id = R.post_id
         WHERE
+            P.deleted_at IS NULL
+          AND
             <if test="contestStatus == 'ongoing'">
                 TO_DATE(#{date}, 'YYYY-MM-DD') BETWEEN C.start_date AND C.end_date
             </if>
@@ -140,7 +142,11 @@
             ON
                 I.shop_id = S.shop_id
         WHERE
+            P.deleted_at IS NULL
+          AND
             P.post_id = #{postId}
+          AND
+            R.deleted_at IS NULL
         ORDER BY
             R.created_at DESC
     </select>
