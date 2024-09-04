@@ -58,4 +58,12 @@
         INSERT INTO CHARACTER_ITEM (category_id, member_id, item_option_id)
         VALUES (#{categoryId}, #{memberId}, #{itemOptionId})
     </insert>
+
+    <!-- 코디 삭제 -->
+    <update id="deleteCoordination">
+        UPDATE COORDINATION
+        SET deleted_at = SYSDATE
+        WHERE coordination_id = #{coordinationId}
+          AND deleted_at IS NULL
+    </update>
 </mapper>

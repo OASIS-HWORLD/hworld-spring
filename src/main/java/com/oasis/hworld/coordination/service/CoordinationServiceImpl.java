@@ -94,4 +94,14 @@ public class CoordinationServiceImpl implements CoordinationService {
         return result;
     }
 
+    /**
+     * 코디 삭제
+     *
+     * @author 김지현
+     */
+    @Override
+    public boolean deleteCoordination(int coordinationId) {
+        return coordinationMapper.deleteCoordination(coordinationId) == 1;
+    }
+
 }

@@ -7,6 +7,7 @@ import com.oasis.hworld.coordination.dto.CoordinationRequestDTO;
 import com.oasis.hworld.coordination.service.CoordinationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -61,6 +62,18 @@ public class CoordinationController {
         return coordinationService.applyCoordination(coordinationItemList, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "코디가 적용되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "코디 적용에 실패했습니다."));
+    }
+
+    /**
+     * 코디 삭제
+     *
+     * @author 김지현
+     */
+    @DeleteMapping("/{coordinationId}")
+    public ResponseEntity<CommonResponseDTO> removeCoordination(@PathVariable("coordinationId") int coordinationId) {
+        return coordinationService.deleteCoordination(coordinationId) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "코디가 삭제되었습니다.")) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "코디 삭제에 실패했습니다."));
     }
 
 }

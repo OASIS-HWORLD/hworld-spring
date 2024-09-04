@@ -1,6 +1,5 @@
 package com.oasis.hworld.coordination.service;
 
-import com.oasis.hworld.coordination.domain.CoordinationItem;
 import com.oasis.hworld.coordination.dto.CoordinationItemRequestDTO;
 import com.oasis.hworld.coordination.dto.CoordinationRequestDTO;
 
@@ -33,5 +32,12 @@ public interface CoordinationService {
      * @author 김지현
      */
     boolean applyCoordination(List<CoordinationItemRequestDTO> coordinationItemList, int memberId);
+
+    /**
+     * 코디 삭제
+     *
+     * @author 김지현
+     */
+    boolean deleteCoordination(int coordinationId);
 
 }
