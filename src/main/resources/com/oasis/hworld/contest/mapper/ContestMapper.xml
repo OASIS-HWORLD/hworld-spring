@@ -168,10 +168,10 @@
                  C.contest_id
             FROM
                 CONTEST C
-            WHERE sysdate BETWEEN C.start_date AND C.end_date),
+            WHERE SYSDATE BETWEEN C.start_date AND C.end_date),
             #{postRequestDTO.coordinationId},
             #{postRequestDTO.title},
-            sysdate
+            SYSDATE
         )
     </insert>
 
@@ -189,7 +189,7 @@
             #{replyRequestDTO.postId},
             #{memberId},
             #{replyRequestDTO.content},
-            sysdate
+            SYSDATE
         )
     </insert>
 
@@ -259,7 +259,7 @@
     <!-- 회원 ID와 게시글 ID를 통한 게시글 삭제  -->
     <update id="deletePostByMemberIdAndPostId">
         UPDATE POST
-        SET deleted_at = sysdate
+        SET deleted_at = SYSDATE
         WHERE
             member_id=#{memberId}
         AND post_id=#{postId}
