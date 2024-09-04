@@ -1,6 +1,7 @@
 package com.oasis.hworld.shop.controller;
 
 import com.oasis.hworld.contest.dto.PostSummaryDTO;
+import com.oasis.hworld.shop.domain.Shop;
 import com.oasis.hworld.shop.dto.ShopItemDTO;
 import com.oasis.hworld.shop.service.ShopService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.List;
  * 수정일        수정자        수정내용
  * ----------  --------    ------------------------------------------------------
  * 2024.09.03  	정은찬        최초 생성
+ * 2024.09.04   정은찬        상점 목록 조회 메소드 추가
  * </pre>
  */
 @RestController
@@ -37,7 +39,7 @@ public class ShopController {
      * @author 정은찬
      * @apiNote 한 상점의 상품 목록을 조회한다.
      */
-    @GetMapping("")
+    @GetMapping("/item")
     public ResponseEntity<List<ShopItemDTO>> getShopOneItemList(@RequestParam("shopId") int shopId, @RequestParam("categoryId") int categoryId) {
         return ResponseEntity.ok(service.getShopOneItemList(shopId, categoryId));
     }
@@ -52,4 +54,16 @@ public class ShopController {
     public ResponseEntity<List<ShopItemDTO>> getShopOneItemList(@PathVariable int categoryId) {
         return ResponseEntity.ok(service.getShopAllItemList(categoryId));
     }
+
+    /**
+     * 상점 목록 조회
+     *
+     * @author 정은찬
+     * @apiNote 모든 상점 목록을 조회한다.
+     */
+    @GetMapping("")
+    public ResponseEntity<List<Shop>> getShopList() {
+        return ResponseEntity.ok(service.getShopList());
+    }
+
 }

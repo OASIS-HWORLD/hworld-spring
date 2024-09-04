@@ -1,5 +1,6 @@
 package com.oasis.hworld.shop.service;
 
+import com.oasis.hworld.shop.domain.Shop;
 import com.oasis.hworld.shop.dto.ShopItemDTO;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
  * 수정일        수정자        수정내용
  * ----------  --------    ------------------------------------------------------
  * 2024.09.03  	정은찬        최초 생성
+ * 2024.09.04   정은찬        상점 목록 조회 메소드 추가
  * </pre>
  */
 public interface ShopService {
@@ -30,4 +32,11 @@ public interface ShopService {
      * @author 정은찬
      */
     List<ShopItemDTO> getShopAllItemList(int categoryId);
+
+    /**
+     * 상점 목록 조회
+     *
+     * @author 정은찬
+     */
+    List<Shop> getShopList();
 }
