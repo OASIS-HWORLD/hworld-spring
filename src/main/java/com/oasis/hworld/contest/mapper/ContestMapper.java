@@ -63,6 +63,6 @@ public interface ContestMapper {
     // 게시글 목록 추천 조회
     List<Integer> getRecommendedPosts(@Param("memberId") int memberId, @Param("postIds") List<Integer> postIds);
 
-    // 회원 ID와 게시글 ID를 톻한 게시글 삭제 등록
+    // 회원 ID와 게시글 ID를 통한 게시글 삭제 등록
     int deletePostByMemberIdAndPostId(@Param("memberId") int memberId, @Param("postId") int postId);
 }
