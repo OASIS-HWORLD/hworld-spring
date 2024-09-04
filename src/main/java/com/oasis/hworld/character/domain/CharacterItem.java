@@ -1,5 +1,6 @@
 package com.oasis.hworld.character.domain;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
