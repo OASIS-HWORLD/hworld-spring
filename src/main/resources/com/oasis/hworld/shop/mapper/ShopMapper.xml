@@ -22,11 +22,8 @@
         SELECT
             I.name AS item_name,
             I.image_url AS item_image_url,
-            I.category_id,
             IO.item_option_id,
-            IO.item_option,
-            S.shop_id,
-            S.name AS shop_name
+            IO.item_option
         FROM
             ITEM I
         LEFT JOIN ITEM_OPTION IO    ON  I.item_id = IO.item_id
@@ -41,11 +38,8 @@
         SELECT
             I.name AS item_name,
             I.image_url AS item_image_url,
-            I.category_id,
             IO.item_option_id,
-            IO.item_option,
-            S.shop_id,
-            S.name AS shop_name
+            IO.item_option
         FROM
             ITEM I
                 LEFT JOIN ITEM_OPTION IO    ON  I.item_id = IO.item_id

@@ -22,10 +22,6 @@ import lombok.ToString;
 public class ShopItemDTO {
     private String itemName;
     private String itemImageUrl;
-    private int categoryId;
-    private String categoryName;
     private int itemOptionId;
     private String itemOption;
-    private int shopId;
-    private String shopName;
 }

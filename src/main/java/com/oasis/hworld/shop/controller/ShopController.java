@@ -7,10 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,7 +37,7 @@ public class ShopController {
      * @author 정은찬
      * @apiNote 한 상점의 상품 목록을 조회한다.
      */
-    @GetMapping("/one")
+    @GetMapping("")
     public ResponseEntity<List<ShopItemDTO>> getShopOneItemList(@RequestParam("shopId") int shopId, @RequestParam("categoryId") int categoryId) {
         return ResponseEntity.ok(service.getShopOneItemList(shopId, categoryId));
     }
@@ -51,8 +48,8 @@ public class ShopController {
      * @author 정은찬
      * @apiNote 한 상점의 상품 목록을 조회한다.
      */
-    @GetMapping("/all")
-    public ResponseEntity<List<ShopItemDTO>> getShopOneItemList(@RequestParam("categoryId") int categoryId) {
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<List<ShopItemDTO>> getShopOneItemList(@PathVariable int categoryId) {
         return ResponseEntity.ok(service.getShopAllItemList(categoryId));
     }
 }

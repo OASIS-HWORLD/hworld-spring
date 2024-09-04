@@ -36,9 +36,6 @@ public class ShopServiceImpl implements ShopService {
     public List<ShopItemDTO> getShopOneItemList(int shopId, int categoryId) {
         List<ShopItemDTO> shopItemList = mapper.selectItemListByShopIdAndCategoryId(shopId, categoryId);
 
-        shopItemList.forEach(shopItem -> {
-            shopItem.setCategoryName(ItemCategory.getCategoryName(shopItem.getCategoryId()));
-        });
         return shopItemList;
     }
 
@@ -49,10 +46,6 @@ public class ShopServiceImpl implements ShopService {
      */
     public List<ShopItemDTO> getShopAllItemList(int categoryId) {
         List<ShopItemDTO> shopItemList = mapper.selectItemListByCategoryId(categoryId);
-
-        shopItemList.forEach(shopItem -> {
-            shopItem.setCategoryName(ItemCategory.getCategoryName(shopItem.getCategoryId()));
-        });
 
         return shopItemList;
     }
