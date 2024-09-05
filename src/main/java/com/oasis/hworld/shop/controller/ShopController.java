@@ -41,7 +41,7 @@ public class ShopController {
      * @apiNote 한 상점의 상품 목록을 조회한다.
      */
     @GetMapping("/item")
-    public ResponseEntity<ShopResponseDTO> getShopOneItemList(@RequestParam("shopId") int shopId, @RequestParam("categoryId") int categoryId) {
+    public ResponseEntity<List<ShopItemDTO>> getShopOneItemList(@RequestParam("shopId") int shopId, @RequestParam("categoryId") int categoryId) {
         return ResponseEntity.ok(service.getShopOneItemList(shopId, categoryId));
     }
 
@@ -52,7 +52,7 @@ public class ShopController {
      * @apiNote 한 상점의 상품 목록을 조회한다.
      */
     @GetMapping("/{categoryId}")
-    public ResponseEntity<List<ShopItemDTO>> getShopOneItemList(@PathVariable int categoryId) {
+    public ResponseEntity<List<ShopItemDTO>> getShopAllItemList(@PathVariable int categoryId) {
         return ResponseEntity.ok(service.getShopAllItemList(categoryId));
     }
 
