@@ -33,7 +33,8 @@
         LEFT JOIN COORDINATION CO   ON P.coordination_id = CO.coordination_id
         WHERE
             P.deleted_at IS NULL
-      AND   <if test="contestStatus == 'ongoing'">
+        AND CO.deleted_at IS NULL
+        AND <if test="contestStatus == 'ongoing'">
                 TO_DATE(#{date}, 'YYYY-MM-DD') BETWEEN C.start_date AND C.end_date
             </if>
             <if test="contestStatus == 'finished'">
@@ -106,8 +107,9 @@
             P.deleted_at IS NULL
         AND P.post_id = #{postId}
         AND R.deleted_at IS NULL
+        AND CO.deleted_at IS NULL
         ORDER BY
-            R.created_at DESC
+            R.created_at DESC, I.category_id ASC
     </select>
 
     <!-- CoordinationResponseDTO, CoordinationItemDTO 간의 매핑을 정의하는 ResultMap -->
@@ -135,10 +137,15 @@
             I.category_id
         FROM
             COORDINATION CO
-        LEFT JOIN COORDINATION_ITEM COI ON CO.coordination_id = COI.coordination_id AND CO.member_id = #{memberId}
+        LEFT JOIN COORDINATION_ITEM COI ON CO.coordination_id = COI.coordination_id
         LEFT JOIN ITEM_OPTION IO        ON COI.item_option_id = IO.item_option_id
         LEFT JOIN ITEM I                ON IO.item_id = I.item_id
         LEFT JOIN SHOP S                ON I.shop_id = S.shop_id
+        WHERE
+            CO.member_id = #{memberId}
+        AND CO.deleted_at IS NULL
+        ORDER BY
+            CO.coordination_id DESC, I.category_id ASC
     </select>
     <!-- 회원 ID와 코디 ID를 통한 게시글 ID 조회   -->
     <select id="selectContestPostByMemberIdAndCoordinationId">
