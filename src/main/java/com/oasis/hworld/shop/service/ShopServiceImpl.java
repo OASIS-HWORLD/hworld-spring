@@ -3,6 +3,7 @@ package com.oasis.hworld.shop.service;
 import com.oasis.hworld.common.domain.ItemCategory;
 import com.oasis.hworld.shop.domain.Shop;
 import com.oasis.hworld.shop.dto.ShopItemDTO;
+import com.oasis.hworld.shop.dto.ShopResponseDTO;
 import com.oasis.hworld.shop.mapper.ShopMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -35,10 +36,11 @@ public class ShopServiceImpl implements ShopService {
      *
      * @author 정은찬
      */
-    public List<ShopItemDTO> getShopOneItemList(int shopId, int categoryId) {
+    public ShopResponseDTO getShopOneItemList(int shopId, int categoryId) {
         List<ShopItemDTO> shopItemList = mapper.selectItemListByShopIdAndCategoryId(shopId, categoryId);
-
-        return shopItemList;
+        ShopResponseDTO shopResponseDTO = new ShopResponseDTO();
+        shopResponseDTO.setItems(shopItemList);
+        return shopResponseDTO;
     }
 
     /**

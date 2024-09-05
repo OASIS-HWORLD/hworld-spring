@@ -2,6 +2,7 @@ package com.oasis.hworld.shop.service;
 
 import com.oasis.hworld.shop.domain.Shop;
 import com.oasis.hworld.shop.dto.ShopItemDTO;
+import com.oasis.hworld.shop.dto.ShopResponseDTO;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public interface ShopService {
      *
      * @author 정은찬
      */
-    List<ShopItemDTO> getShopOneItemList(int shopId, int categoryId);
+    ShopResponseDTO getShopOneItemList(int shopId, int categoryId);
 
     /**
      * 모든 상점의 상품 목록 조회
