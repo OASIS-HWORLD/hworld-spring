@@ -36,4 +36,7 @@ public interface CoordinationMapper {
     // 캐릭터 장착 아이템 추가
     int insertCharacterItemByCoordination(CharacterItem characterItem);
 
+    // 코디 삭제
+    int deleteCoordination(int coordinationId);
+
 }
