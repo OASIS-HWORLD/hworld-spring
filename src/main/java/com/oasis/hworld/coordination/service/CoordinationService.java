@@ -1,6 +1,7 @@
 package com.oasis.hworld.coordination.service;
 
 import com.oasis.hworld.coordination.dto.CoordinationItemRequestDTO;
+import com.oasis.hworld.coordination.dto.CoordinationItemResponseDTO;
 import com.oasis.hworld.coordination.dto.CoordinationRequestDTO;
 
 import java.util.List;
@@ -39,5 +40,12 @@ public interface CoordinationService {
      * @author 김지현
      */
     boolean deleteCoordination(int coordinationId);
+
+    /**
+     * 코디에 사용된 아이템 조회
+     *
+     * @author 김지현
+     */
+    List<CoordinationItemResponseDTO> getCoordinationItem(int coordinationId);
 
 }

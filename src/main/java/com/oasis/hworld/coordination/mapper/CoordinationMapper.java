@@ -2,7 +2,7 @@ package com.oasis.hworld.coordination.mapper;
 
 import com.oasis.hworld.character.domain.CharacterItem;
 import com.oasis.hworld.coordination.domain.Coordination;
-import com.oasis.hworld.coordination.domain.CoordinationItem;
+import com.oasis.hworld.coordination.dto.CoordinationItemResponseDTO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -38,5 +38,8 @@ public interface CoordinationMapper {
 
     // 코디 삭제
     int deleteCoordination(int coordinationId);
+
+    // 코디 ID로 아이템 목록 조회
+    List<CoordinationItemResponseDTO> selectCoordinationItemByCoordinationId(int coordinationId);
 
 }

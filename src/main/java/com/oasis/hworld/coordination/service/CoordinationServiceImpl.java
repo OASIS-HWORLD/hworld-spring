@@ -2,8 +2,8 @@ package com.oasis.hworld.coordination.service;
 
 import com.oasis.hworld.character.domain.CharacterItem;
 import com.oasis.hworld.coordination.domain.Coordination;
-import com.oasis.hworld.coordination.domain.CoordinationItem;
 import com.oasis.hworld.coordination.dto.CoordinationItemRequestDTO;
+import com.oasis.hworld.coordination.dto.CoordinationItemResponseDTO;
 import com.oasis.hworld.coordination.dto.CoordinationRequestDTO;
 import com.oasis.hworld.coordination.mapper.CoordinationMapper;
 import lombok.RequiredArgsConstructor;
@@ -102,6 +102,15 @@ public class CoordinationServiceImpl implements CoordinationService {
     @Override
     public boolean deleteCoordination(int coordinationId) {
         return coordinationMapper.deleteCoordination(coordinationId) == 1;
+    }
+
+    /**
+     * 코디에 사용된 아이템 조회
+     *
+     * @author 김지현
+     */
+    public List<CoordinationItemResponseDTO> getCoordinationItem(int coordinationId) {
+        return coordinationMapper.selectCoordinationItemByCoordinationId(coordinationId);
     }
 
 }
