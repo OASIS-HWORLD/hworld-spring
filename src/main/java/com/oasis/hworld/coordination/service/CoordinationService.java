@@ -16,6 +16,7 @@ import java.util.List;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.04  	김지현        최초 생성
+ * 2024.09.05   김지현        코디에 사용된 아이템 조회 구현
  * </pre>
  */
 public interface CoordinationService {
