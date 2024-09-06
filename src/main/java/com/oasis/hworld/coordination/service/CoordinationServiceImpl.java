@@ -23,6 +23,7 @@ import java.util.List;
  * ----------  --------    ---------------------------
  * 2024.09.04  	김지현        최초 생성
  * 2024.09.05   김지현        코디에 사용된 아이템 조회 구현
+ * 2024.09.06   김지현        장바구니 관련 기능 구현
  * </pre>
  */
 @Service
@@ -110,8 +111,16 @@ public class CoordinationServiceImpl implements CoordinationService {
      *
      * @author 김지현
      */
-    public List<CoordinationItemResponseDTO> getCoordinationItem(int coordinationId) {
-        return coordinationMapper.selectCoordinationItemByCoordinationId(coordinationId);
+    public List<CoordinationItemResponseDTO> getCoordinationItem(int coordinationId, int memberId) {
+        List<CoordinationItemResponseDTO> coordinationItemList = coordinationMapper.selectCoordinationItemByCoordinationId(coordinationId);
+
+        // 장바구니에 담겨있는지 여부 확인
+        for (CoordinationItemResponseDTO coordinationItem : coordinationItemList) {
+            int itemOptionId = coordinationItem.getItemOptionId();
+            coordinationItem.setInCart(coordinationMapper.selectCartByItemOptionIdAndMemberId(itemOptionId, memberId) > 0);
+        }
+
+        return coordinationItemList;
     }
 
 }

@@ -12,6 +12,7 @@
 * 수정일        	수정자        수정내용
 * ==========  =========    =======================
 * 2024.09.04  	김지현        최초 생성
+* 2024.09.06    김지현        장바구니 관련 기능 구현
 * </pre>
 -->
 <mapper namespace="com.oasis.hworld.coordination.mapper.CoordinationMapper">
@@ -80,6 +81,16 @@
                  LEFT JOIN ITEM_OPTION IO    ON CI.item_option_id = IO.item_option_id
                  LEFT JOIN ITEM I            ON IO.item_id = I.item_id
             WHERE CI.coordination_id = #{coordinationId}
+        ]]>
+    </select>
+
+    <!-- 회원 ID와 아이템 옵션 ID로 장바구니 조회 -->
+    <select id="selectCartByItemOptionIdAndMemberId">
+        <![CDATA[
+            SELECT COUNT(cart_id)
+            FROM CART
+            WHERE member_id = #{memberId}
+              AND item_option_id = #{itemOptionId}
         ]]>
     </select>
 </mapper>
