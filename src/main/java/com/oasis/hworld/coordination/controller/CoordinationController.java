@@ -1,8 +1,8 @@
 package com.oasis.hworld.coordination.controller;
 
 import com.oasis.hworld.common.dto.CommonResponseDTO;
-import com.oasis.hworld.coordination.domain.CoordinationItem;
 import com.oasis.hworld.coordination.dto.CoordinationItemRequestDTO;
+import com.oasis.hworld.coordination.dto.CoordinationItemResponseDTO;
 import com.oasis.hworld.coordination.dto.CoordinationRequestDTO;
 import com.oasis.hworld.coordination.service.CoordinationService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +26,8 @@ import java.util.List;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.04  	김지현        최초 생성
+ * 2024.09.05   김지현        코디에 사용된 아이템 조회 구현
+ * 2024.09.06   김지현        장바구니 관련 기능 구현
  * </pre>
  */
 @RestController
@@ -74,6 +76,18 @@ public class CoordinationController {
         return coordinationService.deleteCoordination(coordinationId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "코디가 삭제되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "코디 삭제에 실패했습니다."));
+    }
+
+    /**
+     * 코디에 사용된 아이템 조회
+     *
+     * @author 김지현
+     */
+    @GetMapping("/{coordinationId}")
+    public ResponseEntity<List<CoordinationItemResponseDTO>> getCoordinationItem(@PathVariable("coordinationId") int coordinationId) {
+        // todo: memberId 로직 추가
+        int memberId = 1;
+        return ResponseEntity.ok(coordinationService.getCoordinationItem(coordinationId, memberId));
     }
 
 }
