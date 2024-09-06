@@ -81,6 +81,7 @@
                  LEFT JOIN ITEM_OPTION IO    ON CI.item_option_id = IO.item_option_id
                  LEFT JOIN ITEM I            ON IO.item_id = I.item_id
             WHERE CI.coordination_id = #{coordinationId}
+            ORDER BY CI.category_id
         ]]>
     </select>
 
