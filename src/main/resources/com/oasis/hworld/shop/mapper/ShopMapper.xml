@@ -23,6 +23,7 @@
         SELECT
             I.name AS item_name,
             I.image_url AS item_image_url,
+            I.price AS item_price,
             IO.item_option_id,
             IO.item_option
         FROM
@@ -53,9 +54,10 @@
     <select id="selectShopList">
         SELECT
             S.shop_id,
-            S.name,
-            S.image_url
+            S.name AS shop_name,
+            S.image_url AS shop_image_url
         FROM
             SHOP S
+        ORDER BY S.shop_id ASC
     </select>
 </mapper>

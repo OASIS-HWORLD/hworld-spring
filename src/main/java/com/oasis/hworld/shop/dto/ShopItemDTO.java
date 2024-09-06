@@ -24,4 +24,5 @@ public class ShopItemDTO {
     private String itemImageUrl;
     private int itemOptionId;
     private String itemOption;
+    private int itemPrice;
 }
