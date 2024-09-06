@@ -95,4 +95,11 @@
                 #{itemOptionId}
               </foreach>
     </select>
+
+    <!-- 장바구니에서 아이템 삭제 -->
+    <delete id="deleteCartByItemOptionIdAndMemberId">
+        DELETE FROM CART
+        WHERE item_option_id = #{itemOptionId}
+          AND member_id = #{memberId}
+    </delete>
 </mapper>

@@ -90,4 +90,18 @@ public class CoordinationController {
         return ResponseEntity.ok(coordinationService.getCoordinationItem(coordinationId, memberId));
     }
 
+    /**
+     * 장바구니에서 상품 삭제
+     *
+     * @author 김지현
+     */
+    @DeleteMapping("/cart/{itemOptionId}")
+    public ResponseEntity<CommonResponseDTO> removeCart(@PathVariable("itemOptionId") int itemOptionId) {
+        // todo: memberId 로직 추가
+        int memberId = 1;
+        return coordinationService.deleteCart(itemOptionId, memberId) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "장바구니에서 상품이 삭제되었습니다.")) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "장바구니에 상품이 존재하지 않습니다."));
+    }
+
 }

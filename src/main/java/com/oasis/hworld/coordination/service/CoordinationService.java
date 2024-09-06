@@ -1,8 +1,13 @@
 package com.oasis.hworld.coordination.service;
 
+import com.oasis.hworld.common.dto.CommonResponseDTO;
 import com.oasis.hworld.coordination.dto.CoordinationItemRequestDTO;
 import com.oasis.hworld.coordination.dto.CoordinationItemResponseDTO;
 import com.oasis.hworld.coordination.dto.CoordinationRequestDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -50,4 +55,10 @@ public interface CoordinationService {
      */
     List<CoordinationItemResponseDTO> getCoordinationItem(int coordinationId, int memberId);
 
+    /**
+     * 장바구니에서 상품 삭제
+     *
+     * @author 김지현
+     */
+    boolean deleteCart(int itemOptionId, int memberId);
 }

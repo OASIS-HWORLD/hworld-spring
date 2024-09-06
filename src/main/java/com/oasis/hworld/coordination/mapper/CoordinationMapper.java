@@ -47,4 +47,7 @@ public interface CoordinationMapper {
     // 아이템 장바구니에 담겼는지 여부 확인
     List<Integer> selectCartByItemOptionIdsAndMemberId(@Param("itemOptionIds") List<Integer> itemOptionIds, @Param("memberId") int memberId);
 
+    // 장바구니에서 아이템 삭제
+    int deleteCartByItemOptionIdAndMemberId(@Param("itemOptionId") int itemOptionId, @Param("memberId") int memberId);
+
 }
