@@ -101,6 +101,8 @@
             SELECT coordination_id, title, image_url
             FROM COORDINATION
             WHERE member_id = #{memberId}
+              AND deleted_at IS NULL
+            ORDER BY coordination_id DESC
         ]]>
     </select>
 
