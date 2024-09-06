@@ -1,12 +1,11 @@
 package com.oasis.hworld.contest.service;
 
 import com.oasis.hworld.common.exception.CustomException;
-import com.oasis.hworld.contest.domain.ItemCategory;
+import com.oasis.hworld.common.domain.ItemCategory;
 import com.oasis.hworld.contest.dto.*;
 import com.oasis.hworld.contest.mapper.ContestMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
