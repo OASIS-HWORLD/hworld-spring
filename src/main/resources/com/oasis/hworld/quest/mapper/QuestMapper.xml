@@ -25,7 +25,8 @@
             Q.start_date,
             Q.end_date,
             MQ.status,
-            MQ.finished_at
+            MQ.finished_at,
+            Q.point
         FROM
             QUEST Q
         LEFT JOIN

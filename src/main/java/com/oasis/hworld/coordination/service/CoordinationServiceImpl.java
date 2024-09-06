@@ -130,4 +130,13 @@ public class CoordinationServiceImpl implements CoordinationService {
         return coordinationItemList;
     }
 
+    /**
+     * 장바구니에서 상품 삭제
+     *
+     * @author 김지현
+     */
+    public boolean deleteCart(int itemOptionId, int memberId) {
+        return coordinationMapper.deleteCartByItemOptionIdAndMemberId(itemOptionId, memberId) == 1;
+    }
+
 }

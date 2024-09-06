@@ -37,4 +37,6 @@ public class QuestDetailDTO {
     private String progress;
     // 퀘스트 종료 날짜
     private String finishedAt;
+    // 포인트
+    private int point;
 }
