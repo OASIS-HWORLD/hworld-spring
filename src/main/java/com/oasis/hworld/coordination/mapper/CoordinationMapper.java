@@ -45,6 +45,6 @@ public interface CoordinationMapper {
     List<CoordinationItemResponseDTO> selectCoordinationItemByCoordinationId(int coordinationId);
 
     // 아이템 장바구니에 담겼는지 여부 확인
-    int selectCartByItemOptionIdAndMemberId(@Param("itemOptionId") int itemOptionId, @Param("memberId") int memberId);
+    List<Integer> selectCartByItemOptionIdsAndMemberId(@Param("itemOptionIds") List<Integer> itemOptionIds, @Param("memberId") int memberId);
 
 }

@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 코디 서비스 구현체
@@ -114,10 +115,16 @@ public class CoordinationServiceImpl implements CoordinationService {
     public List<CoordinationItemResponseDTO> getCoordinationItem(int coordinationId, int memberId) {
         List<CoordinationItemResponseDTO> coordinationItemList = coordinationMapper.selectCoordinationItemByCoordinationId(coordinationId);
 
-        // 장바구니에 담겨있는지 여부 확인
+        // 장바구니에 담겨 있는지 여부 확인
+        List<Integer> itemOptionIds = coordinationItemList.stream()
+                .map(CoordinationItemResponseDTO::getItemOptionId)
+                .collect(Collectors.toList());
+
+        List<Integer> itemsInCart = coordinationMapper.selectCartByItemOptionIdsAndMemberId(itemOptionIds, memberId);
+
         for (CoordinationItemResponseDTO coordinationItem : coordinationItemList) {
             int itemOptionId = coordinationItem.getItemOptionId();
-            coordinationItem.setInCart(coordinationMapper.selectCartByItemOptionIdAndMemberId(itemOptionId, memberId) > 0);
+            coordinationItem.setInCart(itemsInCart.contains(itemOptionId));
         }
 
         return coordinationItemList;
