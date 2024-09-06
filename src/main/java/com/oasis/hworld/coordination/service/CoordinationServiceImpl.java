@@ -2,8 +2,8 @@ package com.oasis.hworld.coordination.service;
 
 import com.oasis.hworld.character.domain.CharacterItem;
 import com.oasis.hworld.coordination.domain.Coordination;
-import com.oasis.hworld.coordination.domain.CoordinationItem;
 import com.oasis.hworld.coordination.dto.CoordinationItemRequestDTO;
+import com.oasis.hworld.coordination.dto.CoordinationItemResponseDTO;
 import com.oasis.hworld.coordination.dto.CoordinationRequestDTO;
 import com.oasis.hworld.coordination.mapper.CoordinationMapper;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 코디 서비스 구현체
@@ -22,6 +23,8 @@ import java.util.List;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.04  	김지현        최초 생성
+ * 2024.09.05   김지현        코디에 사용된 아이템 조회 구현
+ * 2024.09.06   김지현        장바구니 관련 기능 구현
  * </pre>
  */
 @Service
@@ -92,6 +95,48 @@ public class CoordinationServiceImpl implements CoordinationService {
         }
 
         return result;
+    }
+
+    /**
+     * 코디 삭제
+     *
+     * @author 김지현
+     */
+    @Override
+    public boolean deleteCoordination(int coordinationId) {
+        return coordinationMapper.deleteCoordination(coordinationId) == 1;
+    }
+
+    /**
+     * 코디에 사용된 아이템 조회
+     *
+     * @author 김지현
+     */
+    public List<CoordinationItemResponseDTO> getCoordinationItem(int coordinationId, int memberId) {
+        List<CoordinationItemResponseDTO> coordinationItemList = coordinationMapper.selectCoordinationItemByCoordinationId(coordinationId);
+
+        // 장바구니에 담겨 있는지 여부 확인
+        List<Integer> itemOptionIds = coordinationItemList.stream()
+                .map(CoordinationItemResponseDTO::getItemOptionId)
+                .collect(Collectors.toList());
+
+        List<Integer> itemsInCart = coordinationMapper.selectCartByItemOptionIdsAndMemberId(itemOptionIds, memberId);
+
+        for (CoordinationItemResponseDTO coordinationItem : coordinationItemList) {
+            int itemOptionId = coordinationItem.getItemOptionId();
+            coordinationItem.setInCart(itemsInCart.contains(itemOptionId));
+        }
+
+        return coordinationItemList;
+    }
+
+    /**
+     * 장바구니에서 상품 삭제
+     *
+     * @author 김지현
+     */
+    public boolean deleteCart(int itemOptionId, int memberId) {
+        return coordinationMapper.deleteCartByItemOptionIdAndMemberId(itemOptionId, memberId) == 1;
     }
 
 }
