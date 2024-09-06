@@ -18,9 +18,23 @@
 
 
 <mapper namespace="com.oasis.hworld.shop.mapper.ShopMapper">
+    <resultMap id="ShopItemResultMap" type="com.oasis.hworld.shop.dto.ShopItemDTO">
+        <id column="item_id" property="itemId"/>
+        <result column="item_name" property="itemName"/>
+        <result column="item_image_url" property="itemImageUrl"/>
+        <result column="item_price" property="itemPrice"/>
+        <collection property="itemOptions"
+                    ofType="com.oasis.hworld.shop.dto.ItemOptionDTO"
+                    javaType="ArrayList">
+            <result column="item_option_id" property="itemOptionId"/>
+            <result column="item_option" property="itemOption"/>
+        </collection>
+    </resultMap>
+
     <!-- 상점 ID와 카테고리 ID를 통한 아이템 리스트 조회 -->
-    <select id="selectItemListByShopIdAndCategoryId">
+    <select id="selectItemListByShopIdAndCategoryId" resultMap="ShopItemResultMap">
         SELECT
+            I.item_id,
             I.name AS item_name,
             I.image_url AS item_image_url,
             I.price AS item_price,
@@ -33,6 +47,7 @@
         WHERE
             S.shop_id=#{shopId}
         AND I.category_id=#{categoryId}
+        ORDER BY item_id ASC
     </select>
 
     <!-- 카테고리 ID를 통한 아이템 리스트 조회 -->
@@ -48,6 +63,7 @@
                 LEFT JOIN SHOP S            ON I.shop_id = S.shop_id
         WHERE
             I.category_id=#{categoryId}
+        ORDER BY item_id ASC
     </select>
 
     <!-- 상점 목록 조회 -->

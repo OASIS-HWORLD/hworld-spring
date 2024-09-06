@@ -38,8 +38,7 @@ public class ShopServiceImpl implements ShopService {
      */
     public List<ShopItemDTO> getShopOneItemList(int shopId, int categoryId) {
         List<ShopItemDTO> shopItemList = mapper.selectItemListByShopIdAndCategoryId(shopId, categoryId);
-//        ShopResponseDTO shopResponseDTO = new ShopResponseDTO();
-//        shopResponseDTO.setItems(shopItemList);
+
         return shopItemList;
     }
 
