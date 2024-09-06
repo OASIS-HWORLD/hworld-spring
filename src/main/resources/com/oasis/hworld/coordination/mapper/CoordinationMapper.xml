@@ -86,12 +86,13 @@
     </select>
 
     <!-- 회원 ID와 아이템 옵션 ID로 장바구니 조회 -->
-    <select id="selectCartByItemOptionIdAndMemberId">
-        <![CDATA[
-            SELECT COUNT(cart_id)
-            FROM CART
-            WHERE member_id = #{memberId}
-              AND item_option_id = #{itemOptionId}
-        ]]>
+    <select id="selectCartByItemOptionIdsAndMemberId" resultType="int">
+        SELECT item_option_id
+        FROM CART
+        WHERE member_id = #{memberId}
+          AND item_option_id IN
+              <foreach item="itemOptionId" collection="itemOptionIds" open="(" separator="," close=")">
+                #{itemOptionId}
+              </foreach>
     </select>
 </mapper>
