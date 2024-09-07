@@ -97,15 +97,16 @@ public class QuestServiceImpl implements QuestService {
         }
 
         // 포인트 지급
-        memberMapper.updatePoint(memberId, quest.getPoint());
-        PointHistory pointHistory = PointHistory.builder()
-                .memberId(memberId)
-                .type(1)
-                .amount(quest.getPoint())
-                .description("퀘스트 | '" + quest.getTitle() + "' 미션 수행 완료")
-                .build();
-        memberMapper.insertPointHistory(pointHistory);
-
+        if (quest.getPoint() != 0) {
+            memberMapper.updatePoint(memberId, quest.getPoint());
+            PointHistory pointHistory = PointHistory.builder()
+                    .memberId(memberId)
+                    .type(1)
+                    .amount(quest.getPoint())
+                    .description("퀘스트 | '" + quest.getTitle() + "' 미션 수행 완료")
+                    .build();
+            memberMapper.insertPointHistory(pointHistory);
+        }
         return questMapper.updateFinishedAt(questId, memberId) == 1;
     }
 

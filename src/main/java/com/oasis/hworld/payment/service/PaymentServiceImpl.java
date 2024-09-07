@@ -249,15 +249,16 @@ public class PaymentServiceImpl implements PaymentService {
             paymentMapper.insertPayment(payment);
 
             // point 차감
-            memberMapper.updatePoint(memberId, -order.getPointUsage());
-            PointHistory pointHistory = PointHistory.builder()
-                    .memberId(memberId)
-                    .type(2)
-                    .amount(order.getPointUsage())
-                    .description("주문번호 | " + order.getOrderId())
-                    .build();
-            memberMapper.insertPointHistory(pointHistory);
-
+            if (order.getPointUsage() != 0) {
+                memberMapper.updatePoint(memberId, -order.getPointUsage());
+                PointHistory pointHistory = PointHistory.builder()
+                        .memberId(memberId)
+                        .type(2)
+                        .amount(order.getPointUsage())
+                        .description("주문번호 | " + order.getOrderId())
+                        .build();
+                memberMapper.insertPointHistory(pointHistory);
+            }
         } else { // 결제 실패 시
             log.info("결제 실패");
         }
