@@ -48,6 +48,7 @@
                 I.shop_id = S.shop_id
         WHERE
             C.member_id = #{memberId}
+        ORDER BY C.cart_id ASC
     </select>
 
     <!-- 회원 ID와 상품 ID로 장바구니 조회 -->

@@ -35,6 +35,8 @@
                 Q.quest_id = MQ.quest_id
             AND
                 MQ.member_id = #{memberId}
+        ORDER BY
+            Q.quest_id ASC
     </select>
 
     <!-- 퀘스트 ID로 퀘스트 조회 -->
