@@ -173,9 +173,10 @@
             #{memberId},
             (SELECT
                  C.contest_id
-            FROM
+             FROM
                 CONTEST C
-            WHERE SYSDATE BETWEEN C.start_date AND C.end_date),
+             WHERE
+                SYSDATE BETWEEN C.start_date AND C.end_date),
             #{postRequestDTO.coordinationId},
             #{postRequestDTO.title},
             SYSDATE
@@ -205,14 +206,18 @@
         DELETE
         FROM
             REPLY
-        WHERE reply_id = #{replyId} AND member_id = #{memberId}
+        WHERE
+            reply_id = #{replyId}
+        AND member_id = #{memberId}
     </delete>
 
     <!-- 회원 ID와 게시글 ID를 통한 콘테스트 게시글 추천 조회 -->
     <select id="selectRecommendByMemberIdAndPostId">
         SELECT RE.member_id, RE.post_id
         FROM RECOMMEND RE
-        WHERE RE.member_id = #{memberId} AND RE.post_id = #{postId}
+        WHERE
+            RE.member_id = #{memberId}
+        AND RE.post_id = #{postId}
     </select>
 
     <!-- 콘테스트 게시글 추천 등록 및 추천수 업데이트 -->
