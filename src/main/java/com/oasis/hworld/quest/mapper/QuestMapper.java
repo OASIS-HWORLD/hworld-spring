@@ -31,4 +31,6 @@ public interface QuestMapper {
     int insertMemberQuest(@Param("questId") int questId, @Param("memberId") int memberId);
     // 회원 퀘스트 종료 날짜 현재로 변경
     int updateFinishedAt(@Param("questId") int questId, @Param("memberId") int memberId);
+    // 퀘스트 status 변경
+    int updateStatus(@Param("questId") int questId, @Param("memberId") int memberId, @Param("status") int status);
 }

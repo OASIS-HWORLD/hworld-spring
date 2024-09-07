@@ -44,8 +44,11 @@ public class QuestServiceImpl implements QuestService {
         questDetailDTOList.forEach(quest -> {
             if (quest.getStatus() == 0) {
                 quest.setProgress(QuestProgress.START_AVAILABLE.getProgress());
-            } else if (quest.getFinishedAt() == null) {
+            } else if (quest.getFinishedAt() == null && quest.getStatus() == 1) {
                 quest.setProgress(QuestProgress.IN_PROGRESS.getProgress());
+            }
+            else if (quest.getFinishedAt() == null && quest.getStatus() == 2) {
+                quest.setProgress(QuestProgress.FINISH_AVAILABLE.getProgress());
             } else {
                 quest.setProgress(QuestProgress.FINISHED.getProgress());
             }
@@ -89,6 +92,25 @@ public class QuestServiceImpl implements QuestService {
 
         // todo: 포인트 지급 PL/SQL 추가
         return mapper.updateFinishedAt(questId, memberId) == 1;
+    }
+
+    /**
+     * 퀘스트 진행
+     *
+     * @author 조영욱
+     */
+    @Override
+    public boolean progressQuest(int questId, int memberId) {
+        validateQuestExist(questId);
+
+        MemberQuest memberQuest = mapper.selectMemberQuestByQuestIdAndMemberId(questId, memberId);
+
+        // 퀘스트를 시작하지 않았거나, 이미 완료된 퀘스트일 시 false
+        if (memberQuest == null || memberQuest.getFinishedAt() != null) {
+            return false;
+        }
+
+        return mapper.updateStatus(questId, memberId, 2) == 1;
     }
 
     /**

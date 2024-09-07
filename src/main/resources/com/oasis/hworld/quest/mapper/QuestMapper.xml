@@ -87,4 +87,16 @@
         AND
             quest_id = #{questId}
     </update>
+
+    <!-- 퀘스트 status 변경 -->
+    <update id="updateStatus">
+        UPDATE
+            MEMBER_QUEST
+        SET
+            status = #{status}
+        WHERE
+            member_id = #{memberId}
+          AND
+            quest_id = #{questId}
+    </update>
 </mapper>

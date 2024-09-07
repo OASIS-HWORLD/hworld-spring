@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public enum QuestProgress {
     START_AVAILABLE("시작가능"),
     IN_PROGRESS("진행중"),
+    FINISH_AVAILABLE("완료가능"),
     FINISHED("완료");
 
     private final String progress;

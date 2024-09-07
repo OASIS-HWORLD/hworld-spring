@@ -38,4 +38,11 @@ public interface QuestService {
      * @author 조영욱
      */
     boolean finishQuest(int questId, int memberId);
+
+    /**
+     * 퀘스트 진행
+     *
+     * @author 조영욱
+     */
+    boolean progressQuest(int questId, int memberId);
 }
