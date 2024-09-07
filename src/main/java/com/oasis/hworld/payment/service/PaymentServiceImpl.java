@@ -9,6 +9,8 @@ import com.oasis.hworld.common.exception.CustomException;
 import com.oasis.hworld.common.exception.ErrorCode;
 import com.oasis.hworld.deliveryaddress.domain.DeliveryAddress;
 import com.oasis.hworld.deliveryaddress.mapper.DeliveryAddressMapper;
+import com.oasis.hworld.member.domain.PointHistory;
+import com.oasis.hworld.member.mapper.MemberMapper;
 import com.oasis.hworld.payment.domain.CardIssuer;
 import com.oasis.hworld.payment.domain.Order;
 import com.oasis.hworld.payment.domain.OrderItem;
@@ -48,6 +50,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * ----------  --------    ---------------------------
  * 2024.09.02  	조영욱        최초 생성
  * 2024.09.03   조영욱        Item -> ItemOption 변경
+ * 2024.09.07   조영욱        주문 승인 시 포인트 차감 구현
  * </pre>
  */
 @Service
@@ -58,6 +61,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentMapper paymentMapper;
     private final DeliveryAddressMapper deliveryAddressMapper;
     private final CartMapper cartMapper;
+    private final MemberMapper memberMapper;
 
     @Value("${PAYMENT_SECRET_KEY}")
     private String secretKey;
@@ -171,7 +175,7 @@ public class PaymentServiceImpl implements PaymentService {
      */
     @Override
     @Transactional
-    public boolean confirmPayment(ConfirmPaymentRequestDTO dto) throws Exception {
+    public boolean confirmPayment(ConfirmPaymentRequestDTO dto, int memberId) throws Exception {
         String orderId = dto.getOrderId();
         int amount = Integer.parseInt(dto.getAmount());
         String paymentKey = dto.getPaymentKey();
@@ -221,7 +225,7 @@ public class PaymentServiceImpl implements PaymentService {
             String methodDetail = "알 수 없음";
             int installmentsMonth = 0;
             if (!paymentResponse.get("card").isNull()) {
-                // todo: 카드사 코드 to 카드사 이름
+                // 카드사 코드 -> 카드사 이름
                 methodDetail = CardIssuer.codeToName(paymentResponse.get("card").get("issuerCode").asText());
                 installmentsMonth = paymentResponse.get("card").get("installmentPlanMonths").asInt();
             }
@@ -243,6 +247,16 @@ public class PaymentServiceImpl implements PaymentService {
 
             // payment 테이블 insert
             paymentMapper.insertPayment(payment);
+
+            // point 차감
+            memberMapper.updatePoint(memberId, -order.getPointUsage());
+            PointHistory pointHistory = PointHistory.builder()
+                    .memberId(memberId)
+                    .type(2)
+                    .amount(order.getPointUsage())
+                    .description("주문번호 | " + order.getOrderId())
+                    .build();
+            memberMapper.insertPointHistory(pointHistory);
 
         } else { // 결제 실패 시
             log.info("결제 실패");

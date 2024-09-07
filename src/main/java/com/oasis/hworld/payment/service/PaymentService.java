@@ -32,5 +32,5 @@ public interface PaymentService {
      * @author 조영욱
      * @apiNote 사용자 결제 이후 결제 승인을 요청한다 (실 결제는 결제 승인까지 완료 후 이루어진다)
      */
-    boolean confirmPayment(ConfirmPaymentRequestDTO dto) throws Exception;
+    boolean confirmPayment(ConfirmPaymentRequestDTO dto, int memberId) throws Exception;
 }
