@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 public class Shop {
     private int shopId;
-    private String name;
-    private String imageUrl;
+    private String shopName;
+    private String shopImageUrl;
 
 }

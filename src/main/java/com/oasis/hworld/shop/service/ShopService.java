@@ -2,6 +2,7 @@ package com.oasis.hworld.shop.service;
 
 import com.oasis.hworld.shop.domain.Shop;
 import com.oasis.hworld.shop.dto.ShopItemDTO;
+import com.oasis.hworld.shop.dto.ShopResponseDTO;
 
 import java.util.List;
 

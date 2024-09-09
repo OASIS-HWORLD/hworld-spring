@@ -3,6 +3,7 @@ package com.oasis.hworld.shop.service;
 import com.oasis.hworld.common.domain.ItemCategory;
 import com.oasis.hworld.shop.domain.Shop;
 import com.oasis.hworld.shop.dto.ShopItemDTO;
+import com.oasis.hworld.shop.dto.ShopResponseDTO;
 import com.oasis.hworld.shop.mapper.ShopMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;

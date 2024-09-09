@@ -3,6 +3,7 @@ package com.oasis.hworld.shop.controller;
 import com.oasis.hworld.contest.dto.PostSummaryDTO;
 import com.oasis.hworld.shop.domain.Shop;
 import com.oasis.hworld.shop.dto.ShopItemDTO;
+import com.oasis.hworld.shop.dto.ShopResponseDTO;
 import com.oasis.hworld.shop.service.ShopService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -51,7 +52,7 @@ public class ShopController {
      * @apiNote 한 상점의 상품 목록을 조회한다.
      */
     @GetMapping("/{categoryId}")
-    public ResponseEntity<List<ShopItemDTO>> getShopOneItemList(@PathVariable int categoryId) {
+    public ResponseEntity<List<ShopItemDTO>> getShopAllItemList(@PathVariable int categoryId) {
         return ResponseEntity.ok(service.getShopAllItemList(categoryId));
     }
 

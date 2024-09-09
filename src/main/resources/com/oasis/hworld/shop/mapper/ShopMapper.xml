@@ -18,20 +18,37 @@
 
 
 <mapper namespace="com.oasis.hworld.shop.mapper.ShopMapper">
+    <resultMap id="ShopItemResultMap" type="com.oasis.hworld.shop.dto.ShopItemDTO">
+        <id column="item_id" property="itemId"/>
+        <result column="item_name" property="itemName"/>
+        <result column="item_image_url" property="itemImageUrl"/>
+        <result column="item_price" property="itemPrice"/>
+        <collection property="itemOptions"
+                    ofType="com.oasis.hworld.shop.dto.ItemOptionDTO"
+                    javaType="ArrayList">
+            <result column="item_option_id" property="itemOptionId"/>
+            <result column="item_option" property="itemOption"/>
+        </collection>
+    </resultMap>
+
     <!-- 상점 ID와 카테고리 ID를 통한 아이템 리스트 조회 -->
-    <select id="selectItemListByShopIdAndCategoryId">
+    <select id="selectItemListByShopIdAndCategoryId" resultMap="ShopItemResultMap">
         SELECT
+            I.item_id,
             I.name AS item_name,
             I.image_url AS item_image_url,
+            I.price AS item_price,
             IO.item_option_id,
             IO.item_option
         FROM
             ITEM I
-        LEFT JOIN ITEM_OPTION IO    ON  I.item_id = IO.item_id
+        LEFT JOIN ITEM_OPTION IO    ON I.item_id = IO.item_id
         LEFT JOIN SHOP S            ON I.shop_id = S.shop_id
         WHERE
             S.shop_id=#{shopId}
         AND I.category_id=#{categoryId}
+        ORDER BY
+            item_id ASC
     </select>
 
     <!-- 카테고리 ID를 통한 아이템 리스트 조회 -->
@@ -43,19 +60,23 @@
             IO.item_option
         FROM
             ITEM I
-                LEFT JOIN ITEM_OPTION IO    ON  I.item_id = IO.item_id
+                LEFT JOIN ITEM_OPTION IO    ON I.item_id = IO.item_id
                 LEFT JOIN SHOP S            ON I.shop_id = S.shop_id
         WHERE
             I.category_id=#{categoryId}
+        ORDER BY
+            item_id ASC
     </select>
 
     <!-- 상점 목록 조회 -->
     <select id="selectShopList">
         SELECT
             S.shop_id,
-            S.name,
-            S.image_url
+            S.name AS shop_name,
+            S.image_url AS shop_image_url
         FROM
             SHOP S
+        ORDER BY
+            S.shop_id ASC
     </select>
 </mapper>
