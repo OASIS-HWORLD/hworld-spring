@@ -1,7 +1,10 @@
 package com.oasis.hworld.quest.service;
 
 import com.oasis.hworld.common.exception.CustomException;
+import com.oasis.hworld.member.domain.PointHistory;
+import com.oasis.hworld.member.mapper.MemberMapper;
 import com.oasis.hworld.quest.domain.MemberQuest;
+import com.oasis.hworld.quest.domain.Quest;
 import com.oasis.hworld.quest.domain.QuestProgress;
 import com.oasis.hworld.quest.dto.QuestDetailDTO;
 import com.oasis.hworld.quest.mapper.QuestMapper;
@@ -23,6 +26,8 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.01  	조영욱        최초 생성
+ * 2024.09.07   조영욱        퀘스트 진행 추가
+ * 2024.09.07   조영욱        퀘스트 완료 시 포인트 지급 추가
  * </pre>
  */
 @Service
@@ -30,7 +35,8 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
 @RequiredArgsConstructor
 public class QuestServiceImpl implements QuestService {
 
-    private final QuestMapper mapper;
+    private final QuestMapper questMapper;
+    private final MemberMapper memberMapper;
 
     /**
      * 퀘스트 목록 조회
@@ -39,13 +45,16 @@ public class QuestServiceImpl implements QuestService {
      */
     @Override
     public List<QuestDetailDTO> getQuestList(int memberId) {
-        List<QuestDetailDTO> questDetailDTOList = mapper.selectQuestByMemberId(memberId);
+        List<QuestDetailDTO> questDetailDTOList = questMapper.selectQuestByMemberId(memberId);
 
         questDetailDTOList.forEach(quest -> {
             if (quest.getStatus() == 0) {
                 quest.setProgress(QuestProgress.START_AVAILABLE.getProgress());
-            } else if (quest.getFinishedAt() == null) {
+            } else if (quest.getFinishedAt() == null && quest.getStatus() == 1) {
                 quest.setProgress(QuestProgress.IN_PROGRESS.getProgress());
+            }
+            else if (quest.getFinishedAt() == null && quest.getStatus() == 2) {
+                quest.setProgress(QuestProgress.FINISH_AVAILABLE.getProgress());
             } else {
                 quest.setProgress(QuestProgress.FINISHED.getProgress());
             }
@@ -64,11 +73,11 @@ public class QuestServiceImpl implements QuestService {
         validateQuestExist(questId);
 
         // 퀘스트가 진행 중이거나 완료 시 false
-        if (mapper.selectMemberQuestByQuestIdAndMemberId(questId, memberId) != null) {
+        if (questMapper.selectMemberQuestByQuestIdAndMemberId(questId, memberId) != null) {
             return false;
         }
 
-        return mapper.insertMemberQuest(questId, memberId) == 1;
+        return questMapper.insertMemberQuest(questId, memberId) == 1;
     }
 
     /**
@@ -78,17 +87,46 @@ public class QuestServiceImpl implements QuestService {
      */
     @Override
     public boolean finishQuest(int questId, int memberId) {
-        validateQuestExist(questId);
+        Quest quest = validateQuestExist(questId);
 
-        MemberQuest memberQuest = mapper.selectMemberQuestByQuestIdAndMemberId(questId, memberId);
+        MemberQuest memberQuest = questMapper.selectMemberQuestByQuestIdAndMemberId(questId, memberId);
 
         // 퀘스트를 시작하지 않았거나, 이미 완료된 퀘스트일 시 false
         if (memberQuest == null || memberQuest.getFinishedAt() != null) {
             return false;
         }
 
-        // todo: 포인트 지급 PL/SQL 추가
-        return mapper.updateFinishedAt(questId, memberId) == 1;
+        // 포인트 지급
+        if (quest.getPoint() != 0) {
+            memberMapper.updatePoint(memberId, quest.getPoint());
+            PointHistory pointHistory = PointHistory.builder()
+                    .memberId(memberId)
+                    .type(1)
+                    .amount(quest.getPoint())
+                    .description("퀘스트 | '" + quest.getTitle() + "' 미션 수행 완료")
+                    .build();
+            memberMapper.insertPointHistory(pointHistory);
+        }
+        return questMapper.updateFinishedAt(questId, memberId) == 1;
+    }
+
+    /**
+     * 퀘스트 진행
+     *
+     * @author 조영욱
+     */
+    @Override
+    public boolean progressQuest(int questId, int memberId) {
+        validateQuestExist(questId);
+
+        MemberQuest memberQuest = questMapper.selectMemberQuestByQuestIdAndMemberId(questId, memberId);
+
+        // 퀘스트를 시작하지 않았거나, 이미 완료된 퀘스트일 시 false
+        if (memberQuest == null || memberQuest.getFinishedAt() != null) {
+            return false;
+        }
+
+        return questMapper.updateStatus(questId, memberId, 2) == 1;
     }
 
     /**
@@ -96,9 +134,11 @@ public class QuestServiceImpl implements QuestService {
      *
      * @author 조영욱
      */
-    private void validateQuestExist(int questId) {
-        if (mapper.selectQuestByQuestId(questId) == null) {
+    private Quest validateQuestExist(int questId) {
+        Quest quest = questMapper.selectQuestByQuestId(questId);
+        if (quest == null) {
             throw new CustomException(QUEST_NOT_EXIST);
         }
+        return quest;
     }
 }

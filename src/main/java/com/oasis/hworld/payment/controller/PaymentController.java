@@ -53,8 +53,8 @@ public class PaymentController {
      */
     @PostMapping("/confirm")
     public ResponseEntity<CommonResponseDTO> confirmPayment(@RequestBody ConfirmPaymentRequestDTO dto) throws Exception {
-
-        return service.confirmPayment(dto) ?
+        // todo: memberId 로직 추가
+        return service.confirmPayment(dto, 1) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "상품이 결제되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "결제를 실패했습니다."));
     }

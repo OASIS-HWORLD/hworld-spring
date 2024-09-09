@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.01  	조영욱        최초 생성
- *
+ * 2024.09.07   조영욱        퀘스트 진행 추가
  * </pre>
  */
 @Getter
@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 public enum QuestProgress {
     START_AVAILABLE("시작가능"),
     IN_PROGRESS("진행중"),
+    FINISH_AVAILABLE("완료가능"),
     FINISHED("완료");
 
     private final String progress;

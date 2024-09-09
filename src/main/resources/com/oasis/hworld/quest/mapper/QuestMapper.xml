@@ -12,6 +12,7 @@
 * 수정일        	수정자        수정내용
 * ==========  =========    =========
 * 2024.09.01  	조영욱        최초 생성
+* 2024.09.07    조영욱        퀘스트 진행 추가
 * </pre>
 -->
 <mapper namespace="com.oasis.hworld.quest.mapper.QuestMapper">
@@ -35,12 +36,19 @@
                 Q.quest_id = MQ.quest_id
             AND
                 MQ.member_id = #{memberId}
+        ORDER BY
+            Q.quest_id ASC
     </select>
 
     <!-- 퀘스트 ID로 퀘스트 조회 -->
     <select id="selectQuestByQuestId">
         SELECT
-            quest_id
+            quest_id,
+            title,
+            content,
+            point,
+            start_date,
+            end_date
         FROM
             QUEST
         WHERE
@@ -83,6 +91,18 @@
         WHERE
             member_id = #{memberId}
         AND
+            quest_id = #{questId}
+    </update>
+
+    <!-- 퀘스트 status 변경 -->
+    <update id="updateStatus">
+        UPDATE
+            MEMBER_QUEST
+        SET
+            status = #{status}
+        WHERE
+            member_id = #{memberId}
+          AND
             quest_id = #{questId}
     </update>
 </mapper>

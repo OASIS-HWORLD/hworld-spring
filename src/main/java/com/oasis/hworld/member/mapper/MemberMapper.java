@@ -1,6 +1,7 @@
 package com.oasis.hworld.member.mapper;
 
 import com.oasis.hworld.member.domain.Member;
+import com.oasis.hworld.member.domain.PointHistory;
 import com.oasis.hworld.member.dto.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * 2024.08.31  	김지현        최초 생성
  * 2024.09.01   김지현        로그인 ID로 회원 정보 조회 메서드 추가
  * 2024.09.04   김지현        마이페이지 관련 기능 구현
+ * 2024.09.07   조영욱        포인트 변경 기능 추가
  * </pre>
  */
 public interface MemberMapper {
@@ -52,4 +54,9 @@ public interface MemberMapper {
     // 주문 ID로 주문 상세 조회
     OrdersDetailResponseDTO selectOrdersDetailByOrderId(String orderId);
 
+    // 포인트 내역 추가
+    int insertPointHistory(PointHistory pointHistory);
+
+    // 회원 포인트 업데이트
+    int updatePoint(@Param("memberId") int memberId, @Param("pointChange") int pointChange);
 }

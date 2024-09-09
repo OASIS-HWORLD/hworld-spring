@@ -36,7 +36,9 @@
             IO.item_option_id,
             IO.item_option,
             I.item_id,
-            I.name AS item_name
+            I.name AS item_name,
+            I.price AS item_price,
+            I.image_url AS item_image_url
         FROM
             CHARACTER_ITEM CI
             LEFT JOIN ITEM_OPTION IO ON CI.item_option_id = IO.item_option_id
