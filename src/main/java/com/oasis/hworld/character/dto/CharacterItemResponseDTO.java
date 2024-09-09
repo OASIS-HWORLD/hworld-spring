@@ -30,4 +30,8 @@ public class CharacterItemResponseDTO {
     private int itemId;
     // 상품 이름
     private String itemName;
+    // 상품 가격
+    private int itemPrice;
+    // 상품 이미지 url
+    private String imageUrl;
 }
