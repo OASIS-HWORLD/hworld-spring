@@ -65,7 +65,8 @@
     <select id="selectOrderByOrderId">
         SELECT
             order_id,
-            amount
+            amount,
+            point_usage
         FROM
             ORDERS
         WHERE

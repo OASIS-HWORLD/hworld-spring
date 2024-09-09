@@ -22,6 +22,7 @@ import java.util.List;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.01  	조영욱        최초 생성
+ * 2024.09.07   조영욱        퀘스트 진행 추가
  * </pre>
  */
 @RestController
@@ -70,4 +71,16 @@ public class QuestController {
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "퀘스트를 종료할 수 없습니다."));
     }
 
+    /**
+     * 퀘스트 진행
+     *
+     * @author 조영욱
+     */
+    @PutMapping("/progress/{questId}")
+    public ResponseEntity<CommonResponseDTO> progressQuest(@PathVariable("questId") int questId) {
+        // todo: memberId 로직 추가
+        return service.progressQuest(questId, 1) ?
+                ResponseEntity.ok(new CommonResponseDTO(true, "퀘스트가 진행되었습니다.")) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "퀘스트가 진행되지 않았습니다."));
+    }
 }

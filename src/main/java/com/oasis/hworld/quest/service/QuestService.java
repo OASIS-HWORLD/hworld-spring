@@ -14,6 +14,7 @@ import java.util.List;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.01  	조영욱        최초 생성
+ * 2024.09.07   조영욱        퀘스트 진행 추가
  * </pre>
  */
 public interface QuestService {
@@ -38,4 +39,11 @@ public interface QuestService {
      * @author 조영욱
      */
     boolean finishQuest(int questId, int memberId);
+
+    /**
+     * 퀘스트 진행
+     *
+     * @author 조영욱
+     */
+    boolean progressQuest(int questId, int memberId);
 }

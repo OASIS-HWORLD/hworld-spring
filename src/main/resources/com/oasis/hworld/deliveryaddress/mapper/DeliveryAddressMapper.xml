@@ -29,6 +29,8 @@
             DELIVERY_ADDRESS
         WHERE
             member_id = #{memberId}
+        ORDER BY
+            delivery_address_id ASC
     </select>
 
     <!-- 배송지 ID로 배송지 조회 -->

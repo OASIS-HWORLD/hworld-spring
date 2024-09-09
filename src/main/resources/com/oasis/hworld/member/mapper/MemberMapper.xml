@@ -15,6 +15,7 @@
 * 2024.09.01    김지현        로그인 ID로 회원 조회 추가
 * 2024.09.03    김지현        마이페이지 관련 기능 구현
 * 2024.09.05    김지현        코디에 사용된 아이템 조회 구현
+* 2024.09.07    조영욱        포인트 변경 기능 추가
 * </pre>
 -->
 <mapper namespace="com.oasis.hworld.member.mapper.MemberMapper">
@@ -187,4 +188,33 @@
             WHERE O.order_id = #{orderId}
         ]]>
     </select>
+
+    <!-- 포인트 내역 추가 -->
+    <insert id="insertPointHistory">
+        INSERT INTO POINT_HISTORY (
+            point_history_id,
+            member_id,
+            type,
+            amount,
+            description,
+            created_at
+        ) VALUES (
+            SEQ_POINT_HISTORY.NEXTVAL,
+            #{memberId},
+            #{type},
+            #{amount},
+            #{description},
+            SYSDATE
+        )
+    </insert>
+
+    <!-- 회원 포인트 업데이트 -->
+    <update id="updatePoint">
+        UPDATE
+            member
+        SET
+            point = point + #{pointChange}
+        WHERE
+            member_id = #{memberId}
+    </update>
 </mapper>
