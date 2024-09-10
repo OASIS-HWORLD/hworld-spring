@@ -7,6 +7,7 @@ import com.oasis.hworld.notice.dto.NoticeSummaryDTO;
 import com.oasis.hworld.notice.mapper.NoticeMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.01  	조영욱        최초 생성
+ * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
  * </pre>
  */
 @Service
@@ -31,6 +33,8 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
 public class NoticeServiceImpl implements NoticeService {
 
     private final NoticeMapper mapper;
+    @Value("${S3_BUCKET_URL}")
+    private String s3BucketUrl;
 
     /**
      * 공지사항 목록 조회
@@ -53,6 +57,11 @@ public class NoticeServiceImpl implements NoticeService {
 
         if (notice == null) {
             throw new CustomException(NOTICE_NOT_EXIST);
+        }
+
+        // s3 버킷 이미지 url 추가
+        if (notice.getImageUrl() != null) {
+            notice.setImageUrl(s3BucketUrl + notice.getImageUrl());
         }
 
         return NoticeDetailDTO.from(notice);

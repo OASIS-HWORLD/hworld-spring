@@ -8,6 +8,7 @@ import com.oasis.hworld.coordination.dto.CoordinationRequestDTO;
 import com.oasis.hworld.coordination.mapper.CoordinationMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
  * 2024.09.04  	김지현        최초 생성
  * 2024.09.05   김지현        코디에 사용된 아이템 조회 구현
  * 2024.09.06   김지현        장바구니 관련 기능 구현
+ * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
  * </pre>
  */
 @Service
@@ -33,6 +35,8 @@ import java.util.stream.Collectors;
 public class CoordinationServiceImpl implements CoordinationService {
 
     private final CoordinationMapper coordinationMapper;
+    @Value("${S3_BUCKET_URL}")
+    private String s3BucketUrl;
 
     /**
      * 코디 추가
@@ -125,6 +129,9 @@ public class CoordinationServiceImpl implements CoordinationService {
         for (CoordinationItemResponseDTO coordinationItem : coordinationItemList) {
             int itemOptionId = coordinationItem.getItemOptionId();
             coordinationItem.setInCart(itemsInCart.contains(itemOptionId));
+
+            // s3 버킷 이미지 url 추가
+            coordinationItem.setImageUrl(s3BucketUrl + coordinationItem.getImageUrl());
         }
 
         return coordinationItemList;

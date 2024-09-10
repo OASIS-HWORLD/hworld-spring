@@ -7,6 +7,7 @@ import com.oasis.hworld.character.mapper.CharacterMapper;
 import com.oasis.hworld.common.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.03  	조영욱        최초 생성
+ * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
  * </pre>
  */
 @Service
@@ -31,6 +33,8 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
 public class CharacterServiceImpl implements CharacterService {
 
     private final CharacterMapper mapper;
+    @Value("${S3_BUCKET_URL}")
+    private String s3BucketUrl;
 
     /**
      * 캐릭터 상태 조회
@@ -58,7 +62,14 @@ public class CharacterServiceImpl implements CharacterService {
      */
     @Override
     public List<CharacterItemResponseDTO> getCharacterItemList(int memberId) {
-        return mapper.selectCharacterItemByMemberId(memberId);
+        List<CharacterItemResponseDTO> itemList = mapper.selectCharacterItemByMemberId(memberId);
+
+        // s3 버킷 이미지 url 추가
+        for (CharacterItemResponseDTO item : itemList) {
+            item.setImageUrl(s3BucketUrl + item.getImageUrl());
+        }
+
+        return itemList;
     }
 
     /**

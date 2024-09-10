@@ -6,6 +6,7 @@ import com.oasis.hworld.contest.dto.*;
 import com.oasis.hworld.contest.mapper.ContestMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
  * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드, 게시글 추천 여부 확인 메소드 추가
  * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드, 게시글 목록 조회 / 상세보기 메소드 추천여부 확인, 게시글 삭제하기 메소드 추가
+ * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
  * </pre>
  */
 @Service
@@ -39,6 +41,8 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
 public class ContestServiceImpl implements ContestService {
 
     private final ContestMapper mapper;
+    @Value("${S3_BUCKET_URL}")
+    private String s3BucketUrl;
 
     /**
      * 콘테스트 게시글 목록 조회
@@ -68,6 +72,9 @@ public class ContestServiceImpl implements ContestService {
             } else {
                 postSummary.setIsRecommended(false);
             }
+
+            // s3 버킷 이미지 url 추가
+            postSummary.setImageUrl(s3BucketUrl + postSummary.getImageUrl());
         });
 
         return postSummaryList;
@@ -81,10 +88,14 @@ public class ContestServiceImpl implements ContestService {
     public PostDetailResponseDTO getPostDetail(int postId, int memberId) {
         PostDetailResponseDTO postDetail = mapper.selectContestPostDetailByPostId(postId);
 
-        postDetail.getItemList().forEach( itemDTO -> {
-                    itemDTO.setCategoryName(ItemCategory.getCategoryName(itemDTO.getCategoryId()));
-                }
-        );
+        // s3 버킷 이미지 url 추가
+        postDetail.setImageUrl(s3BucketUrl + postDetail.getImageUrl());
+
+        postDetail.getItemList().forEach(itemDTO -> {
+            itemDTO.setCategoryName(ItemCategory.getCategoryName(itemDTO.getCategoryId()));
+            // s3 버킷 이미지 url 추가
+            itemDTO.setItemImageUrl(s3BucketUrl + itemDTO.getItemImageUrl());
+        });
         if(postDetail == null) {
             throw new CustomException(POST_NOT_EXIST);
         }
@@ -108,7 +119,12 @@ public class ContestServiceImpl implements ContestService {
         coordinationList.forEach(coordination -> {
             coordination.getItemList().forEach(item -> {
                 item.setCategoryName(ItemCategory.getCategoryName(item.getCategoryId()));
+                // s3 버킷 이미지 url 추가
+                item.setItemImageUrl(s3BucketUrl + item.getItemImageUrl());
             });
+
+            // s3 버킷 이미지 url 추가
+            coordination.setCoordinationImageUrl(s3BucketUrl + coordination.getCoordinationImageUrl());
         });
         return coordinationList;
     }

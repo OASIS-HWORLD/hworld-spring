@@ -9,6 +9,7 @@ import com.oasis.hworld.cart.mapper.CartMapper;
 import com.oasis.hworld.common.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * ----------  --------    ---------------------------
  * 2024.08.31  	조영욱        최초 생성
  * 2024.09.03   조영욱        Item -> ItemOption 변경
+ * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
  * </pre>
  */
 @Service
@@ -34,6 +36,8 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
 public class CartServiceImpl implements CartService {
 
     private final CartMapper mapper;
+    @Value("${S3_BUCKET_URL}")
+    private String s3BucketUrl;
 
     /**
      * 회원 장바구니 조회
@@ -47,6 +51,11 @@ public class CartServiceImpl implements CartService {
         CartDetailDTOList.forEach(cart -> {
             int subTotalPrice = cart.getItemPrice() * cart.getItemCount();
             cart.setSubtotalPrice(subTotalPrice);
+
+            // s3 버킷 이미지 url 추가
+            cart.setItemImageUrl(s3BucketUrl + cart.getItemImageUrl());
+            cart.setItemDetailImageUrl(s3BucketUrl + cart.getItemDetailImageUrl());
+            cart.setShopImageUrl(s3BucketUrl + cart.getShopImageUrl());
         });
 
         return CartListResponseDTO.from(CartDetailDTOList);
