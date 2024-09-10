@@ -4,9 +4,11 @@ import com.oasis.hworld.member.dto.*;
 import com.oasis.hworld.member.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 회원 서비스 구현체
@@ -19,6 +21,7 @@ import java.util.List;
  * ----------  --------    ---------------------------
  * 2024.09.02  	김지현        최초 생성
  * 2024.09.03   김지현        마이페이지 관련 기능 구현
+ * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
  * </pre>
  */
 @Service
@@ -27,6 +30,8 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberMapper memberMapper;
+    @Value("${S3_BUCKET_URL}")
+    private String s3BucketUrl;
 
     /**
      * 포인트 사용 내역 조회
@@ -45,7 +50,14 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public List<PostListResponseDTO> getMemberPost(int memberId, String orderBy) {
-        return memberMapper.selectPostByMemberId(memberId, orderBy);
+        List<PostListResponseDTO> postList = memberMapper.selectPostByMemberId(memberId, orderBy);
+
+        // s3 버킷 이미지 url 추가
+        for (PostListResponseDTO post : postList) {
+            post.setImageUrl(s3BucketUrl + post.getImageUrl());
+        }
+
+        return postList;
     }
 
     /**
@@ -55,7 +67,14 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public List<CoordinationListResponseDTO> getMemberCoordination(int memberId) {
-        return memberMapper.selectCoordinationByMemberId(memberId);
+        List<CoordinationListResponseDTO> coordinationList = memberMapper.selectCoordinationByMemberId(memberId);
+
+        // s3 버킷 이미지 url 추가
+        for (CoordinationListResponseDTO coordination : coordinationList) {
+            coordination.setImageUrl(s3BucketUrl + coordination.getImageUrl());
+        }
+
+        return coordinationList;
     }
 
     /**
@@ -64,7 +83,15 @@ public class MemberServiceImpl implements MemberService {
      * @author 김지현
      */
     public List<CoordinationItemListResponseDTO> getCoordinationItem(int coordinationId) {
-        return memberMapper.selectCoordinationItemByCoordinationId(coordinationId);
+        List<CoordinationItemListResponseDTO> coordinationItemList = memberMapper.selectCoordinationItemByCoordinationId(coordinationId);
+
+        // s3 버킷 이미지 url 추가
+        for (CoordinationItemListResponseDTO coordinationItem : coordinationItemList) {
+            coordinationItem.setImageUrl(s3BucketUrl + coordinationItem.getImageUrl());
+            coordinationItem.setDetailImageUrl(s3BucketUrl + coordinationItem.getDetailImageUrl());
+        }
+
+        return coordinationItemList;
     }
 
     /**
@@ -83,7 +110,17 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public OrdersDetailResponseDTO getMemberOrdersDetail(String orderId) {
-        return memberMapper.selectOrdersDetailByOrderId(orderId);
+        OrdersDetailResponseDTO orderDetail = memberMapper.selectOrdersDetailByOrderId(orderId);
+
+        // s3 버킷 이미지 url 추가
+        orderDetail.setItemList(orderDetail.getItemList().stream()
+                .peek(item -> {
+                    item.setItemImageUrl(s3BucketUrl + item.getItemImageUrl());
+                    item.setShopImageUrl(s3BucketUrl + item.getShopImageUrl());
+                })
+                .collect(Collectors.toList()));
+
+        return orderDetail;
     }
 
 }

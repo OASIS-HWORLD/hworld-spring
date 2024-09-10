@@ -1,9 +1,6 @@
 package com.oasis.hworld.member.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 코디 아이템 내역 응답 DTO
@@ -21,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 public class CoordinationItemListResponseDTO {
 
     // 상품 카테고리

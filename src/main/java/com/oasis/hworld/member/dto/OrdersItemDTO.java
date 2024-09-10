@@ -1,9 +1,6 @@
 package com.oasis.hworld.member.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * 회원 주문 상품 DTO
@@ -21,6 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
+@Setter
 public class OrdersItemDTO {
 
     // 상품 이미지 url
