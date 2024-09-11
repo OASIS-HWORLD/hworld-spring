@@ -18,6 +18,9 @@
         <constructor-arg ref="jwtTokenProvider" />
     </bean>
 
+    <!-- CORS filter -->
+    <bean id="corsFilter" class="com.oasis.hworld.filter.CorsFilter" />
+
     <!-- BCrypt Password Encoder -->
     <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
@@ -26,6 +29,7 @@
 
     <security:http>
         <security:csrf disabled="true"/>
+        <security:custom-filter ref="corsFilter" before="CHANNEL_FILTER" />
 
         <!-- JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 이전에 등록 -->
         <security:custom-filter ref="jwtAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
