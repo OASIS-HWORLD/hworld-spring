@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
  * 2024.09.02  	김지현        최초 생성
  * 2024.09.03   김지현        마이페이지 관련 기능 구현
  * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
+ * 2024.09.11   김지현        회원 정보 조회 기능 구현
  * </pre>
  */
 @Service
@@ -121,6 +122,16 @@ public class MemberServiceImpl implements MemberService {
                 .collect(Collectors.toList()));
 
         return orderDetail;
+    }
+
+    /**
+     * 회원 정보 조회
+     *
+     * @author 김지현
+     */
+    @Override
+    public MemberInfoResponseDTO getMemberInfo(int memberId) {
+        return memberMapper.selectMemberInfoByMemberId(memberId);
     }
 
 }

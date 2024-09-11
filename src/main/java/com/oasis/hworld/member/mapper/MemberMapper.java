@@ -20,6 +20,7 @@ import java.util.List;
  * 2024.09.01   김지현        로그인 ID로 회원 정보 조회 메서드 추가
  * 2024.09.04   김지현        마이페이지 관련 기능 구현
  * 2024.09.07   조영욱        포인트 변경 기능 추가
+ * 2024.09.11   김지현        회원 정보 조회 기능 구현
  * </pre>
  */
 public interface MemberMapper {
@@ -59,4 +60,7 @@ public interface MemberMapper {
 
     // 회원 포인트 업데이트
     int updatePoint(@Param("memberId") int memberId, @Param("pointChange") int pointChange);
+
+    // 회원 정보 조회
+    MemberInfoResponseDTO selectMemberInfoByMemberId(int memberId);
 }

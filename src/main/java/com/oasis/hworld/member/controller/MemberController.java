@@ -25,6 +25,7 @@ import java.util.List;
  * 2024.08.31  	김지현        최초 생성
  * 2024.09.01   김지현        로그인 기능 구현
  * 2024.09.03   김지현        마이페이지 관련 기능 구현
+ * 2024.09.11   김지현        회원 정보 조회 기능 구현
  * </pre>
  */
 @RestController
@@ -149,5 +150,17 @@ public class MemberController {
     @GetMapping("/my-orders/{orderId}")
     public ResponseEntity<OrdersDetailResponseDTO> getMemberOrdersDetail(@PathVariable("orderId") String orderId) {
         return ResponseEntity.ok(memberService.getMemberOrdersDetail(orderId));
+    }
+
+    /**
+     * 회원 정보 조회
+     *
+     * @author 김지현
+     */
+    @GetMapping("/my-info")
+    public ResponseEntity<MemberInfoResponseDTO> getMemberInfo() {
+        // todo: memberId 로직 추가
+        int memberId = 1;
+        return ResponseEntity.ok(memberService.getMemberInfo(memberId));
     }
 }
