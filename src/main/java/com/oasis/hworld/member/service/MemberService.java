@@ -15,6 +15,7 @@ import java.util.List;
  * ----------  --------    ---------------------------
  * 2024.09.02  	김지현        최초 생성
  * 2024.09.03   김지현        마이페이지 관련 기능 구현
+ * 2024.09.11   김지현        회원 정보 조회 기능 구현
  * </pre>
  */
 public interface MemberService {
@@ -60,5 +61,12 @@ public interface MemberService {
      * @author 김지현
      */
     OrdersDetailResponseDTO getMemberOrdersDetail(String orderId);
+
+    /**
+     * 회원 정보 조회
+     *
+     * @author 김지현
+     */
+    MemberInfoResponseDTO getMemberInfo(int memberId);
 
 }
