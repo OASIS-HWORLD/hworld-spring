@@ -21,11 +21,15 @@ import java.util.Map;
  * 2024.09.01   정은찬        콘테스트 게시글 목록 조회 query parameter 적용, 게시글 상세 조회, 게시글 코디 착용 아이템 조회 추가
  * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회, 진행중인 콘테스트 게시글 등록, 댓글 등록/삭제, 게시글 추천 조회 추가
  * 2024.09.03   정은찬        콘테스트 게시글 추천 등록 및 추천수 업데이트,  콘테스트 게시글 추천 삭제 및 추천수 업데이트, 댓글수 업데이트(증가, 감소), 게시글 목록 추천 조회, 게시글 삭제 추가
+ * 2024.09.12   정은찬        콘테스트 게시글 수 조회 추가
  * </pre>
  */
 public interface ContestMapper {
     // 콘테스트 게시글 목록 조회
-    List<PostSummaryDTO> selectContestPostList(@Param("date") String date, @Param("sortBy") String sortBy, @Param("contestStatus") String contestStatus);
+    List<PostSummaryDTO> selectContestPostList(@Param("page") int page, @Param("amount") int amount, @Param("date") String date, @Param("sortBy") String sortBy, @Param("contestStatus") String contestStatus);
+
+    // 콘테스트 게시글 수 조회
+    int selectContestPostTotalCount(@Param("date") String date, @Param("contestStatus") String contestStatus);
 
     // 게시글 ID를 통한 게시글 상세 조회
     PostDetailResponseDTO selectContestPostDetailByPostId(@Param("postId") int postId);
