@@ -49,7 +49,7 @@ public class S3Uploader {
             throw new CustomException(ErrorCode.QUEST_NOT_EXIST);
         }
 
-        return amazonS3.getUrl(bucket, uploadName).toString();
+        return uploadName;
     }
 
     /**
