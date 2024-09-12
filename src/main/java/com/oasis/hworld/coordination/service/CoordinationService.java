@@ -1,13 +1,9 @@
 package com.oasis.hworld.coordination.service;
 
-import com.oasis.hworld.common.dto.CommonResponseDTO;
 import com.oasis.hworld.coordination.dto.CoordinationItemRequestDTO;
 import com.oasis.hworld.coordination.dto.CoordinationItemResponseDTO;
 import com.oasis.hworld.coordination.dto.CoordinationRequestDTO;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -23,6 +19,7 @@ import java.util.List;
  * 2024.09.04  	김지현        최초 생성
  * 2024.09.05   김지현        코디에 사용된 아이템 조회 구현
  * 2024.09.06   김지현        장바구니 관련 기능 구현
+ * 2023.09.12   조영욱        코디 추가 시 이미지 S3에 업로드
  * </pre>
  */
 public interface CoordinationService {
@@ -32,7 +29,7 @@ public interface CoordinationService {
      *
      * @author 김지현
      */
-    boolean addCoordination(CoordinationRequestDTO coordinationRequestDTO, int memberId);
+    boolean addCoordination(CoordinationRequestDTO coordinationRequestDTO, MultipartFile file, int memberId);
 
     /**
      * 저장된 코디 적용

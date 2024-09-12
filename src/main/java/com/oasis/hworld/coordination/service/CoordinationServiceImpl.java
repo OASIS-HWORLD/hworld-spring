@@ -1,6 +1,7 @@
 package com.oasis.hworld.coordination.service;
 
 import com.oasis.hworld.character.domain.CharacterItem;
+import com.oasis.hworld.common.file.S3Uploader;
 import com.oasis.hworld.coordination.domain.Coordination;
 import com.oasis.hworld.coordination.dto.CoordinationItemRequestDTO;
 import com.oasis.hworld.coordination.dto.CoordinationItemResponseDTO;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
  * 2024.09.05   김지현        코디에 사용된 아이템 조회 구현
  * 2024.09.06   김지현        장바구니 관련 기능 구현
  * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
+ * 2023.09.12   조영욱        코디 추가 시 이미지 S3에 업로드
  * </pre>
  */
 @Service
@@ -35,6 +38,7 @@ import java.util.stream.Collectors;
 public class CoordinationServiceImpl implements CoordinationService {
 
     private final CoordinationMapper coordinationMapper;
+    private final S3Uploader s3Uploader;
     @Value("${S3_BUCKET_URL}")
     private String s3BucketUrl;
 
@@ -44,11 +48,14 @@ public class CoordinationServiceImpl implements CoordinationService {
      * @author 김지현
      */
     @Override
-    public boolean addCoordination(CoordinationRequestDTO coordinationRequestDTO, int memberId) {
+    public boolean addCoordination(CoordinationRequestDTO coordinationRequestDTO, MultipartFile file, int memberId) {
+
+        String uploadedImageUrl = s3Uploader.uploadImage(file);
+
         Coordination coordination = Coordination.builder()
                 .memberId(memberId)
                 .title(coordinationRequestDTO.getTitle())
-                .imageUrl(coordinationRequestDTO.getImageUrl())
+                .imageUrl(uploadedImageUrl)
                 .build();
 
         // 코디 추가

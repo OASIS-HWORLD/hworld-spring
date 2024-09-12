@@ -303,6 +303,14 @@
 			<version>0.11.2</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-s3 -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.11.1034</version>
+		</dependency>
+
+
 
 		<!-- ==================  dependiney 끝  =========================== -->
 		<!-- ==================  dependiney 끝  =========================== -->
