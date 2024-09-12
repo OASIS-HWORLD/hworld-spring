@@ -74,6 +74,7 @@
                 WHERE member_id = #{memberId}
             ) total
             WHERE member_id = #{memberId}
+            ORDER BY created_at DESC
             OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
         ]]>
     </select>
