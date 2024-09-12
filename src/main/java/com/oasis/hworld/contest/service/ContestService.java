@@ -25,7 +25,7 @@ public interface ContestService {
      *
      * @author 정은찬
      */
-    List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy, int memberId);
+    List<PostSummaryDTO> getContestPostList(int page, int amount, String contestStatus, String sortBy, int memberId);
 
     /**
      * 게시글 ID를 통해 콘테스트 게시글 상세 조회

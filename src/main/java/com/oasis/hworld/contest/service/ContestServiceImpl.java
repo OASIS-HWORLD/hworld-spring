@@ -49,13 +49,13 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy, int memberId) {
+    public List<PostSummaryDTO> getContestPostList(int page, int amount, String contestStatus, String sortBy, int memberId) {
 
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(currentDate);
 
-        List<PostSummaryDTO> postSummaryList = mapper.selectContestPostList(formattedDate, sortBy, contestStatus);
+        List<PostSummaryDTO> postSummaryList = mapper.selectContestPostList(page, amount, formattedDate, sortBy, contestStatus);
 
         // 모든 postId 추출
         List<Integer> postIds = postSummaryList.stream()

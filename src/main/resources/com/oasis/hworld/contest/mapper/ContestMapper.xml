@@ -34,20 +34,22 @@
         WHERE
             P.deleted_at IS NULL
         AND CO.deleted_at IS NULL
-        AND <if test="contestStatus == 'ongoing'">
-                TO_DATE(#{date}, 'YYYY-MM-DD') BETWEEN C.start_date AND C.end_date
-            </if>
-            <if test="contestStatus == 'finished'">
-                C.end_date &lt; TO_DATE(#{date}, 'YYYY-MM-DD')
-            </if>
+        <if test="contestStatus == 'ongoing'">
+            AND TO_DATE(#{date}, 'YYYY-MM-DD') BETWEEN C.start_date AND C.end_date
+        </if>
+        <if test="contestStatus == 'finished'">
+            AND C.end_date &lt; TO_DATE(#{date}, 'YYYY-MM-DD')
+        </if>
         <choose>
             <when test="sortBy == 'latest'">
-                ORDER BY MAX(P.created_at) DESC
+                ORDER BY P.created_at DESC
             </when>
             <when test="sortBy == 'recommend'">
                 ORDER BY P.recommend_count DESC
             </when>
         </choose>
+        OFFSET (#{page}-1) * #{amount} ROWS
+        FETCH FIRST #{amount} ROWS ONLY
     </select>
 
     <!-- PostDetailResponseDTO, ReplyDTO, ItemDTO 간의 매핑을 정의하는 ResultMap -->
@@ -262,10 +264,12 @@
             RECOMMEND RE
         WHERE
             RE.member_id = #{memberId}
-        AND RE.post_id IN
-        <foreach item="postId" collection="postIds" open="(" separator="," close=")">
-            #{postId}
-        </foreach>
+        <if test="postIds != null and postIds.size() > 0">
+            AND RE.post_id IN
+            <foreach item="postId" collection="postIds" open="(" separator="," close=")">
+                #{postId}
+            </foreach>
+        </if>
     </select>
 
     <!-- 회원 ID와 게시글 ID를 통한 게시글 삭제  -->

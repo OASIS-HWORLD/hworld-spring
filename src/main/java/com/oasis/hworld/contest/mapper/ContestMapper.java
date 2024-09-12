@@ -25,7 +25,7 @@ import java.util.Map;
  */
 public interface ContestMapper {
     // 콘테스트 게시글 목록 조회
-    List<PostSummaryDTO> selectContestPostList(@Param("date") String date, @Param("sortBy") String sortBy, @Param("contestStatus") String contestStatus);
+    List<PostSummaryDTO> selectContestPostList(@Param("page") int page, @Param("amount") int amount, @Param("date") String date, @Param("sortBy") String sortBy, @Param("contestStatus") String contestStatus);
 
     // 게시글 ID를 통한 게시글 상세 조회
     PostDetailResponseDTO selectContestPostDetailByPostId(@Param("postId") int postId);
