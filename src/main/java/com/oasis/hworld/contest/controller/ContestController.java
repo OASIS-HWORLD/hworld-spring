@@ -25,6 +25,7 @@ import java.util.List;
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
  * 2024.09.02   정은찬        코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드 추가
  * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드 추가, 댓글 삭제 메소드 수정, 게시글 삭제 메소드 추가
+ * 2024.09.12   조영욱        베스트 코디 조회 추가
  * </pre>
  */
 @RestController
@@ -158,6 +159,19 @@ public class ContestController {
         return service.removePost(memberId, postId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "게시글을 삭제했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 삭제를 실패했습니다."));
+    }
+
+    /**
+     * 베스트 콘테스트 게시글 목록 조회
+     *
+     * @author 조영욱
+     * @apiNote 콘테스트 좋아요 순 베스트 게시글 목록을 조회한다.
+     */
+    @GetMapping("/posts/best")
+    public ResponseEntity<PostResponseDTO> getBestContestPostList() {
+        // todo : memberId 로직 추가
+        int memberId = 1;
+        return ResponseEntity.ok(service.getBestContestPostList(memberId));
     }
 }
 
