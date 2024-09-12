@@ -40,8 +40,17 @@ public class MemberServiceImpl implements MemberService {
      * @author 김지현
      */
     @Override
-    public List<PointHistoryResponseDTO> getPointHistory(int memberId) {
-        return memberMapper.selectPointHistoryByMemberId(memberId);
+    public PageResponseDTO<List<PointHistoryResponseDTO>> getPointHistory(int memberId, int page, int size) {
+        int offset = (page-1) * size;
+        List<PointHistoryResponseDTO> pointHistoryList = memberMapper.selectPointHistoryByMemberId(memberId, offset, size);
+
+        int totalCount = pointHistoryList.isEmpty() ? 0 : pointHistoryList.get(0).getTotalCount();
+        return PageResponseDTO.<List<PointHistoryResponseDTO>>builder()
+                .data(pointHistoryList)
+                .totalCount(totalCount)
+                .currentPage(page)
+                .pageSize(size)
+                .build();
     }
 
     /**

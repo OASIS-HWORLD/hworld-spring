@@ -25,7 +25,7 @@ public interface MemberService {
      *
      * @author 김지현
      */
-    List<PointHistoryResponseDTO> getPointHistory(int memberId);
+    PageResponseDTO<List<PointHistoryResponseDTO>> getPointHistory(int memberId, int page, int size);
 
     /**
      * 회원 게시글 목록 조회

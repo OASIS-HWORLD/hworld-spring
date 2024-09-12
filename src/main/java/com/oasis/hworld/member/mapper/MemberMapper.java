@@ -38,7 +38,10 @@ public interface MemberMapper {
     Member selectMemberByLoginId(String loginId);
 
     // 회원 ID로 포인트 내역 조회
-    List<PointHistoryResponseDTO> selectPointHistoryByMemberId(int memberId);
+    List<PointHistoryResponseDTO> selectPointHistoryByMemberId(
+            @Param("memberId") int memberId,
+            @Param("offset") int offset,
+            @Param("size") int size);
 
     // 회원 ID로 게시글 목록 조회
     List<PostListResponseDTO> selectPostByMemberId(

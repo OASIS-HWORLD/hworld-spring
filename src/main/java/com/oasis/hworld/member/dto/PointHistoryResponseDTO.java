@@ -31,5 +31,7 @@ public class PointHistoryResponseDTO {
     private String description;
     // 생성일
     private String createdAt;
+    // 전체 데이터 수
+    private int totalCount;
 
 }

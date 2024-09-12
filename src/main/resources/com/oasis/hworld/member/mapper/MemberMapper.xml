@@ -65,9 +65,16 @@
                    END AS type,
                 amount,
                 description,
-                TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at
+                TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at,
+                total.total_count
             FROM POINT_HISTORY
+            CROSS JOIN (
+                SELECT COUNT(*) AS total_count
+                FROM POINT_HISTORY
+                WHERE member_id = #{memberId}
+            ) total
             WHERE member_id = #{memberId}
+            OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
         ]]>
     </select>
 
@@ -85,10 +92,10 @@
         LEFT JOIN COORDINATION C
             ON P.coordination_id = C.coordination_id
         CROSS JOIN (
-        SELECT COUNT(*) AS total_count
-        FROM POST
-        WHERE deleted_at IS NULL
-        AND member_id = #{memberId}
+            SELECT COUNT(*) AS total_count
+            FROM POST
+            WHERE deleted_at IS NULL
+            AND member_id = #{memberId}
         ) total
         WHERE P.deleted_at IS NULL
           AND P.member_id = #{memberId}
