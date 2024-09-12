@@ -102,7 +102,7 @@ public class MemberController {
      * @author 김지현
      */
     @GetMapping("/my-posts")
-    public ResponseEntity<List<PostListResponseDTO>> getMemberPost(
+    public ResponseEntity<PageResponseDTO<List<PostListResponseDTO>>> getMemberPost(
             @RequestParam("orderBy") String orderBy,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "4") int size) {

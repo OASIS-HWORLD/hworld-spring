@@ -36,5 +36,7 @@ public class PostListResponseDTO {
     private int rank;
     // 작성 날짜
     private Date createdAt;
+    // 전체 데이터 수
+    private int totalCount;
 
 }

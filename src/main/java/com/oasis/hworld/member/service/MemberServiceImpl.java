@@ -50,16 +50,23 @@ public class MemberServiceImpl implements MemberService {
      * @author 김지현
      */
     @Override
-    public List<PostListResponseDTO> getMemberPost(int memberId, String orderBy, int page, int size) {
+    public PageResponseDTO<List<PostListResponseDTO>> getMemberPost(int memberId, String orderBy, int page, int size) {
         int offset = (page-1) * size;
         List<PostListResponseDTO> postList = memberMapper.selectPostByMemberId(memberId, orderBy, offset, size);
+
+        int totalCount = postList.isEmpty() ? 0 : postList.get(0).getTotalCount();
 
         // s3 버킷 이미지 url 추가
         for (PostListResponseDTO post : postList) {
             post.setImageUrl(s3BucketUrl + post.getImageUrl());
         }
 
-        return postList;
+        return PageResponseDTO.<List<PostListResponseDTO>>builder()
+                .data(postList)
+                .totalCount(totalCount)
+                .currentPage(page)
+                .pageSize(size)
+                .build();
     }
 
     /**

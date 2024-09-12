@@ -79,10 +79,17 @@
             P.recommend_count,
             P.reply_count,
             P.rank,
-            P.created_at
+            P.created_at,
+            total.total_count
         FROM POST P
         LEFT JOIN COORDINATION C
             ON P.coordination_id = C.coordination_id
+        CROSS JOIN (
+        SELECT COUNT(*) AS total_count
+        FROM POST
+        WHERE deleted_at IS NULL
+        AND member_id = #{memberId}
+        ) total
         WHERE P.deleted_at IS NULL
           AND P.member_id = #{memberId}
         ORDER BY
