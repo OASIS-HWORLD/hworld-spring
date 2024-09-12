@@ -34,5 +34,7 @@ public class OrdersListResponseDTO {
     private String orderName;
     // 총 결제 금액
     private int totalAmount;
+    // 전체 데이터 수
+    private int totalCount;
 
 }

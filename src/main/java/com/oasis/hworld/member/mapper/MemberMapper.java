@@ -57,7 +57,10 @@ public interface MemberMapper {
     List<CoordinationItemListResponseDTO> selectCoordinationItemByCoordinationId(int coordinationId);
 
     // 회원 ID로 주문 내역 조회
-    List<OrdersListResponseDTO> selectOrdersByMemberId(int memberId);
+    List<OrdersListResponseDTO> selectOrdersByMemberId(
+            @Param("memberId") int memberId,
+            @Param("offset") int offset,
+            @Param("size") int size);
 
     // 주문 ID로 주문 상세 조회
     OrdersDetailResponseDTO selectOrdersDetailByOrderId(String orderId);

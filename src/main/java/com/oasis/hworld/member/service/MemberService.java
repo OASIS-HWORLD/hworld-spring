@@ -53,7 +53,7 @@ public interface MemberService {
      *
      * @author 김지현
      */
-    List<OrdersListResponseDTO> getMemberOrders(int memberId);
+    PageResponseDTO<List<OrdersListResponseDTO>> getMemberOrders(int memberId, int page, int size);
 
     /**
      * 회원 주문 내역 상세 조회

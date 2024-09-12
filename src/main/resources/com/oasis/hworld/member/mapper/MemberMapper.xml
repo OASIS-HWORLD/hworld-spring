@@ -141,10 +141,18 @@
             SELECT O.order_id,
                    P.approved_at,
                    O.order_name,
-                   P.total_amount
+                   P.total_amount,
+                   total.total_count
             FROM ORDERS O
             LEFT JOIN PAYMENT P ON O.order_id = P.order_id
+            CROSS JOIN (
+                SELECT COUNT(*) AS total_count
+                FROM ORDERS
+                WHERE member_id = #{memberId}
+            ) total
             WHERE O.member_id = #{memberId}
+            ORDER BY O.created_at DESC
+            OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
         ]]>
     </select>
 

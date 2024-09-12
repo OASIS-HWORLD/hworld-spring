@@ -117,8 +117,18 @@ public class MemberServiceImpl implements MemberService {
      *
      * @author 김지현
      */
-    public List<OrdersListResponseDTO> getMemberOrders(int memberId) {
-        return memberMapper.selectOrdersByMemberId(memberId);
+    public PageResponseDTO<List<OrdersListResponseDTO>> getMemberOrders(int memberId, int page, int size) {
+        int offset = (page-1) * size;
+        List<OrdersListResponseDTO> orderList = memberMapper.selectOrdersByMemberId(memberId, offset, size);
+
+        int totalCount = orderList.isEmpty() ? 0 : orderList.get(0).getTotalCount();
+
+        return PageResponseDTO.<List<OrdersListResponseDTO>>builder()
+                .data(orderList)
+                .totalCount(totalCount)
+                .currentPage(page)
+                .pageSize(size)
+                .build();
     }
 
     /**
