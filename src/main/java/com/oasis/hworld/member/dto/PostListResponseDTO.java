@@ -15,6 +15,7 @@ import java.util.Date;
  * ----------  --------    ---------------------------
  * 2024.09.02  	김지현        최초 생성
  * 2024.09.03   김지현        recommendCount 필드 이름 변경
+ * 2024.09.12   김지현        totalCount 필드 추가
  * </pre>
  */
 @AllArgsConstructor

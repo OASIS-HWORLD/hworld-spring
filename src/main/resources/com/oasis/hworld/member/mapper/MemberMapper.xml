@@ -17,6 +17,7 @@
 * 2024.09.05    김지현        코디에 사용된 아이템 조회 구현
 * 2024.09.07    조영욱        포인트 변경 기능 추가
 * 2024.09.11    김지현        회원 정보 조회 기능 구현
+* 2024.09.12    김지현        페이징 처리
 * </pre>
 -->
 <mapper namespace="com.oasis.hworld.member.mapper.MemberMapper">

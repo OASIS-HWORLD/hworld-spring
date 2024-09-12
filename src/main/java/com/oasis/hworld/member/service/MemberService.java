@@ -16,6 +16,7 @@ import java.util.List;
  * 2024.09.02  	김지현        최초 생성
  * 2024.09.03   김지현        마이페이지 관련 기능 구현
  * 2024.09.11   김지현        회원 정보 조회 기능 구현
+ * 2024.09.12   김지현        페이징 처리
  * </pre>
  */
 public interface MemberService {
