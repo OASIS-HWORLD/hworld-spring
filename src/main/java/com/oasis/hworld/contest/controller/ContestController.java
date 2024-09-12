@@ -41,7 +41,7 @@ public class ContestController {
      * @apiNote 콘테스트 게시글 목록을 파라미터를 통해 진행중, 완료, 최신순, 추천순을 조회한다.
      */
     @GetMapping("/posts")
-    public ResponseEntity<List<PostSummaryDTO>> getContestPostList(
+    public ResponseEntity<PostResponseDTO> getContestPostList(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "amount", defaultValue = "8") int amount,
             @RequestParam("status") String contestStatus,

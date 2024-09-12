@@ -49,7 +49,7 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public List<PostSummaryDTO> getContestPostList(int page, int amount, String contestStatus, String sortBy, int memberId) {
+    public PostResponseDTO getContestPostList(int page, int amount, String contestStatus, String sortBy, int memberId) {
 
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -77,7 +77,11 @@ public class ContestServiceImpl implements ContestService {
             postSummary.setImageUrl(s3BucketUrl + postSummary.getImageUrl());
         });
 
-        return postSummaryList;
+        PostResponseDTO postResponseDTO = new PostResponseDTO();
+        postResponseDTO.setPostList(postSummaryList);
+        postResponseDTO.setTotalCount(mapper.selectContestPostTotalCount(formattedDate, contestStatus));
+
+        return postResponseDTO;
     }
 
     /**
