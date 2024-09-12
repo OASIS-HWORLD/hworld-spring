@@ -33,6 +33,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드, 게시글 추천 여부 확인 메소드 추가
  * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드, 게시글 목록 조회 / 상세보기 메소드 추천여부 확인, 게시글 삭제하기 메소드 추가
  * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
+ * 2024.09.12   조영욱        베스트 코디 조회 추가
  * </pre>
  */
 @Service
@@ -49,13 +50,13 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public List<PostSummaryDTO> getContestPostList(String contestStatus, String sortBy, int memberId) {
+    public PostResponseDTO getContestPostList(int page, int amount, String contestStatus, String sortBy, int memberId) {
 
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(currentDate);
 
-        List<PostSummaryDTO> postSummaryList = mapper.selectContestPostList(formattedDate, sortBy, contestStatus);
+        List<PostSummaryDTO> postSummaryList = mapper.selectContestPostList(page, amount, formattedDate, sortBy, contestStatus);
 
         // 모든 postId 추출
         List<Integer> postIds = postSummaryList.stream()
@@ -77,7 +78,11 @@ public class ContestServiceImpl implements ContestService {
             postSummary.setImageUrl(s3BucketUrl + postSummary.getImageUrl());
         });
 
-        return postSummaryList;
+        PostResponseDTO postResponseDTO = new PostResponseDTO();
+        postResponseDTO.setPostList(postSummaryList);
+        postResponseDTO.setTotalCount(mapper.selectContestPostTotalCount(formattedDate, contestStatus));
+
+        return postResponseDTO;
     }
 
     /**
@@ -232,5 +237,45 @@ public class ContestServiceImpl implements ContestService {
      */
     public boolean removePost(int memberId, int postId) {
         return mapper.deletePostByMemberIdAndPostId(memberId, postId)==1;
+    }
+
+    /**
+     * 베스트 콘테스트 게시글 목록 조회
+     *
+     * @author 조영욱
+     */
+    @Override
+    public PostResponseDTO getBestContestPostList(int memberId) {
+        Date currentDate = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String formattedDate = dateFormat.format(currentDate);
+
+        List<PostSummaryDTO> postSummaryList = mapper.selectContestPostListOrderByRecommend(formattedDate);
+
+        // 모든 postId 추출
+        List<Integer> postIds = postSummaryList.stream()
+                .map(PostSummaryDTO::getPostId)
+                .collect(Collectors.toList());
+
+        // 추천받은 postId 목록 조회
+        List<Integer> recommendedPostIds = mapper.getRecommendedPosts(memberId, postIds);
+
+        // 각 PostSummary 객체에 대한 추천 여부 설정
+        postSummaryList.forEach(postSummary -> {
+            if (recommendedPostIds.contains(postSummary.getPostId())) {
+                postSummary.setIsRecommended(true);
+            } else {
+                postSummary.setIsRecommended(false);
+            }
+
+            // s3 버킷 이미지 url 추가
+            postSummary.setImageUrl(s3BucketUrl + postSummary.getImageUrl());
+        });
+
+        PostResponseDTO postResponseDTO = new PostResponseDTO();
+        postResponseDTO.setPostList(postSummaryList);
+        postResponseDTO.setTotalCount(mapper.selectContestPostTotalCount(formattedDate, null));
+
+        return postResponseDTO;
     }
 }
