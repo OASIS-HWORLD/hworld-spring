@@ -11,8 +11,11 @@ import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -28,6 +31,7 @@ import java.util.List;
  * 2024.09.04  	김지현        최초 생성
  * 2024.09.05   김지현        코디에 사용된 아이템 조회 구현
  * 2024.09.06   김지현        장바구니 관련 기능 구현
+ * 2023.09.12   조영욱        코디 추가 시 이미지 S3에 업로드
  * </pre>
  */
 @RestController
@@ -43,11 +47,21 @@ public class CoordinationController {
      *
      * @author 김지현
      */
-    @PostMapping("")
-    public ResponseEntity<CommonResponseDTO> saveCoordination(@RequestBody CoordinationRequestDTO coordinationRequestDTO) {
+    @PostMapping(value = "",consumes = {
+            MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<CommonResponseDTO> saveCoordination(
+            @RequestPart("request") @Valid CoordinationRequestDTO coordinationRequestDTO,
+            BindingResult bs,
+            @RequestPart("file") MultipartFile file) {
         // todo: memberId 로직 추가
         int memberId = 1;
-        return coordinationService.addCoordination(coordinationRequestDTO, memberId) ?
+
+        if (bs.hasErrors()) {
+            log.info(bs);
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "코디 추가에 실패했습니다."));
+        }
+
+        return coordinationService.addCoordination(coordinationRequestDTO, file, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "코디가 추가되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "코디 추가에 실패했습니다."));
     }

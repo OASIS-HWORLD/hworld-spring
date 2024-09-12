@@ -22,6 +22,7 @@ import java.util.Map;
  * 2024.09.02   정은찬        회원 ID를 통한 코디 목록 조회, 진행중인 콘테스트 게시글 등록, 댓글 등록/삭제, 게시글 추천 조회 추가
  * 2024.09.03   정은찬        콘테스트 게시글 추천 등록 및 추천수 업데이트,  콘테스트 게시글 추천 삭제 및 추천수 업데이트, 댓글수 업데이트(증가, 감소), 게시글 목록 추천 조회, 게시글 삭제 추가
  * 2024.09.12   정은찬        콘테스트 게시글 수 조회 추가
+ * 2024.09.12   조영욱        베스트 코디 조회 추가
  * </pre>
  */
 public interface ContestMapper {
@@ -69,4 +70,7 @@ public interface ContestMapper {
 
     // 회원 ID와 게시글 ID를 통한 게시글 삭제 등록
     int deletePostByMemberIdAndPostId(@Param("memberId") int memberId, @Param("postId") int postId);
+
+    // 콘테스트 게시글 추천 순 조회
+    List<PostSummaryDTO> selectContestPostListOrderByRecommend(String date);
 }

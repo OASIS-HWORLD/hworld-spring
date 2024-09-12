@@ -17,6 +17,7 @@ import java.util.List;
  * 2024.09.01   정은찬        파라미터를 통해 콘테스트 게시글 목록 조회 메소드 통합, 게시글 상세 조회 메소드 추가
  * 2024.09.02   정은찬        회원 ID를 통해 코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드, 게시글 추천 여부 확인 메소드 추가
  * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드, 게시글 목록 조회 / 상세보기 메소드 추천여부 확인, 게시글 삭제하기 메소드 추가
+ * 2024.09.12   조영욱        베스트 코디 조회 추가
  * </pre>
  */
 public interface ContestService {
@@ -82,4 +83,11 @@ public interface ContestService {
      * @author 정은찬
      */
     boolean removePost(int memberId, int postId);
+
+    /**
+     * 베스트 콘테스트 게시글 목록 조회
+     *
+     * @author 조영욱
+     */
+    PostResponseDTO getBestContestPostList(int memberId);
 }
