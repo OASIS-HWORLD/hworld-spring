@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 /**
  * 회원 주문 내역 응답 DTO
  * @author 김지현
@@ -30,7 +28,7 @@ public class OrdersListResponseDTO {
     // 주문 ID
     private String orderId;
     // 승인 날짜
-    private Date approvedAt;
+    private String approvedAt;
     // 주문 이름
     private String orderName;
     // 총 결제 금액

@@ -140,7 +140,7 @@
     <select id="selectOrdersByMemberId">
         <![CDATA[
             SELECT O.order_id,
-                   P.approved_at,
+                   TO_CHAR(P.approved_at, 'YYYY-MM-DD HH24:MI:SS') AS approved_at,
                    O.order_name,
                    P.total_amount,
                    total.total_count
