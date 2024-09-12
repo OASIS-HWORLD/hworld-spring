@@ -41,10 +41,14 @@ public class ContestController {
      * @apiNote 콘테스트 게시글 목록을 파라미터를 통해 진행중, 완료, 최신순, 추천순을 조회한다.
      */
     @GetMapping("/posts")
-    public ResponseEntity<List<PostSummaryDTO>> getContestPostList(@RequestParam("status") String contestStatus, @RequestParam(value = "sortBy", required = false, defaultValue = "latest") String sortBy) {
+    public ResponseEntity<PostResponseDTO> getContestPostList(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "amount", defaultValue = "8") int amount,
+            @RequestParam("status") String contestStatus,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "latest") String sortBy) {
         // todo : memberId 로직 추가
         int memberId = 1;
-        return ResponseEntity.ok(service.getContestPostList(contestStatus, sortBy, memberId));
+        return ResponseEntity.ok(service.getContestPostList(page, amount, contestStatus, sortBy, memberId));
     }
 
     /**
