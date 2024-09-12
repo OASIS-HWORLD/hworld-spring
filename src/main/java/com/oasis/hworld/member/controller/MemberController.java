@@ -102,10 +102,13 @@ public class MemberController {
      * @author 김지현
      */
     @GetMapping("/my-posts")
-    public ResponseEntity<List<PostListResponseDTO>> getMemberPost(@RequestParam("orderBy") String orderBy) {
+    public ResponseEntity<List<PostListResponseDTO>> getMemberPost(
+            @RequestParam("orderBy") String orderBy,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "4") int size) {
         // todo: memberId 로직 추가
         int memberId = 1;
-        return ResponseEntity.ok(memberService.getMemberPost(memberId, orderBy));
+        return ResponseEntity.ok(memberService.getMemberPost(memberId, orderBy, page, size));
     }
 
     /**

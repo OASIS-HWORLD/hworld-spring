@@ -50,8 +50,9 @@ public class MemberServiceImpl implements MemberService {
      * @author 김지현
      */
     @Override
-    public List<PostListResponseDTO> getMemberPost(int memberId, String orderBy) {
-        List<PostListResponseDTO> postList = memberMapper.selectPostByMemberId(memberId, orderBy);
+    public List<PostListResponseDTO> getMemberPost(int memberId, String orderBy, int page, int size) {
+        int offset = (page-1) * size;
+        List<PostListResponseDTO> postList = memberMapper.selectPostByMemberId(memberId, orderBy, offset, size);
 
         // s3 버킷 이미지 url 추가
         for (PostListResponseDTO post : postList) {

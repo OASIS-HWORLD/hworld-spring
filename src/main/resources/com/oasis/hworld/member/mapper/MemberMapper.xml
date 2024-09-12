@@ -83,9 +83,6 @@
         FROM POST P
         LEFT JOIN COORDINATION C
             ON P.coordination_id = C.coordination_id
-        LEFT JOIN REPLY R
-            ON P.post_id = R.post_id
-            AND R.deleted_at IS NULL
         WHERE P.deleted_at IS NULL
           AND P.member_id = #{memberId}
         ORDER BY
@@ -95,6 +92,7 @@
             <if test="orderBy == 'recommend'">
                 P.recommend_count DESC
             </if>
+        OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
     </select>
 
     <!-- 회원 ID로 코디 목록 조회 -->

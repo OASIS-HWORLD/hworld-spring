@@ -32,7 +32,7 @@ public interface MemberService {
      *
      * @author 김지현
      */
-    List<PostListResponseDTO> getMemberPost(int memberId, String orderBy);
+    List<PostListResponseDTO> getMemberPost(int memberId, String orderBy, int page, int size);
 
     /**
      * 회원 코디 목록 조회

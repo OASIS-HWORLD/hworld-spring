@@ -41,7 +41,11 @@ public interface MemberMapper {
     List<PointHistoryResponseDTO> selectPointHistoryByMemberId(int memberId);
 
     // 회원 ID로 게시글 목록 조회
-    List<PostListResponseDTO> selectPostByMemberId(@Param("memberId") int memberId, @Param("orderBy") String orderBy);
+    List<PostListResponseDTO> selectPostByMemberId(
+            @Param("memberId") int memberId,
+            @Param("orderBy") String orderBy,
+            @Param("offset") int offset,
+            @Param("size") int size);
 
     // 회원 ID로 코디 목록 조회
     List<CoordinationListResponseDTO> selectCoordinationByMemberId(int memberId);
