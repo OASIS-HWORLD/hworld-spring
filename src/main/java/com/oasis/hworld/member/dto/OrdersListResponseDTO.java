@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.03  	김지현        최초 생성
- * 2024.09.12   김지현        totalCount 필드 추가
  * </pre>
  */
 
@@ -33,7 +32,5 @@ public class OrdersListResponseDTO {
     private String orderName;
     // 총 결제 금액
     private int totalAmount;
-    // 전체 데이터 수
-    private int totalCount;
 
 }

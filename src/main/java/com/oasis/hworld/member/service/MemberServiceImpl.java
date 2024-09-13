@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
         int offset = (page-1) * size;
         List<PointHistoryResponseDTO> pointHistoryList = memberMapper.selectPointHistoryByMemberId(memberId, offset, size);
 
-        int totalCount = pointHistoryList.isEmpty() ? 0 : pointHistoryList.get(0).getTotalCount();
+        int totalCount = memberMapper.selectPointHistoryCountByMemberId(memberId);
         return PageResponseDTO.<List<PointHistoryResponseDTO>>builder()
                 .data(pointHistoryList)
                 .totalCount(totalCount)
@@ -65,7 +65,7 @@ public class MemberServiceImpl implements MemberService {
         int offset = (page-1) * size;
         List<PostListResponseDTO> postList = memberMapper.selectPostByMemberId(memberId, orderBy, offset, size);
 
-        int totalCount = postList.isEmpty() ? 0 : postList.get(0).getTotalCount();
+        int totalCount = memberMapper.selectPostCountByMemberId(memberId);
 
         // s3 버킷 이미지 url 추가
         for (PostListResponseDTO post : postList) {
@@ -123,7 +123,7 @@ public class MemberServiceImpl implements MemberService {
         int offset = (page-1) * size;
         List<OrdersListResponseDTO> orderList = memberMapper.selectOrdersByMemberId(memberId, offset, size);
 
-        int totalCount = orderList.isEmpty() ? 0 : orderList.get(0).getTotalCount();
+        int totalCount = memberMapper.selectOrdersCountByMemberId(memberId);
 
         return PageResponseDTO.<List<OrdersListResponseDTO>>builder()
                 .data(orderList)

@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.02  	김지현        최초 생성
- * 2024.09.12   김지현        totalCount 필드 추가
  * </pre>
  */
 @AllArgsConstructor
@@ -32,7 +31,5 @@ public class PointHistoryResponseDTO {
     private String description;
     // 생성일
     private String createdAt;
-    // 전체 데이터 수
-    private int totalCount;
 
 }

@@ -73,4 +73,13 @@ public interface MemberMapper {
 
     // 회원 정보 조회
     MemberInfoResponseDTO selectMemberInfoByMemberId(int memberId);
+
+    // 회원 ID로 주문 내역 전체 count 조회
+    int selectOrdersCountByMemberId(int memberId);
+
+    // 회원 ID로 포인트 사용 내역 전체 count 조회
+    int selectPointHistoryCountByMemberId(int memberId);
+
+    // 회원 ID로 게시글 목록 전체 count 조회
+    int selectPostCountByMemberId(int memberId);
 }
