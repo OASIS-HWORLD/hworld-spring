@@ -1,6 +1,7 @@
 package com.oasis.hworld.shop.service;
 
 import com.oasis.hworld.shop.domain.Shop;
+import com.oasis.hworld.shop.dto.ItemDetailResponseDTO;
 import com.oasis.hworld.shop.dto.ShopItemDTO;
 import com.oasis.hworld.shop.mapper.ShopMapper;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import java.util.List;
  * 2024.09.03  	정은찬        최초 생성
  * 2024.09.04   정은찬        상점 목록 조회 메소드 추가
  * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
+ * 2024.09.14   김지현        아이템 상세 조회 메소드 추가
  * </pre>
  */
 @Service
@@ -79,6 +81,23 @@ public class ShopServiceImpl implements ShopService {
         }
 
         return shopList;
+    }
+
+    /**
+     * 아이템 상세 조회
+     *
+     * @author 김지현
+     */
+    @Override
+    public ItemDetailResponseDTO getItemDetail(int itemId) {
+        ItemDetailResponseDTO itemDetail = mapper.selectItemDetailByItemId(itemId);
+
+        // s3 버킷 이미지 url 추가
+        itemDetail.setItemImageUrl(s3BucketUrl + itemDetail.getItemImageUrl());
+        itemDetail.setShopImageUrl(s3BucketUrl + itemDetail.getShopImageUrl());
+        itemDetail.setItemDetailImageUrl(s3BucketUrl + itemDetail.getItemDetailImageUrl());
+
+        return itemDetail;
     }
 
 }

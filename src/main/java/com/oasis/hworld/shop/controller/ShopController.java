@@ -2,6 +2,7 @@ package com.oasis.hworld.shop.controller;
 
 import com.oasis.hworld.contest.dto.PostSummaryDTO;
 import com.oasis.hworld.shop.domain.Shop;
+import com.oasis.hworld.shop.dto.ItemDetailResponseDTO;
 import com.oasis.hworld.shop.dto.ShopItemDTO;
 import com.oasis.hworld.shop.dto.ShopResponseDTO;
 import com.oasis.hworld.shop.service.ShopService;
@@ -24,6 +25,7 @@ import java.util.List;
  * ----------  --------    ------------------------------------------------------
  * 2024.09.03  	정은찬        최초 생성
  * 2024.09.04   정은찬        상점 목록 조회 메소드 추가
+ * 2024.09.14   김지현        아이템 상세 조회 메소드 추가
  * </pre>
  */
 @RestController
@@ -65,6 +67,17 @@ public class ShopController {
     @GetMapping("")
     public ResponseEntity<List<Shop>> getShopList() {
         return ResponseEntity.ok(service.getShopList());
+    }
+
+    /**
+     * 아이템 상세 조회
+     *
+     * @author 김지현
+     * @apiNote 아이템 상세 정보를 조회한다.
+     */
+    @GetMapping("/item/{itemId}")
+    public ResponseEntity<ItemDetailResponseDTO> getItemDetail(@PathVariable int itemId) {
+        return ResponseEntity.ok(service.getItemDetail(itemId));
     }
 
 }
