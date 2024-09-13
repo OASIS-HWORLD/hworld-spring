@@ -46,10 +46,11 @@ public class ContestController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "amount", defaultValue = "8") int amount,
             @RequestParam("status") String contestStatus,
-            @RequestParam(value = "sortBy", required = false, defaultValue = "latest") String sortBy) {
+            @RequestParam(value = "sortBy", required = false, defaultValue = "latest") String sortBy,
+            @RequestParam(value = "month") String month) {
         // todo : memberId 로직 추가
         int memberId = 1;
-        return ResponseEntity.ok(service.getContestPostList(page, amount, contestStatus, sortBy, memberId));
+        return ResponseEntity.ok(service.getContestPostList(page, amount, contestStatus, sortBy, memberId, month));
     }
 
     /**
@@ -127,7 +128,7 @@ public class ContestController {
     @PostMapping("/recommend/{postId}")
     ResponseEntity<CommonResponseDTO> addRecommend(@PathVariable int postId) {
         // todo : memberId 로직 추가
-        return service.addRecommend(1, postId) ?
+        return service.addRecommend(17, postId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "게시글을 추천했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 추천을 실패했습니다."));
     }
@@ -141,7 +142,7 @@ public class ContestController {
     @DeleteMapping("/recommend/{postId}")
     ResponseEntity<CommonResponseDTO> removeRecommend(@PathVariable int postId) {
         // todo : memberId 로직 추가
-        return service.removeRecommend(1, postId) ?
+        return service.removeRecommend(17, postId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "게시글 추천을 취소했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 추천 취소를 실패했습니다."));
     }
@@ -159,6 +160,19 @@ public class ContestController {
         return service.removePost(memberId, postId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "게시글을 삭제했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 삭제를 실패했습니다."));
+    }
+
+    /**
+     * 월을 통한 콘테스트 게시글 수상작 목록 조회
+     *
+     * @author 정은찬
+     */
+    @GetMapping("/posts/award")
+    public ResponseEntity<List<PostAwardDTO>> getContestPostAwardList(
+            @RequestParam(value = "month") String month) {
+        // todo : memberId 로직 추가
+        int memberId = 1;
+        return ResponseEntity.ok(service.getPostAwardList(memberId, month));
     }
 
     /**

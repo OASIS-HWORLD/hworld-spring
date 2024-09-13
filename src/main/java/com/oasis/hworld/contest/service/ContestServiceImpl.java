@@ -50,13 +50,13 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public PostResponseDTO getContestPostList(int page, int amount, String contestStatus, String sortBy, int memberId) {
+    public PostResponseDTO getContestPostList(int page, int amount, String contestStatus, String sortBy, int memberId, String month) {
 
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = dateFormat.format(currentDate);
 
-        List<PostSummaryDTO> postSummaryList = mapper.selectContestPostList(page, amount, formattedDate, sortBy, contestStatus);
+        List<PostSummaryDTO> postSummaryList = mapper.selectContestPostList(page, amount, formattedDate, sortBy, contestStatus, month);
 
         // 모든 postId 추출
         List<Integer> postIds = postSummaryList.stream()
@@ -80,7 +80,7 @@ public class ContestServiceImpl implements ContestService {
 
         PostResponseDTO postResponseDTO = new PostResponseDTO();
         postResponseDTO.setPostList(postSummaryList);
-        postResponseDTO.setTotalCount(mapper.selectContestPostTotalCount(formattedDate, contestStatus));
+        postResponseDTO.setTotalCount(mapper.selectContestPostTotalCount(formattedDate, contestStatus, month));
 
         return postResponseDTO;
     }
@@ -240,6 +240,37 @@ public class ContestServiceImpl implements ContestService {
     }
 
     /**
+     * 월을 통한 콘테스트 게시글 수상작 목록 조회
+     *
+     * @author 정은찬
+     */
+    public List<PostAwardDTO> getPostAwardList(int memberId, String month) {
+        List<PostAwardDTO> postAwardList = mapper.selectPostAwardListByMonth(month);
+
+        // 모든 postId 추출
+        List<Integer> postIds = postAwardList.stream()
+                .map(PostAwardDTO::getPostId)
+                .collect(Collectors.toList());
+
+        // 추천받은 postId 목록 조회
+        List<Integer> recommendedPostIds = mapper.getRecommendedPosts(memberId, postIds);
+
+        // 각 PostSummary 객체에 대한 추천 여부 설정
+        postAwardList.forEach(postAward -> {
+            if (recommendedPostIds.contains(postAward.getPostId())) {
+                postAward.setIsRecommended(true);
+            } else {
+                postAward.setIsRecommended(false);
+            }
+
+            // s3 버킷 이미지 url 추가
+            postAward.setImageUrl(s3BucketUrl + postAward.getImageUrl());
+        });
+
+        return postAwardList;
+    }
+
+    /**
      * 베스트 콘테스트 게시글 목록 조회
      *
      * @author 조영욱
@@ -271,10 +302,9 @@ public class ContestServiceImpl implements ContestService {
             // s3 버킷 이미지 url 추가
             postSummary.setImageUrl(s3BucketUrl + postSummary.getImageUrl());
         });
-
         PostResponseDTO postResponseDTO = new PostResponseDTO();
         postResponseDTO.setPostList(postSummaryList);
-        postResponseDTO.setTotalCount(mapper.selectContestPostTotalCount(formattedDate, null));
+        postResponseDTO.setTotalCount(mapper.selectContestPostTotalCount(formattedDate, null, null));
 
         return postResponseDTO;
     }
