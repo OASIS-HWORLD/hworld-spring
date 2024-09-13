@@ -26,7 +26,7 @@ public interface ContestService {
      *
      * @author 정은찬
      */
-    PostResponseDTO getContestPostList(int page, int amount, String contestStatus, String sortBy, int memberId);
+    PostResponseDTO getContestPostList(int page, int amount, String contestStatus, String sortBy, int memberId, String month);
 
     /**
      * 게시글 ID를 통해 콘테스트 게시글 상세 조회
@@ -84,6 +84,13 @@ public interface ContestService {
      */
     boolean removePost(int memberId, int postId);
 
+    /**
+     * 월을 통한 콘테스트 게시글 수상작 목록 조회
+     *
+     * @author 정은찬
+     */
+    List<PostAwardDTO> getPostAwardList(int memberId, String month);
+    
     /**
      * 베스트 콘테스트 게시글 목록 조회
      *

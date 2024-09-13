@@ -27,10 +27,10 @@ import java.util.Map;
  */
 public interface ContestMapper {
     // 콘테스트 게시글 목록 조회
-    List<PostSummaryDTO> selectContestPostList(@Param("page") int page, @Param("amount") int amount, @Param("date") String date, @Param("sortBy") String sortBy, @Param("contestStatus") String contestStatus);
+    List<PostSummaryDTO> selectContestPostList(@Param("page") int page, @Param("amount") int amount, @Param("date") String date, @Param("sortBy") String sortBy, @Param("contestStatus") String contestStatus, @Param("month") String month);
 
     // 콘테스트 게시글 수 조회
-    int selectContestPostTotalCount(@Param("date") String date, @Param("contestStatus") String contestStatus);
+    int selectContestPostTotalCount(@Param("date") String date, @Param("contestStatus") String contestStatus, @Param("month") String month);
 
     // 게시글 ID를 통한 게시글 상세 조회
     PostDetailResponseDTO selectContestPostDetailByPostId(@Param("postId") int postId);
@@ -71,6 +71,9 @@ public interface ContestMapper {
     // 회원 ID와 게시글 ID를 통한 게시글 삭제 등록
     int deletePostByMemberIdAndPostId(@Param("memberId") int memberId, @Param("postId") int postId);
 
+    // 월을 통한 게시글 리스트 조회
+    List<PostAwardDTO> selectPostAwardListByMonth(@Param("month") String month);
+    
     // 콘테스트 게시글 추천 순 조회
     List<PostSummaryDTO> selectContestPostListOrderByRecommend(String date);
 }
