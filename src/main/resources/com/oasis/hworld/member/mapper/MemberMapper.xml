@@ -66,14 +66,8 @@
                    END AS type,
                 amount,
                 description,
-                TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at,
-                total.total_count
+                TO_CHAR(created_at, 'YYYY-MM-DD HH24:MI:SS') AS created_at
             FROM POINT_HISTORY
-            CROSS JOIN (
-                SELECT COUNT(*) AS total_count
-                FROM POINT_HISTORY
-                WHERE member_id = #{memberId}
-            ) total
             WHERE member_id = #{memberId}
             ORDER BY created_at DESC
             OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
