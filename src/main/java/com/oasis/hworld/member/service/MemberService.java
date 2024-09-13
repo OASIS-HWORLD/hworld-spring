@@ -16,6 +16,7 @@ import java.util.List;
  * 2024.09.02  	김지현        최초 생성
  * 2024.09.03   김지현        마이페이지 관련 기능 구현
  * 2024.09.11   김지현        회원 정보 조회 기능 구현
+ * 2024.09.12   김지현        페이징 처리
  * </pre>
  */
 public interface MemberService {
@@ -25,14 +26,14 @@ public interface MemberService {
      *
      * @author 김지현
      */
-    List<PointHistoryResponseDTO> getPointHistory(int memberId);
+    PageResponseDTO<List<PointHistoryResponseDTO>> getPointHistory(int memberId, int page, int size);
 
     /**
      * 회원 게시글 목록 조회
      *
      * @author 김지현
      */
-    List<PostListResponseDTO> getMemberPost(int memberId, String orderBy);
+    PageResponseDTO<List<PostListResponseDTO>> getMemberPost(int memberId, String orderBy, int page, int size);
 
     /**
      * 회원 코디 목록 조회
@@ -53,7 +54,7 @@ public interface MemberService {
      *
      * @author 김지현
      */
-    List<OrdersListResponseDTO> getMemberOrders(int memberId);
+    PageResponseDTO<List<OrdersListResponseDTO>> getMemberOrders(int memberId, int page, int size);
 
     /**
      * 회원 주문 내역 상세 조회

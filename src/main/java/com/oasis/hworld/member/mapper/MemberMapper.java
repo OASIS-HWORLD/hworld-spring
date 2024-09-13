@@ -38,10 +38,17 @@ public interface MemberMapper {
     Member selectMemberByLoginId(String loginId);
 
     // 회원 ID로 포인트 내역 조회
-    List<PointHistoryResponseDTO> selectPointHistoryByMemberId(int memberId);
+    List<PointHistoryResponseDTO> selectPointHistoryByMemberId(
+            @Param("memberId") int memberId,
+            @Param("offset") int offset,
+            @Param("size") int size);
 
     // 회원 ID로 게시글 목록 조회
-    List<PostListResponseDTO> selectPostByMemberId(@Param("memberId") int memberId, @Param("orderBy") String orderBy);
+    List<PostListResponseDTO> selectPostByMemberId(
+            @Param("memberId") int memberId,
+            @Param("orderBy") String orderBy,
+            @Param("offset") int offset,
+            @Param("size") int size);
 
     // 회원 ID로 코디 목록 조회
     List<CoordinationListResponseDTO> selectCoordinationByMemberId(int memberId);
@@ -50,7 +57,10 @@ public interface MemberMapper {
     List<CoordinationItemListResponseDTO> selectCoordinationItemByCoordinationId(int coordinationId);
 
     // 회원 ID로 주문 내역 조회
-    List<OrdersListResponseDTO> selectOrdersByMemberId(int memberId);
+    List<OrdersListResponseDTO> selectOrdersByMemberId(
+            @Param("memberId") int memberId,
+            @Param("offset") int offset,
+            @Param("size") int size);
 
     // 주문 ID로 주문 상세 조회
     OrdersDetailResponseDTO selectOrdersDetailByOrderId(String orderId);
@@ -63,4 +73,13 @@ public interface MemberMapper {
 
     // 회원 정보 조회
     MemberInfoResponseDTO selectMemberInfoByMemberId(int memberId);
+
+    // 회원 ID로 주문 내역 전체 count 조회
+    int selectOrdersCountByMemberId(int memberId);
+
+    // 회원 ID로 포인트 사용 내역 전체 count 조회
+    int selectPointHistoryCountByMemberId(int memberId);
+
+    // 회원 ID로 게시글 목록 전체 count 조회
+    int selectPostCountByMemberId(int memberId);
 }

@@ -26,6 +26,7 @@ import java.util.List;
  * 2024.09.01   김지현        로그인 기능 구현
  * 2024.09.03   김지현        마이페이지 관련 기능 구현
  * 2024.09.11   김지현        회원 정보 조회 기능 구현
+ * 2024.09.12   김지현        페이징 처리
  * </pre>
  */
 @RestController
@@ -90,10 +91,12 @@ public class MemberController {
      * @author 김지현
      */
     @GetMapping("/my-points")
-    public ResponseEntity<List<PointHistoryResponseDTO>> getPointHistory() {
+    public ResponseEntity<PageResponseDTO<List<PointHistoryResponseDTO>>> getPointHistory(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "4") int size) {
         // todo: memberId 로직 추가
         int memberId = 1;
-        return ResponseEntity.ok(memberService.getPointHistory(memberId));
+        return ResponseEntity.ok(memberService.getPointHistory(memberId, page, size));
     }
 
     /**
@@ -102,10 +105,13 @@ public class MemberController {
      * @author 김지현
      */
     @GetMapping("/my-posts")
-    public ResponseEntity<List<PostListResponseDTO>> getMemberPost(@RequestParam("orderBy") String orderBy) {
+    public ResponseEntity<PageResponseDTO<List<PostListResponseDTO>>> getMemberPost(
+            @RequestParam("orderBy") String orderBy,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "4") int size) {
         // todo: memberId 로직 추가
         int memberId = 1;
-        return ResponseEntity.ok(memberService.getMemberPost(memberId, orderBy));
+        return ResponseEntity.ok(memberService.getMemberPost(memberId, orderBy, page, size));
     }
 
     /**
@@ -136,10 +142,12 @@ public class MemberController {
      * @author 김지현
      */
     @GetMapping("/my-orders")
-    public ResponseEntity<List<OrdersListResponseDTO>> getMemberOrders() {
+    public ResponseEntity<PageResponseDTO<List<OrdersListResponseDTO>>> getMemberOrders(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "4") int size) {
         // todo: memberId 로직 추가
         int memberId = 1;
-        return ResponseEntity.ok(memberService.getMemberOrders(memberId));
+        return ResponseEntity.ok(memberService.getMemberOrders(memberId, page, size));
     }
 
     /**

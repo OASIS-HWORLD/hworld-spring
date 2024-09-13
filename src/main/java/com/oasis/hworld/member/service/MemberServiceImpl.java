@@ -2,6 +2,7 @@ package com.oasis.hworld.member.service;
 
 import com.oasis.hworld.member.dto.*;
 import com.oasis.hworld.member.mapper.MemberMapper;
+import com.oasis.hworld.payment.domain.Order;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
  * 2024.09.03   김지현        마이페이지 관련 기능 구현
  * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
  * 2024.09.11   김지현        회원 정보 조회 기능 구현
+ * 2024.09.12   김지현        페이징 처리
  * </pre>
  */
 @Service
@@ -40,8 +42,17 @@ public class MemberServiceImpl implements MemberService {
      * @author 김지현
      */
     @Override
-    public List<PointHistoryResponseDTO> getPointHistory(int memberId) {
-        return memberMapper.selectPointHistoryByMemberId(memberId);
+    public PageResponseDTO<List<PointHistoryResponseDTO>> getPointHistory(int memberId, int page, int size) {
+        int offset = (page-1) * size;
+        List<PointHistoryResponseDTO> pointHistoryList = memberMapper.selectPointHistoryByMemberId(memberId, offset, size);
+
+        int totalCount = memberMapper.selectPointHistoryCountByMemberId(memberId);
+        return PageResponseDTO.<List<PointHistoryResponseDTO>>builder()
+                .data(pointHistoryList)
+                .totalCount(totalCount)
+                .currentPage(page)
+                .pageSize(size)
+                .build();
     }
 
     /**
@@ -50,15 +61,23 @@ public class MemberServiceImpl implements MemberService {
      * @author 김지현
      */
     @Override
-    public List<PostListResponseDTO> getMemberPost(int memberId, String orderBy) {
-        List<PostListResponseDTO> postList = memberMapper.selectPostByMemberId(memberId, orderBy);
+    public PageResponseDTO<List<PostListResponseDTO>> getMemberPost(int memberId, String orderBy, int page, int size) {
+        int offset = (page-1) * size;
+        List<PostListResponseDTO> postList = memberMapper.selectPostByMemberId(memberId, orderBy, offset, size);
+
+        int totalCount = memberMapper.selectPostCountByMemberId(memberId);
 
         // s3 버킷 이미지 url 추가
         for (PostListResponseDTO post : postList) {
             post.setImageUrl(s3BucketUrl + post.getImageUrl());
         }
 
-        return postList;
+        return PageResponseDTO.<List<PostListResponseDTO>>builder()
+                .data(postList)
+                .totalCount(totalCount)
+                .currentPage(page)
+                .pageSize(size)
+                .build();
     }
 
     /**
@@ -100,8 +119,18 @@ public class MemberServiceImpl implements MemberService {
      *
      * @author 김지현
      */
-    public List<OrdersListResponseDTO> getMemberOrders(int memberId) {
-        return memberMapper.selectOrdersByMemberId(memberId);
+    public PageResponseDTO<List<OrdersListResponseDTO>> getMemberOrders(int memberId, int page, int size) {
+        int offset = (page-1) * size;
+        List<OrdersListResponseDTO> orderList = memberMapper.selectOrdersByMemberId(memberId, offset, size);
+
+        int totalCount = memberMapper.selectOrdersCountByMemberId(memberId);
+
+        return PageResponseDTO.<List<OrdersListResponseDTO>>builder()
+                .data(orderList)
+                .totalCount(totalCount)
+                .currentPage(page)
+                .pageSize(size)
+                .build();
     }
 
     /**
@@ -112,6 +141,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public OrdersDetailResponseDTO getMemberOrdersDetail(String orderId) {
         OrdersDetailResponseDTO orderDetail = memberMapper.selectOrdersDetailByOrderId(orderId);
+
+        List<OrdersItemDTO> items = orderDetail.getItemList();
+
+        int totalItemCount = 0;
+        for (OrdersItemDTO item : items) {
+            totalItemCount += item.getItemCount();
+        }
+
+        orderDetail.setTotalItemCount(totalItemCount);
 
         // s3 버킷 이미지 url 추가
         orderDetail.setItemList(orderDetail.getItemList().stream()
