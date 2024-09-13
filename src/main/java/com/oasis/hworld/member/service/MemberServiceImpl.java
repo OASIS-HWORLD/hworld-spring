@@ -2,6 +2,7 @@ package com.oasis.hworld.member.service;
 
 import com.oasis.hworld.member.dto.*;
 import com.oasis.hworld.member.mapper.MemberMapper;
+import com.oasis.hworld.payment.domain.Order;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -140,6 +141,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public OrdersDetailResponseDTO getMemberOrdersDetail(String orderId) {
         OrdersDetailResponseDTO orderDetail = memberMapper.selectOrdersDetailByOrderId(orderId);
+
+        List<OrdersItemDTO> items = orderDetail.getItemList();
+
+        int totalItemCount = 0;
+        for (OrdersItemDTO item : items) {
+            totalItemCount += item.getItemCount();
+        }
+
+        orderDetail.setTotalItemCount(totalItemCount);
 
         // s3 버킷 이미지 url 추가
         orderDetail.setItemList(orderDetail.getItemList().stream()
