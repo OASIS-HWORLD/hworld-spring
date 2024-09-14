@@ -13,6 +13,7 @@
 * ==========  =========    ======================================================
 * 2024.09.03    정은찬        최초 생성
 * 2024.09.04    정은찬        상품 목록 조회 추가
+* 2024.09.14    김지현        아이템 상세 조회 추가
 * </pre>
 -->
 
@@ -78,5 +79,35 @@
             SHOP S
         ORDER BY
             S.shop_id ASC
+    </select>
+
+    <resultMap id="ItemDetailResultMap" type="com.oasis.hworld.shop.dto.ItemDetailResponseDTO">
+        <result column="shop_name" property="shopName"/>
+        <result column="shop_image_url" property="shopImageUrl"/>
+        <result column="item_name" property="itemName"/>
+        <result column="price" property="price"/>
+        <result column="item_image_url" property="itemImageUrl"/>
+        <result column="item_detail_image_url" property="itemDetailImageUrl"/>
+        <collection property="itemOptionList" ofType="com.oasis.hworld.shop.dto.ItemOptionDTO" javaType="ArrayList">
+            <result column="item_option_id" property="itemOptionId"/>
+            <result column="item_option" property="itemOption"/>
+        </collection>
+    </resultMap>
+
+    <!-- 아이템 ID를 통한 아이템 상세 조회 -->
+    <select id="selectItemDetailByItemId" resultMap="ItemDetailResultMap">
+        SELECT
+            S.name AS shop_name,
+            S.image_url AS shop_image_url,
+            I.name AS item_name,
+            I.price,
+            I.image_url AS item_image_url,
+            I.detail_image_url AS item_detail_image_url,
+            IO.item_option_id,
+            IO.item_option
+        FROM ITEM I
+        LEFT JOIN ITEM_OPTION IO    ON I.item_id = IO.item_id
+        LEFT JOIN SHOP S            ON I.shop_id = S.shop_id
+        WHERE I.item_id = #{itemId}
     </select>
 </mapper>
