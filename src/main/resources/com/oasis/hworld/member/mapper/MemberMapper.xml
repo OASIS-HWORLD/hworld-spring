@@ -61,8 +61,8 @@
         <![CDATA[
             SELECT
                 CASE
-                   WHEN type = 1 THEN '사용'
-                   WHEN type = 2 THEN '적립'
+                   WHEN type = 1 THEN '적립'
+                   WHEN type = 2 THEN '사용'
                    END AS type,
                 amount,
                 description,
