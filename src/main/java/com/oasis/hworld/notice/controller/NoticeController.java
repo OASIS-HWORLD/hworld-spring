@@ -1,6 +1,7 @@
 package com.oasis.hworld.notice.controller;
 
 import com.oasis.hworld.notice.dto.NoticeDetailDTO;
+import com.oasis.hworld.notice.dto.NoticeListResponseDTO;
 import com.oasis.hworld.notice.dto.NoticeSummaryDTO;
 import com.oasis.hworld.notice.service.NoticeService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.List;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.01  	조영욱        최초 생성
+ * 2024.09.14    조영욱       공지사항 목록 페이지네이션 조회를 위한 전체 개수 조회 추가
  * </pre>
  */
 @RestController
@@ -38,7 +40,7 @@ public class NoticeController {
      * @apiNote 공지사항 목록을 조회한다. Query Parameter를 통해 페이지네이션한다.
      */
     @GetMapping("")
-    public ResponseEntity<List<NoticeSummaryDTO>> getNoticeList(
+    public ResponseEntity<NoticeListResponseDTO> getNoticeList(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "amount", defaultValue = "10") int amount,
             @RequestParam(value = "category", defaultValue = "0") int category) {
