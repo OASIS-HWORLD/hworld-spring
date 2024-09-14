@@ -76,7 +76,7 @@
 
     <!-- 회원 ID로 포인트 내역 전체 count 조회 -->
     <select id="selectPointHistoryCountByMemberId">
-        SELECT COUNT(*) AS total_count
+        SELECT COUNT(*)
         FROM POINT_HISTORY
         WHERE member_id = #{memberId}
     </select>
@@ -108,9 +108,10 @@
     <!-- 회원 ID로 게시글 목록 전체 count 조회 -->
     <select id="selectPostCountByMemberId">
         SELECT COUNT(*)
-        FROM POST
-        WHERE deleted_at IS NULL
-          AND member_id = #{memberId}
+        FROM POST P
+        LEFT JOIN COORDINATION C ON P.coordination_id = C.coordination_id
+        WHERE P.deleted_at IS NULL
+          AND P.member_id = #{memberId}
     </select>
 
     <!-- 회원 ID로 코디 목록 조회 -->
@@ -145,8 +146,8 @@
                    TO_CHAR(P.approved_at, 'YYYY-MM-DD HH24:MI:SS') AS approved_at,
                    O.order_name,
                    P.total_amount
-            FROM ORDERS O
-            LEFT JOIN PAYMENT P ON O.order_id = P.order_id
+            FROM PAYMENT P
+            LEFT JOIN ORDERS O ON O.order_id = P.order_id
             WHERE O.member_id = #{memberId}
             ORDER BY O.created_at DESC
             OFFSET #{offset} ROWS FETCH NEXT #{size} ROWS ONLY
@@ -156,7 +157,8 @@
     <!-- 회원 ID로 주문 내역 전체 count 조회 -->
     <select id="selectOrdersCountByMemberId">
         SELECT COUNT(*)
-        FROM ORDERS
+        FROM PAYMENT P
+        LEFT JOIN ORDERS O ON O.order_id = P.order_id
         WHERE member_id = #{memberId}
     </select>
 
