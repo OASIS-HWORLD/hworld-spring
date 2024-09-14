@@ -100,6 +100,7 @@ public class ContestServiceImpl implements ContestService {
             itemDTO.setCategoryName(ItemCategory.getCategoryName(itemDTO.getCategoryId()));
             // s3 버킷 이미지 url 추가
             itemDTO.setItemImageUrl(s3BucketUrl + itemDTO.getItemImageUrl());
+            itemDTO.setShopImageUrl(s3BucketUrl + itemDTO.getShopImageUrl());
         });
         if(postDetail == null) {
             throw new CustomException(POST_NOT_EXIST);

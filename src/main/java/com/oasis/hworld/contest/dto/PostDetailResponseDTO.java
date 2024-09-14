@@ -41,4 +41,6 @@ public class PostDetailResponseDTO {
     private List<ItemDTO> itemList;
     // 댓글 리스트
     private List<ReplyDTO> replyList;
+
+    private List<ItemOptionDTO> itemOptionList;
 }

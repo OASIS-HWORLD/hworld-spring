@@ -20,6 +20,10 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ReplyDTO {
+    // 댓글 id
+    private int replyId;
+    // 작성자 id
+    private int memberId;
     // 작성자 닉네임
     private String nickname;
     // 댓글 내용

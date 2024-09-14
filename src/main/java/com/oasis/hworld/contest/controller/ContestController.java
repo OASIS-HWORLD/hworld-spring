@@ -86,7 +86,7 @@ public class ContestController {
     @PostMapping("/posts")
     ResponseEntity<CommonResponseDTO> addContestPost(@RequestBody PostRequestDTO postRequestDTO) {
         // todo : memberId 로직 추가
-        return service.addContestPost(7, postRequestDTO) ?
+        return service.addContestPost(1, postRequestDTO) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "콘테스트 게시글이 등록되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "같은 코디 게시글이 존재합니다."));
     }
@@ -100,7 +100,7 @@ public class ContestController {
     @PostMapping("/reply")
     ResponseEntity<CommonResponseDTO> addReply(@RequestBody ReplyRequestDTO replyRequestDTO) {
         // todo : memberId 로직 추가
-        return service.addReply(1, replyRequestDTO) ?
+        return service.addReply(17, replyRequestDTO) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "댓글이 등록되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "댓글이 등록되지 않았습니다."));
     }
