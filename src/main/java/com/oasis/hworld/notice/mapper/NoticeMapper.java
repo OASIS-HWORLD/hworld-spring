@@ -16,6 +16,7 @@ import java.util.List;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.01  	조영욱        최초 생성
+ * 2024.09.14    조영욱       공지사항 목록 페이지네이션 조회를 위한 전체 개수 조회 추가
  * </pre>
  */
 public interface NoticeMapper {
@@ -24,4 +25,6 @@ public interface NoticeMapper {
     List<Notice> selectNoticeWithPage(@Param("page") int page, @Param("amount") int amount, @Param("category") int category);
     // 공지사항 하나 조회
     Notice selectNoticeByNoticeId(int noticeId);
+    // 공지사항 목록 페이지네이션 조회를 위한 전체 개수 조회
+    int selectCountNotice(int categoryId);
 }

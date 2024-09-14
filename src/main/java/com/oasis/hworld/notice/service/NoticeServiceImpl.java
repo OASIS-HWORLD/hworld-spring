@@ -3,6 +3,7 @@ package com.oasis.hworld.notice.service;
 import com.oasis.hworld.common.exception.CustomException;
 import com.oasis.hworld.notice.domain.Notice;
 import com.oasis.hworld.notice.dto.NoticeDetailDTO;
+import com.oasis.hworld.notice.dto.NoticeListResponseDTO;
 import com.oasis.hworld.notice.dto.NoticeSummaryDTO;
 import com.oasis.hworld.notice.mapper.NoticeMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * ----------  --------    ---------------------------
  * 2024.09.01  	조영욱        최초 생성
  * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
+ * 2024.09.14    조영욱       공지사항 목록 페이지네이션 조회를 위한 전체 개수 조회 추가
  * </pre>
  */
 @Service
@@ -41,10 +43,16 @@ public class NoticeServiceImpl implements NoticeService {
      *
      * @author 조영욱
      */
-    public List<NoticeSummaryDTO> getNoticeList(int page, int amount, int category) {
+    public NoticeListResponseDTO getNoticeList(int page, int amount, int category) {
         List<Notice> noticeList = mapper.selectNoticeWithPage(page, amount, category);
 
-        return NoticeSummaryDTO.from(noticeList);
+        int totalCount = mapper.selectCountNotice(category);
+
+        NoticeListResponseDTO response = new NoticeListResponseDTO();
+        response.setNoticeList(NoticeSummaryDTO.from(noticeList));
+        response.setTotalCount(totalCount);
+
+        return response;
     }
 
     /**
