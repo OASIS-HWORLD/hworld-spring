@@ -2,6 +2,7 @@ package com.oasis.hworld.contest.service;
 
 import com.oasis.hworld.common.exception.CustomException;
 import com.oasis.hworld.common.domain.ItemCategory;
+import com.oasis.hworld.common.file.S3Uploader;
 import com.oasis.hworld.contest.dto.*;
 import com.oasis.hworld.contest.mapper.ContestMapper;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,6 +36,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
  * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드, 게시글 목록 조회 / 상세보기 메소드 추천여부 확인, 게시글 삭제하기 메소드 추가
  * 2024.09.10   조영욱        S3 도입으로 인한 이미지 URL 변경
  * 2024.09.12   조영욱        베스트 코디 조회 추가
+ * 2024.09.15   조영욱        게시글 생성 시 이미지 업로드 추가
  * </pre>
  */
 @Service
@@ -42,6 +45,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
 public class ContestServiceImpl implements ContestService {
 
     private final ContestMapper mapper;
+    private final S3Uploader s3Uploader;
     @Value("${S3_BUCKET_URL}")
     private String s3BucketUrl;
 
@@ -140,7 +144,10 @@ public class ContestServiceImpl implements ContestService {
      *
      * @author 정은찬
      */
-    public boolean addContestPost(int memberId, PostRequestDTO postRequestDTO) {
+    public boolean addContestPost(int memberId, PostRequestDTO postRequestDTO, MultipartFile file) {
+
+        String uploadedImageUrl = s3Uploader.uploadImage(file);
+
         int coordinationId = postRequestDTO.getCoordinationId();
 
         // 이미 같은 코디 게시글 존재
@@ -148,7 +155,7 @@ public class ContestServiceImpl implements ContestService {
             return false;
         }
         
-       return mapper.insertContestPost(memberId, postRequestDTO) == 1;
+       return mapper.insertContestPost(memberId, postRequestDTO, uploadedImageUrl) == 1;
     }
 
     /**
