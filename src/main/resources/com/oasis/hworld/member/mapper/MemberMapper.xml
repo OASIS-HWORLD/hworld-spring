@@ -85,7 +85,7 @@
     <select id="selectPostByMemberId">
         SELECT
             P.post_id,
-            C.image_url,
+            P.post_image_url AS image_url,
             P.recommend_count,
             P.reply_count,
             P.rank,
