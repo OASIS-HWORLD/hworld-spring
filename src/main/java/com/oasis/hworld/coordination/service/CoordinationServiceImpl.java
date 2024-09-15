@@ -48,14 +48,12 @@ public class CoordinationServiceImpl implements CoordinationService {
      * @author 김지현
      */
     @Override
-    public boolean addCoordination(CoordinationRequestDTO coordinationRequestDTO, MultipartFile file, int memberId) {
-
-        String uploadedImageUrl = s3Uploader.uploadImage(file);
+    public boolean addCoordination(CoordinationRequestDTO coordinationRequestDTO, int memberId) {
 
         Coordination coordination = Coordination.builder()
                 .memberId(memberId)
                 .title(coordinationRequestDTO.getTitle())
-                .imageUrl(uploadedImageUrl)
+                .imageUrl(coordinationRequestDTO.getImageUrl())
                 .build();
 
         // 코디 추가
@@ -74,6 +72,15 @@ public class CoordinationServiceImpl implements CoordinationService {
         }
 
         return true;
+    }
+
+    /**
+     * 코디 생성을 위한 이미지 업로드
+     *
+     * @author 조영욱
+     */
+    public String addCoordinationImage(MultipartFile file, int memberId) {
+        return s3Uploader.uploadImage(file);
     }
 
     /**
