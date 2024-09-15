@@ -31,6 +31,10 @@ public class PostDetailResponseDTO {
     private String createdAt;
     // 코디 이미지
     private String imageUrl;
+
+    // 게시글 이미지
+    private String postImageUrl;
+
     // 작성자 닉네임
     private String nickname;
     // 추천수

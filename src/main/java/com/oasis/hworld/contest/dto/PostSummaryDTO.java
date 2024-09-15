@@ -31,4 +31,7 @@ public class PostSummaryDTO {
     private int replyCount;
     // 추천 여부
     private Boolean isRecommended;
+
+    // 게시글 이미지 url
+    private String postImageUrl;
 }

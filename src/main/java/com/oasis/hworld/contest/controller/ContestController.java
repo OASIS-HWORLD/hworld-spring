@@ -76,8 +76,9 @@ public class ContestController {
      * @author 정은찬
      * @apiNote 코디 목록을 조회한다.
      */
-    @GetMapping("/coordination/{memberId}")
-    public ResponseEntity<List<CoordinationResponseDTO>> getCoordinationList(@PathVariable("memberId") int memberId) {
+    @GetMapping("/coordination")
+    public ResponseEntity<List<CoordinationResponseDTO>> getCoordinationList() {
+        int memberId = 1;
         return ResponseEntity.ok(service.getCoordinationList(memberId));
     }
 

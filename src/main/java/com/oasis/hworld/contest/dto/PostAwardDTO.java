@@ -32,4 +32,6 @@ public class PostAwardDTO {
     private int rank;
     // 추천 여부
     private Boolean isRecommended;
+
+    private String postImageUrl;
 }
