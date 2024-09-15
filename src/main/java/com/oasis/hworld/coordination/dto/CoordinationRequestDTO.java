@@ -28,6 +28,8 @@ public class CoordinationRequestDTO {
     private int coordinationId;
     // 회원 ID
     private int memberId;
+    // 이미지 URL
+    private String imageUrl;
     // 코디 제목
     private String title;
     // 코디 상품 옵션 ID 목록

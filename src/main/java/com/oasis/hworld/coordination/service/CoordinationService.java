@@ -29,7 +29,14 @@ public interface CoordinationService {
      *
      * @author 김지현
      */
-    boolean addCoordination(CoordinationRequestDTO coordinationRequestDTO, MultipartFile file, int memberId);
+    boolean addCoordination(CoordinationRequestDTO coordinationRequestDTO, int memberId);
+
+    /**
+     * 코디 생성을 위한 이미지 업로드
+     *
+     * @author 조영욱
+     */
+    String addCoordinationImage(MultipartFile file, int memberId);
 
     /**
      * 저장된 코디 적용

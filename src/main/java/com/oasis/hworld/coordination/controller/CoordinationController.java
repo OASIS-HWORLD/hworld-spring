@@ -47,23 +47,34 @@ public class CoordinationController {
      *
      * @author 김지현
      */
-    @PostMapping(value = "",consumes = {
-            MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping("")
     public ResponseEntity<CommonResponseDTO> saveCoordination(
-            @RequestPart("request") @Valid CoordinationRequestDTO coordinationRequestDTO,
-            BindingResult bs,
-            @RequestPart("file") MultipartFile file) {
+            @RequestBody CoordinationRequestDTO coordinationRequestDTO) {
         // todo: memberId 로직 추가
         int memberId = 1;
 
-        if (bs.hasErrors()) {
-            log.info(bs);
-            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "코디 추가에 실패했습니다."));
-        }
-
-        return coordinationService.addCoordination(coordinationRequestDTO, file, memberId) ?
+        return coordinationService.addCoordination(coordinationRequestDTO, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "코디가 추가되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "코디 추가에 실패했습니다."));
+    }
+
+    /**
+     * 코디 생성을 위한 이미지 업로드
+     *
+     * @author 조영욱
+     */
+    @PostMapping(value = "/image", consumes = {
+            MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<CommonResponseDTO> saveCoordinationImage(@RequestPart("file") MultipartFile file) {
+        // todo: memberId 로직 추가
+        int memberId = 1;
+
+        String uploadedUrl = coordinationService.addCoordinationImage(file, memberId);
+
+        return uploadedUrl != null ?
+                ResponseEntity.ok(new CommonResponseDTO(true, uploadedUrl)) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "이미지 추가에 실패했습니다."));
+
     }
 
     /**
