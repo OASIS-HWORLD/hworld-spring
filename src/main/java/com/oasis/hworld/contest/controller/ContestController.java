@@ -8,8 +8,11 @@ import lombok.extern.log4j.Log4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -26,6 +29,7 @@ import java.util.List;
  * 2024.09.02   정은찬        코디 목록 조회 메소드, 진행중인 콘테스트 게시글 등록 메소드, 댓글 등록/삭제 메소드 추가
  * 2024.09.03   정은찬        콘테스트 게시글 추천하기 메소드, 게시글 추천 취소하기 메소드 추가, 댓글 삭제 메소드 수정, 게시글 삭제 메소드 추가
  * 2024.09.12   조영욱        베스트 코디 조회 추가
+ * 2024.09.15   조영욱        게시글 생성 시 이미지 업로드 추가
  * </pre>
  */
 @RestController
@@ -83,10 +87,19 @@ public class ContestController {
      * @author 정은찬
      * @apiNote 진행중인 콘테스트 게시글을 등록한다.
      */
-    @PostMapping("/posts")
-    ResponseEntity<CommonResponseDTO> addContestPost(@RequestBody PostRequestDTO postRequestDTO) {
+    @PostMapping(value = "/posts",consumes = {
+            MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    ResponseEntity<CommonResponseDTO> addContestPost(
+            @RequestPart("request") @Valid PostRequestDTO postRequestDTO,
+            BindingResult bs,
+            @RequestPart("file") MultipartFile file) {
+        if (bs.hasErrors()) {
+            log.info(bs);
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 업로드를 실패했습니다."));
+        }
+
         // todo : memberId 로직 추가
-        return service.addContestPost(1, postRequestDTO) ?
+        return service.addContestPost(1, postRequestDTO, file) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "콘테스트 게시글이 등록되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "같은 코디 게시글이 존재합니다."));
     }

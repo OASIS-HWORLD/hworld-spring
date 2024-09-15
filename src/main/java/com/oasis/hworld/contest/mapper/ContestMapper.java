@@ -23,6 +23,7 @@ import java.util.Map;
  * 2024.09.03   정은찬        콘테스트 게시글 추천 등록 및 추천수 업데이트,  콘테스트 게시글 추천 삭제 및 추천수 업데이트, 댓글수 업데이트(증가, 감소), 게시글 목록 추천 조회, 게시글 삭제 추가
  * 2024.09.12   정은찬        콘테스트 게시글 수 조회 추가
  * 2024.09.12   조영욱        베스트 코디 조회 추가
+ * 2024.09.15   조영욱        게시글 생성 시 이미지 업로드 추가
  * </pre>
  */
 public interface ContestMapper {
@@ -42,7 +43,7 @@ public interface ContestMapper {
     Post selectContestPostByMemberIdAndCoordinationId(@Param("memberId") int memberId, @Param("coordinationId") int coordinationId);
 
     // 진행중인 콘테스트 게시글 등록
-    int insertContestPost(@Param("memberId") int memberId, @Param("postRequestDTO") PostRequestDTO postRequestDTO);
+    int insertContestPost(@Param("memberId") int memberId, @Param("postRequestDTO") PostRequestDTO postRequestDTO, @Param("uploadedImageUrl") String uploadedImageUrl);
 
     // 콘테스트 게시글 댓글 등록
     int insertReply(@Param("memberId") int memberId, @Param("replyRequestDTO") ReplyRequestDTO replyRequestDTO);
