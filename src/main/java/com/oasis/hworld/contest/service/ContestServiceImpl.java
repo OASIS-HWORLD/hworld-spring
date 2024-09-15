@@ -80,6 +80,7 @@ public class ContestServiceImpl implements ContestService {
 
             // s3 버킷 이미지 url 추가
             postSummary.setImageUrl(s3BucketUrl + postSummary.getImageUrl());
+            postSummary.setPostImageUrl(s3BucketUrl + postSummary.getPostImageUrl());
         });
 
         PostResponseDTO postResponseDTO = new PostResponseDTO();
@@ -99,7 +100,7 @@ public class ContestServiceImpl implements ContestService {
 
         // s3 버킷 이미지 url 추가
         postDetail.setImageUrl(s3BucketUrl + postDetail.getImageUrl());
-
+        postDetail.setPostImageUrl(s3BucketUrl + postDetail.getPostImageUrl());
         postDetail.getItemList().forEach(itemDTO -> {
             itemDTO.setCategoryName(ItemCategory.getCategoryName(itemDTO.getCategoryId()));
             // s3 버킷 이미지 url 추가
@@ -150,11 +151,11 @@ public class ContestServiceImpl implements ContestService {
 
         int coordinationId = postRequestDTO.getCoordinationId();
 
-        // 이미 같은 코디 게시글 존재
-        if(mapper.selectContestPostByMemberIdAndCoordinationId(memberId, coordinationId) != null) {
-            return false;
-        }
-        
+//        // 이미 같은 코디 게시글 존재
+//        if(mapper.selectContestPostByMemberIdAndCoordinationId(memberId, coordinationId) != null) {
+//            return false;
+//        }
+//
        return mapper.insertContestPost(memberId, postRequestDTO, uploadedImageUrl) == 1;
     }
 
@@ -273,6 +274,7 @@ public class ContestServiceImpl implements ContestService {
 
             // s3 버킷 이미지 url 추가
             postAward.setImageUrl(s3BucketUrl + postAward.getImageUrl());
+            postAward.setPostImageUrl(s3BucketUrl + postAward.getPostImageUrl());
         });
 
         return postAwardList;
@@ -309,6 +311,7 @@ public class ContestServiceImpl implements ContestService {
 
             // s3 버킷 이미지 url 추가
             postSummary.setImageUrl(s3BucketUrl + postSummary.getImageUrl());
+            postSummary.setPostImageUrl(s3BucketUrl + postSummary.getPostImageUrl());
         });
         PostResponseDTO postResponseDTO = new PostResponseDTO();
         postResponseDTO.setPostList(postSummaryList);

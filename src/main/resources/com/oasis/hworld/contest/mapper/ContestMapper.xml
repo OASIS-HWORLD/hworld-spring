@@ -28,7 +28,8 @@
             P.post_id,
             CO.image_url,
             P.recommend_count,
-            P.reply_count
+            P.reply_count,
+            P.post_image_url
         FROM
             POST P
         LEFT JOIN CONTEST C         ON P.contest_id = C.contest_id
@@ -85,6 +86,7 @@
         <result column="title" property="title"/>
         <result column="post_created_at" property="createdAt"/>
         <result column="image_url" property="imageUrl"/>
+        <result column="post_image_url" property="postImageUrl"/>
         <result column="post_nickname" property="nickname"/>
         <result column="recommend_count" property="recommendCount"/>
         <collection property="itemList"
@@ -123,6 +125,7 @@
             P.title,
             TO_CHAR(P.created_at, 'YYYY-MM-DD') AS post_created_at,
             CO.image_url,
+            P.post_image_url,
             M.nickname AS post_nickname,
             P.recommend_count,
             I.item_id,
@@ -336,7 +339,8 @@
             CO.image_url,
             P.recommend_count,
             P.reply_count,
-            P.rank
+            P.rank,
+            P.post_image_url
         FROM
             POST P
                 LEFT JOIN CONTEST C         ON P.contest_id = C.contest_id
@@ -356,7 +360,8 @@
             P.post_id,
             CO.image_url,
             P.recommend_count,
-            P.reply_count
+            P.reply_count,
+            P.post_image_url
         FROM
             POST P
         LEFT JOIN CONTEST C         ON P.contest_id = C.contest_id
