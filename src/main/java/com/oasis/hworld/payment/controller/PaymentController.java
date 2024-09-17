@@ -1,5 +1,6 @@
 package com.oasis.hworld.payment.controller;
 
+import com.oasis.hworld.common.annotation.MemberId;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import com.oasis.hworld.payment.dto.ConfirmPaymentRequestDTO;
 import com.oasis.hworld.payment.dto.OrderRequestDTO;
@@ -39,10 +40,8 @@ public class PaymentController {
      * @apiNote 주문서 생성 요청 시 주문을 생성한다.
      */
     @PostMapping("/order")
-    public ResponseEntity<OrderResponseDTO> addOrder(@RequestBody OrderRequestDTO dto) {
-
-        // todo: memberId 로직 추가
-        return ResponseEntity.ok(service.addOrder(dto, 1));
+    public ResponseEntity<OrderResponseDTO> addOrder(@RequestBody OrderRequestDTO dto, @MemberId int memberId) {
+        return ResponseEntity.ok(service.addOrder(dto, memberId));
     }
 
     /**
@@ -52,9 +51,8 @@ public class PaymentController {
      * @apiNote 사용자 결제 이후 결제 승인을 요청한다 (실 결제는 결제 승인까지 완료 후 이루어진다)
      */
     @PostMapping("/confirm")
-    public ResponseEntity<CommonResponseDTO> confirmPayment(@RequestBody ConfirmPaymentRequestDTO dto) throws Exception {
-        // todo: memberId 로직 추가
-        return service.confirmPayment(dto, 1) ?
+    public ResponseEntity<CommonResponseDTO> confirmPayment(@RequestBody ConfirmPaymentRequestDTO dto, @MemberId int memberId) throws Exception {
+        return service.confirmPayment(dto, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "상품이 결제되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "결제를 실패했습니다."));
     }

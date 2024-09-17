@@ -34,6 +34,7 @@ import static com.oasis.hworld.common.exception.ErrorCode.FORBIDDEN_REQUEST;
  * 수정일        	수정자        수정내용
  * ----------  --------    ---------------------------
  * 2024.09.01   김지현        최초 생성
+ * 2024.09.15   김지현        권한에 따른 페이지 요청 처리 수정
  * </pre>
  */
 @Slf4j
@@ -54,70 +55,89 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.info("request -> " + request.toString());
         String requestURI = request.getRequestURI();
 
-//        if (requestURI.equals("/members/login") || requestURI.equals("/members/sign-up")) {
-//            log.info("회원가입 및 로그인 페이지");
-//        } else {
-//            JwtTokenDTO jwtTokenDTO = jwtTokenProvider.resolveToken(request);
-//
-//            try {
-//                if (jwtTokenDTO.getAccessToken() == null) {
-//                    throw new RuntimeException("토큰이 존재하지 않거나 유효하지 않습니다.");
-//                }
-//
-//                String accessToken = jwtTokenDTO.getAccessToken();
-//                // AccessToken이 유효한지 검사
-//                jwtTokenProvider.validateAccessToken(accessToken);
-//
-//                // 인증 객체 생성
-//                Authentication auth = jwtTokenProvider.getAuthentication(accessToken);
-//
-//                // SecurityContextHolder에 인증 객체 저장
-//                SecurityContextHolder.getContext().setAuthentication(auth);
-//                request.setAttribute("loginId", auth.getName());
-//
-//                // 다음 필터로 요청 전달
-//                filterChain.doFilter(request, response);
-//            } catch (ExpiredJwtException e) {
-//                try {
-//                    // AccessToken 만료 시 RefreshToken을 통해 AccessToken 재발급
-//                    log.info("access token 만료됨");
-//
-//                    if (jwtTokenDTO.getRefreshToken() == null) {
-//                        throw new RuntimeException("토큰이 존재하지 않거나 유효하지 않습니다.");
-//                    }
-//
-//                    String refreshToken = jwtTokenDTO.getRefreshToken();
-//                    // RefreshToken이 유효한지 검사
-//                    jwtTokenProvider.validateRefreshToken(refreshToken);
-//
-//                    // loginId 가져온 후 loginId, refreshToken을 바탕으로 JWT 토큰 재발급
-//                    String loginId = jwtTokenProvider.parseClaims(refreshToken).getSubject();
-//                    log.info("loginId = " + loginId);
-//                    log.info("refresh token = " + refreshToken);
-//                    JwtTokenDTO newJwtTokenDTO = authService.reissueToken(loginId, refreshToken);
-//
-//                    // 인증 객체 생성
-//                    Authentication auth = jwtTokenProvider.getAuthentication(newJwtTokenDTO.getAccessToken());
-//
-//                    // SecurityContextHolder에 인증 객체 저장
-//                    SecurityContextHolder.getContext().setAuthentication(auth);
-//                    request.setAttribute("loginId", auth.getName());
-//
-//                    // header에 token값 세팅
-//                    response.setHeader("auth", "Bearer " + newJwtTokenDTO.getAccessToken());
-//                    response.setHeader("refresh", "Bearer " + newJwtTokenDTO.getRefreshToken());
-//
-//                    // 다음 필터로 요청 전달
-//                    filterChain.doFilter(request, response);
-//                } catch (Exception e2) {
-//                    setErrorResponse(response, FORBIDDEN_REQUEST);
-//                }
-//            } catch (Exception e3) {
-//                setErrorResponse(response, FORBIDDEN_REQUEST);
-//            }
-//        }
+        // 누구나 접근 가능한 페이지에 대한 요청 처리
+        // 1. 회원가입 및 로그인 페이지
+        if (requestURI.equals("/members/login") || requestURI.equals("/members/sign-up") ||
+                requestURI.equals("/members/check-id") || requestURI.equals("/members/check-nickname")) {
+            log.info("로그인 및 회원가입 페이지 접근: " + requestURI);
+            filterChain.doFilter(request, response);
+            return;
+        }
 
-        filterChain.doFilter(request, response);
+        // 2. 공지사항 페이지
+        if (requestURI.startsWith("/notices")) {
+            log.info("공지사항 페이지 접근: " + requestURI);
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        // 3. 콘테스트 관련 페이지
+        if (requestURI.equals("/contest/posts") || requestURI.equals("/contest/posts/*") ||
+                requestURI.equals("/contest/") || requestURI.equals("/contest/posts/award") ||
+                requestURI.equals("/contest/posts/best") || requestURI.equals("/shop/item/*")) {
+            log.info("콘테스트 관련 전체 공개 페이지 접근: " + requestURI);
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        JwtTokenDTO jwtTokenDTO = jwtTokenProvider.resolveToken(request);
+
+        try {
+            if (jwtTokenDTO.getAccessToken() == null) {
+                throw new RuntimeException("토큰이 존재하지 않거나 유효하지 않습니다.");
+            }
+
+            String accessToken = jwtTokenDTO.getAccessToken();
+            // AccessToken이 유효한지 검사
+            jwtTokenProvider.validateAccessToken(accessToken);
+
+            // 인증 객체 생성
+            Authentication auth = jwtTokenProvider.getAuthentication(accessToken);
+
+            // SecurityContextHolder에 인증 객체 저장
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            request.setAttribute("loginId", auth.getName());
+
+            // 다음 필터로 요청 전달
+            filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException e) {
+            try {
+                // AccessToken 만료 시 RefreshToken을 통해 AccessToken 재발급
+                log.info("access token 만료됨");
+
+                if (jwtTokenDTO.getRefreshToken() == null) {
+                    throw new RuntimeException("토큰이 존재하지 않거나 유효하지 않습니다.");
+                }
+
+                String refreshToken = jwtTokenDTO.getRefreshToken();
+                // RefreshToken이 유효한지 검사
+                jwtTokenProvider.validateRefreshToken(refreshToken);
+
+                // loginId 가져온 후 loginId, refreshToken을 바탕으로 JWT 토큰 재발급
+                String loginId = jwtTokenProvider.parseClaims(refreshToken).getSubject();
+                log.info("loginId = " + loginId);
+                log.info("refresh token = " + refreshToken);
+                JwtTokenDTO newJwtTokenDTO = authService.reissueToken(loginId, refreshToken);
+
+                // 인증 객체 생성
+                Authentication auth = jwtTokenProvider.getAuthentication(newJwtTokenDTO.getAccessToken());
+
+                // SecurityContextHolder에 인증 객체 저장
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                request.setAttribute("loginId", auth.getName());
+
+                // header에 token값 세팅
+                response.setHeader("auth", "Bearer " + newJwtTokenDTO.getAccessToken());
+                response.setHeader("refresh", "Bearer " + newJwtTokenDTO.getRefreshToken());
+
+                // 다음 필터로 요청 전달
+                filterChain.doFilter(request, response);
+            } catch (Exception e2) {
+                setErrorResponse(response, FORBIDDEN_REQUEST);
+            }
+        } catch (Exception e3) {
+            setErrorResponse(response, FORBIDDEN_REQUEST);
+        }
     }
 
     public static void setErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {

@@ -2,6 +2,7 @@ package com.oasis.hworld.character.controller;
 
 import com.oasis.hworld.character.dto.*;
 import com.oasis.hworld.character.service.CharacterService;
+import com.oasis.hworld.common.annotation.MemberId;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -39,10 +40,7 @@ public class CharacterController {
      * @apiNote 회원 ID로 캐릭터 상태를 조회한다.
      */
     @GetMapping("/state")
-    public ResponseEntity<CharacterStateResponseDTO> getCharacterState() {
-        // todo: memberId 로직 추가
-        int memberId = 1;
-
+    public ResponseEntity<CharacterStateResponseDTO> getCharacterState(@MemberId int memberId) {
         return ResponseEntity.ok(service.getCharacterState(memberId));
     }
 
@@ -53,10 +51,7 @@ public class CharacterController {
      * @apiNote 회원 ID로 캐릭터가 장착 중인 상품을 조회한다.
      */
     @GetMapping("/item")
-    public ResponseEntity<List<CharacterItemResponseDTO>> getCharacterItem() {
-        // todo: memberId 로직 추가
-        int memberId = 1;
-
+    public ResponseEntity<List<CharacterItemResponseDTO>> getCharacterItem(@MemberId int memberId) {
         return ResponseEntity.ok(service.getCharacterItemList(memberId));
     }
 
@@ -66,9 +61,7 @@ public class CharacterController {
      * @author 조영욱
      */
     @PutMapping("/state")
-    public ResponseEntity<CommonResponseDTO> modifyCharacterState(@RequestBody CharacterStateRequestDTO dto) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
+    public ResponseEntity<CommonResponseDTO> modifyCharacterState(@RequestBody CharacterStateRequestDTO dto, @MemberId int memberId) {
         return service.modifyCharacterState(dto, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "변경에 성공했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "변경에 실패했습니다."));
@@ -80,9 +73,7 @@ public class CharacterController {
      * @author 조영욱
      */
     @PostMapping("")
-    public ResponseEntity<CommonResponseDTO> addCharacter(@RequestBody AddCharacterRequestDTO dto) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
+    public ResponseEntity<CommonResponseDTO> addCharacter(@RequestBody AddCharacterRequestDTO dto, @MemberId int memberId) {
         return service.addCharacter(dto, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "캐릭터 생성에 성공했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "캐릭터 생성에 실패했습니다."));
@@ -95,10 +86,7 @@ public class CharacterController {
      * @apiNote 캐릭터에 상품을 장착한다.
      */
     @PostMapping("/item")
-    public ResponseEntity<CommonResponseDTO> equipItem(@RequestBody EquipItemRequestDTO dto) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
-
+    public ResponseEntity<CommonResponseDTO> equipItem(@RequestBody EquipItemRequestDTO dto, @MemberId int memberId) {
         return service.equipItem(dto, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "상품 장착에 성공했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "상품 장착에 실패했습니다."));
@@ -111,10 +99,7 @@ public class CharacterController {
      * @apiNote 캐릭터가 장착중인 상품을 해제한다.
      */
     @DeleteMapping("/item/{categoryId}")
-    public ResponseEntity<CommonResponseDTO> unequipItem(@PathVariable("categoryId") int categoryId) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
-
+    public ResponseEntity<CommonResponseDTO> unequipItem(@PathVariable("categoryId") int categoryId, @MemberId int memberId) {
         return service.unequipItem(categoryId, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "장착을 해제했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "해당 상품을 장착중이지 않습니다."));
