@@ -1,5 +1,6 @@
 package com.oasis.hworld.deliveryaddress.controller;
 
+import com.oasis.hworld.common.annotation.MemberId;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import com.oasis.hworld.deliveryaddress.domain.DeliveryAddress;
 import com.oasis.hworld.deliveryaddress.dto.DeliveryAddressRequestDTO;
@@ -41,9 +42,8 @@ public class DeliveryAddressController {
      * @apiNote 로그인한 회원의 배송지 목록을 조회한다.
      */
     @GetMapping("")
-    public ResponseEntity<List<DeliveryAddress>> getDeliveryAddressList() {
-        // todo: memberId 로직 추가
-        return ResponseEntity.ok(service.getDeliveryAddressList(1));
+    public ResponseEntity<List<DeliveryAddress>> getDeliveryAddressList(@MemberId int memberId) {
+        return ResponseEntity.ok(service.getDeliveryAddressList(memberId));
     }
 
     /**
@@ -52,9 +52,8 @@ public class DeliveryAddressController {
      * @author 조영욱
      */
     @PostMapping("")
-    public ResponseEntity<CommonResponseDTO> addDeliveryAddress(@RequestBody DeliveryAddressRequestDTO dto) {
-        // todo: memberId 로직 추가
-        return service.addDeliveryAddress(dto, 1) ?
+    public ResponseEntity<CommonResponseDTO> addDeliveryAddress(@RequestBody DeliveryAddressRequestDTO dto, @MemberId int memberId) {
+        return service.addDeliveryAddress(dto, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "배송지가 추가되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "배송지 추가를 실패하였습니다."));
     }
@@ -65,9 +64,8 @@ public class DeliveryAddressController {
      * @author 조영욱
      */
     @DeleteMapping("/{deliveryAddressId}")
-    public ResponseEntity<CommonResponseDTO> removeDeliveryAddress(@PathVariable("deliveryAddressId") int deliveryAddressId) {
-        // todo: memberId 로직 추가
-        return service.removeDeliveryAddress(deliveryAddressId, 1) ?
+    public ResponseEntity<CommonResponseDTO> removeDeliveryAddress(@PathVariable("deliveryAddressId") int deliveryAddressId, @MemberId int memberId) {
+        return service.removeDeliveryAddress(deliveryAddressId, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "배송지를 삭제하였습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "배송지 삭제를 실패하였습니다."));
     }

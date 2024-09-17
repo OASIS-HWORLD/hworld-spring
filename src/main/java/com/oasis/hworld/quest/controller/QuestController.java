@@ -1,5 +1,6 @@
 package com.oasis.hworld.quest.controller;
 
+import com.oasis.hworld.common.annotation.MemberId;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import com.oasis.hworld.quest.dto.QuestDetailDTO;
 import com.oasis.hworld.quest.service.QuestService;
@@ -40,9 +41,8 @@ public class QuestController {
      * @apiNote 로그인한 회원의 퀘스트 목록을 조회한다.
      */
     @GetMapping("")
-    public ResponseEntity<List<QuestDetailDTO>> getQuestList() {
-        // todo: memberId 로직 추가
-        return ResponseEntity.ok(service.getQuestList(1));
+    public ResponseEntity<List<QuestDetailDTO>> getQuestList(@MemberId int memberId) {
+        return ResponseEntity.ok(service.getQuestList(memberId));
     }
 
     /**
@@ -51,9 +51,8 @@ public class QuestController {
      * @author 조영욱
      */
     @PostMapping("/start/{questId}")
-    public ResponseEntity<CommonResponseDTO> startQuest(@PathVariable("questId") int questId) {
-        // todo: memberId 로직 추가
-        return service.startQuest(questId, 1) ?
+    public ResponseEntity<CommonResponseDTO> startQuest(@PathVariable("questId") int questId, @MemberId int memberId) {
+        return service.startQuest(questId, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "퀘스트가 시작되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "퀘스트를 시작할 수 없습니다."));
     }
@@ -64,9 +63,8 @@ public class QuestController {
      * @author 조영욱
      */
     @PutMapping("/finish/{questId}")
-    public ResponseEntity<CommonResponseDTO> finishQuest(@PathVariable("questId") int questId) {
-        // todo: memberId 로직 추가
-        return service.finishQuest(questId, 1) ?
+    public ResponseEntity<CommonResponseDTO> finishQuest(@PathVariable("questId") int questId, @MemberId int memberId) {
+        return service.finishQuest(questId, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "퀘스트가 종료되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "퀘스트를 종료할 수 없습니다."));
     }
@@ -77,9 +75,8 @@ public class QuestController {
      * @author 조영욱
      */
     @PutMapping("/progress/{questId}")
-    public ResponseEntity<CommonResponseDTO> progressQuest(@PathVariable("questId") int questId) {
-        // todo: memberId 로직 추가
-        return service.progressQuest(questId, 1) ?
+    public ResponseEntity<CommonResponseDTO> progressQuest(@PathVariable("questId") int questId, @MemberId int memberId) {
+        return service.progressQuest(questId, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "퀘스트가 진행되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "퀘스트가 진행되지 않았습니다."));
     }

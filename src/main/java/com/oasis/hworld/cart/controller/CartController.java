@@ -4,6 +4,7 @@ import com.oasis.hworld.cart.dto.CartItemOptionRequestDTO;
 import com.oasis.hworld.cart.dto.CartListResponseDTO;
 import com.oasis.hworld.cart.dto.ModifyCartItemCountRequestDTO;
 import com.oasis.hworld.cart.service.CartService;
+import com.oasis.hworld.common.annotation.MemberId;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -40,9 +41,8 @@ public class CartController {
      * @apiNote 로그인한 회원의 장바구니를 조회한다.
      */
     @GetMapping("")
-    public ResponseEntity<CartListResponseDTO> getCartList() {
-        // todo: memberId 로직 추가
-        return ResponseEntity.ok(service.getCartList(1));
+    public ResponseEntity<CartListResponseDTO> getCartList(@MemberId int memberId) {
+        return ResponseEntity.ok(service.getCartList(memberId));
     }
 
     /**
@@ -51,9 +51,8 @@ public class CartController {
      * @author 조영욱
      */
     @PostMapping("")
-    public ResponseEntity<CommonResponseDTO> addCart(@RequestBody CartItemOptionRequestDTO dto) {
-        // todo: memberId 로직 추가
-        return service.addCart(dto, 1) ?
+    public ResponseEntity<CommonResponseDTO> addCart(@RequestBody CartItemOptionRequestDTO dto, @MemberId int memberId) {
+        return service.addCart(dto, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "장바구니에 추가되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "이미 장바구니에 추가된 상품입니다."));
     }
@@ -64,9 +63,8 @@ public class CartController {
      * @author 조영욱
      */
     @DeleteMapping("/{cartId}")
-    public ResponseEntity<CommonResponseDTO> removeItemFromCart(@PathVariable("cartId") int cartId) {
-        // todo: memberId 로직 추가
-        return service.removeItemFromCart(cartId, 1) ?
+    public ResponseEntity<CommonResponseDTO> removeItemFromCart(@PathVariable("cartId") int cartId, @MemberId int memberId) {
+        return service.removeItemFromCart(cartId, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "장바구니에서 상품이 삭제되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "장바구니에 상품이 존재하지 않습니다."));
     }
@@ -77,9 +75,8 @@ public class CartController {
      * @author 조영욱
      */
     @PutMapping("/count")
-    public ResponseEntity<CommonResponseDTO> modifyCartItemCount(@RequestBody ModifyCartItemCountRequestDTO dto) {
-        // todo: memberId 로직 추가
-        return service.modifyCartItemCount(dto, 1) ?
+    public ResponseEntity<CommonResponseDTO> modifyCartItemCount(@RequestBody ModifyCartItemCountRequestDTO dto, @MemberId int memberId) {
+        return service.modifyCartItemCount(dto, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "수량이 변경되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "장바구니에 상품이 존재하지 않습니다."));
     }

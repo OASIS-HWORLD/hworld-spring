@@ -34,16 +34,25 @@
         <!-- JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 이전에 등록 -->
         <security:custom-filter ref="jwtAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
 
-        <!-- 모든 URL에 대해 접근 허용 -->
-        <security:intercept-url pattern="/**" access="permitAll" />
+        <!-- 1. 회원가입 및 로그인 관련 경로 누구나 접근 가능 -->
+        <security:intercept-url pattern="/members/sign-up" access="permitAll" />
+        <security:intercept-url pattern="/members/login" access="permitAll" />
+        <security:intercept-url pattern="/members/check-id" access="permitAll" />
+        <security:intercept-url pattern="/members/check-nickname" access="permitAll" />
 
+        <!-- 2. 공지사항 관련 경로 누구나 접근 가능 -->
+        <security:intercept-url pattern="/notices/**" access="permitAll" />
 
-<!--        <security:intercept-url pattern="/members/login"-->
-<!--                                access="permitAll" />-->
+        <!-- 3. 콘테스트 관련 경로 누구나 접근 가능 -->
+        <security:intercept-url pattern="/contest/posts" access="permitAll" />
+        <security:intercept-url pattern="/contest/posts/*" access="permitAll" />
+        <security:intercept-url pattern="/contest/" access="permitAll" />
+        <security:intercept-url pattern="/contest/posts/award" access="permitAll" />
+        <security:intercept-url pattern="/contest/posts/best" access="permitAll" />
+        <security:intercept-url pattern="/shop/item/*" access="permitAll" />
 
-<!--        <security:intercept-url pattern="/members/sign-up"-->
-<!--                                access="permitAll" />-->
-
+        <!-- 기타 모든 요청은 인증된 사용자만 접근 가능 -->
+        <security:intercept-url pattern="/**" access="hasRole('MEMBER')" />
 
         <security:form-login/>
     </security:http>

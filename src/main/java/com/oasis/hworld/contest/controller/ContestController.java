@@ -1,5 +1,6 @@
 package com.oasis.hworld.contest.controller;
 
+import com.oasis.hworld.common.annotation.MemberId;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import com.oasis.hworld.contest.dto.*;
 import com.oasis.hworld.contest.service.ContestService;
@@ -51,9 +52,8 @@ public class ContestController {
             @RequestParam(value = "amount", defaultValue = "8") int amount,
             @RequestParam("status") String contestStatus,
             @RequestParam(value = "sortBy", required = false, defaultValue = "latest") String sortBy,
-            @RequestParam(value = "month") String month) {
-        // todo : memberId 로직 추가
-        int memberId = 1;
+            @RequestParam(value = "month") String month,
+            @MemberId int memberId) {
         return ResponseEntity.ok(service.getContestPostList(page, amount, contestStatus, sortBy, memberId, month));
     }
 
@@ -64,9 +64,7 @@ public class ContestController {
      * @apiNote 콘테스트 게시글을 상세 조회한다.
      */
     @GetMapping("/posts/{postId}")
-    public ResponseEntity<PostDetailResponseDTO> getPostDetail(@PathVariable("postId") int postId) {
-        // todo : memberId 로직 추가
-        int memberId = 1;
+    public ResponseEntity<PostDetailResponseDTO> getPostDetail(@PathVariable("postId") int postId, @MemberId int memberId) {
         return ResponseEntity.ok(service.getPostDetail(postId, memberId));
     }
 
@@ -77,8 +75,7 @@ public class ContestController {
      * @apiNote 코디 목록을 조회한다.
      */
     @GetMapping("/coordination")
-    public ResponseEntity<List<CoordinationResponseDTO>> getCoordinationList() {
-        int memberId = 1;
+    public ResponseEntity<List<CoordinationResponseDTO>> getCoordinationList(@MemberId int memberId) {
         return ResponseEntity.ok(service.getCoordinationList(memberId));
     }
 
@@ -93,14 +90,14 @@ public class ContestController {
     ResponseEntity<CommonResponseDTO> addContestPost(
             @RequestPart("request") @Valid PostRequestDTO postRequestDTO,
             BindingResult bs,
-            @RequestPart("file") MultipartFile file) {
+            @RequestPart("file") MultipartFile file,
+            @MemberId int memberId) {
         if (bs.hasErrors()) {
             log.info(bs);
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 업로드를 실패했습니다."));
         }
 
-        // todo : memberId 로직 추가
-        return service.addContestPost(1, postRequestDTO, file) ?
+        return service.addContestPost(memberId, postRequestDTO, file) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "콘테스트 게시글이 등록되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "같은 코디 게시글이 존재합니다."));
     }
@@ -112,9 +109,8 @@ public class ContestController {
      * @apiNote 콘테스트 게시글의 댓글을 등록한다.
      */
     @PostMapping("/reply")
-    ResponseEntity<CommonResponseDTO> addReply(@RequestBody ReplyRequestDTO replyRequestDTO) {
-        // todo : memberId 로직 추가
-        return service.addReply(17, replyRequestDTO) ?
+    ResponseEntity<CommonResponseDTO> addReply(@RequestBody ReplyRequestDTO replyRequestDTO, @MemberId int memberId) {
+        return service.addReply(memberId, replyRequestDTO) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "댓글이 등록되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "댓글이 등록되지 않았습니다."));
     }
@@ -126,9 +122,8 @@ public class ContestController {
      * @apiNote 콘테스트 게시글의 댓글을 삭제한다.
      */
     @DeleteMapping("/reply")
-    ResponseEntity<CommonResponseDTO> removeReply(@RequestParam("postId") int postId, @RequestParam("replyId") int replyId) {
-        // todo : memberId 로직 추가
-        return service.removeReply(1, postId, replyId) ?
+    ResponseEntity<CommonResponseDTO> removeReply(@RequestParam("postId") int postId, @RequestParam("replyId") int replyId, @MemberId int memberId) {
+        return service.removeReply(memberId, postId, replyId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "댓글이 삭제되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "댓글이 삭제되지 않았습니다."));
     }
@@ -140,9 +135,8 @@ public class ContestController {
      * @apiNote 콘테스트 게시글을 추천한다.
      */
     @PostMapping("/recommend/{postId}")
-    ResponseEntity<CommonResponseDTO> addRecommend(@PathVariable int postId) {
-        // todo : memberId 로직 추가
-        return service.addRecommend(17, postId) ?
+    ResponseEntity<CommonResponseDTO> addRecommend(@PathVariable int postId, @MemberId int memberId) {
+        return service.addRecommend(memberId, postId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "게시글을 추천했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 추천을 실패했습니다."));
     }
@@ -154,9 +148,8 @@ public class ContestController {
      * @apiNote 콘테스트 게시글 추천을 취소한다.
      */
     @DeleteMapping("/recommend/{postId}")
-    ResponseEntity<CommonResponseDTO> removeRecommend(@PathVariable int postId) {
-        // todo : memberId 로직 추가
-        return service.removeRecommend(17, postId) ?
+    ResponseEntity<CommonResponseDTO> removeRecommend(@PathVariable int postId, @MemberId int memberId) {
+        return service.removeRecommend(memberId, postId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "게시글 추천을 취소했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 추천 취소를 실패했습니다."));
     }
@@ -168,9 +161,7 @@ public class ContestController {
      * @apiNote 콘테스트 게시글을 삭제한다.
      */
     @DeleteMapping("/posts/{postId}")
-    ResponseEntity<CommonResponseDTO> removePost(@PathVariable int postId) {
-        // todo : memberId 로직 추가
-        int memberId = 1;
+    ResponseEntity<CommonResponseDTO> removePost(@PathVariable int postId, @MemberId int memberId) {
         return service.removePost(memberId, postId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "게시글을 삭제했습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "게시글 삭제를 실패했습니다."));
@@ -183,9 +174,7 @@ public class ContestController {
      */
     @GetMapping("/posts/award")
     public ResponseEntity<List<PostAwardDTO>> getContestPostAwardList(
-            @RequestParam(value = "month") String month) {
-        // todo : memberId 로직 추가
-        int memberId = 1;
+            @RequestParam(value = "month") String month, @MemberId int memberId) {
         return ResponseEntity.ok(service.getPostAwardList(memberId, month));
     }
 
@@ -196,9 +185,7 @@ public class ContestController {
      * @apiNote 콘테스트 좋아요 순 베스트 게시글 목록을 조회한다.
      */
     @GetMapping("/posts/best")
-    public ResponseEntity<PostResponseDTO> getBestContestPostList() {
-        // todo : memberId 로직 추가
-        int memberId = 1;
+    public ResponseEntity<PostResponseDTO> getBestContestPostList(@MemberId int memberId) {
         return ResponseEntity.ok(service.getBestContestPostList(memberId));
     }
 }

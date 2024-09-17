@@ -1,5 +1,6 @@
 package com.oasis.hworld.member.controller;
 
+import com.oasis.hworld.common.annotation.MemberId;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import com.oasis.hworld.member.dto.*;
 import com.oasis.hworld.member.service.AuthService;
@@ -10,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -93,9 +95,8 @@ public class MemberController {
     @GetMapping("/my-points")
     public ResponseEntity<PageResponseDTO<List<PointHistoryResponseDTO>>> getPointHistory(
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "4") int size) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
+            @RequestParam(value = "size", defaultValue = "4") int size,
+            @MemberId int memberId) {
         return ResponseEntity.ok(memberService.getPointHistory(memberId, page, size));
     }
 
@@ -108,9 +109,8 @@ public class MemberController {
     public ResponseEntity<PageResponseDTO<List<PostListResponseDTO>>> getMemberPost(
             @RequestParam("orderBy") String orderBy,
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "4") int size) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
+            @RequestParam(value = "size", defaultValue = "4") int size,
+            @MemberId int memberId) {
         return ResponseEntity.ok(memberService.getMemberPost(memberId, orderBy, page, size));
     }
 
@@ -120,9 +120,7 @@ public class MemberController {
      * @author 김지현
      */
     @GetMapping("/my-coordinations")
-    public ResponseEntity<List<CoordinationListResponseDTO>> getMemberCoordination() {
-        // todo: memberId 로직 추가
-        int memberId = 1;
+    public ResponseEntity<List<CoordinationListResponseDTO>> getMemberCoordination(@MemberId int memberId) {
         return ResponseEntity.ok(memberService.getMemberCoordination(memberId));
     }
 
@@ -144,9 +142,8 @@ public class MemberController {
     @GetMapping("/my-orders")
     public ResponseEntity<PageResponseDTO<List<OrdersListResponseDTO>>> getMemberOrders(
             @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "4") int size) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
+            @RequestParam(value = "size", defaultValue = "4") int size,
+            @MemberId int memberId) {
         return ResponseEntity.ok(memberService.getMemberOrders(memberId, page, size));
     }
 
@@ -166,9 +163,7 @@ public class MemberController {
      * @author 김지현
      */
     @GetMapping("/my-info")
-    public ResponseEntity<MemberInfoResponseDTO> getMemberInfo() {
-        // todo: memberId 로직 추가
-        int memberId = 1;
+    public ResponseEntity<MemberInfoResponseDTO> getMemberInfo(@MemberId int memberId) {
         return ResponseEntity.ok(memberService.getMemberInfo(memberId));
     }
 }

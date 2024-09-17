@@ -31,8 +31,19 @@ public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+
+        // 로그인 ID가 없을 경우 0 반환
         String loginId = (String) request.getAttribute("loginId");
+        if (loginId == null) {
+            return 0;
+        }
+
         Member member = memberMapper.selectMemberByLoginId(loginId);
+
+        // Member가 존재하지 않으면 0 반환
+        if (member == null) {
+            return 0;
+        }
         return member.getMemberId();
     }
 }

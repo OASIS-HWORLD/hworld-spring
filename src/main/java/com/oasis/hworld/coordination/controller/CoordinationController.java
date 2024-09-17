@@ -1,5 +1,6 @@
 package com.oasis.hworld.coordination.controller;
 
+import com.oasis.hworld.common.annotation.MemberId;
 import com.oasis.hworld.common.dto.CommonResponseDTO;
 import com.oasis.hworld.coordination.dto.CoordinationItemRequestDTO;
 import com.oasis.hworld.coordination.dto.CoordinationItemResponseDTO;
@@ -49,10 +50,7 @@ public class CoordinationController {
      */
     @PostMapping("")
     public ResponseEntity<CommonResponseDTO> saveCoordination(
-            @RequestBody CoordinationRequestDTO coordinationRequestDTO) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
-
+            @RequestBody CoordinationRequestDTO coordinationRequestDTO, @MemberId int memberId) {
         return coordinationService.addCoordination(coordinationRequestDTO, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "코디가 추가되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "코디 추가에 실패했습니다."));
@@ -65,10 +63,7 @@ public class CoordinationController {
      */
     @PostMapping(value = "/image", consumes = {
             MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<CommonResponseDTO> saveCoordinationImage(@RequestPart("file") MultipartFile file) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
-
+    public ResponseEntity<CommonResponseDTO> saveCoordinationImage(@RequestPart("file") MultipartFile file, @MemberId int memberId) {
         String uploadedUrl = coordinationService.addCoordinationImage(file, memberId);
 
         return uploadedUrl != null ?
@@ -83,9 +78,7 @@ public class CoordinationController {
      * @author 김지현
      */
     @PostMapping("/apply-coordination")
-    public ResponseEntity<CommonResponseDTO> applyCoordination(@RequestBody List<CoordinationItemRequestDTO> coordinationItemList) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
+    public ResponseEntity<CommonResponseDTO> applyCoordination(@RequestBody List<CoordinationItemRequestDTO> coordinationItemList, @MemberId int memberId) {
         return coordinationService.applyCoordination(coordinationItemList, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "코디가 적용되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "코디 적용에 실패했습니다."));
@@ -109,9 +102,7 @@ public class CoordinationController {
      * @author 김지현
      */
     @GetMapping("/{coordinationId}")
-    public ResponseEntity<List<CoordinationItemResponseDTO>> getCoordinationItem(@PathVariable("coordinationId") int coordinationId) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
+    public ResponseEntity<List<CoordinationItemResponseDTO>> getCoordinationItem(@PathVariable("coordinationId") int coordinationId, @MemberId int memberId) {
         return ResponseEntity.ok(coordinationService.getCoordinationItem(coordinationId, memberId));
     }
 
@@ -121,9 +112,7 @@ public class CoordinationController {
      * @author 김지현
      */
     @DeleteMapping("/cart/{itemOptionId}")
-    public ResponseEntity<CommonResponseDTO> removeCart(@PathVariable("itemOptionId") int itemOptionId) {
-        // todo: memberId 로직 추가
-        int memberId = 1;
+    public ResponseEntity<CommonResponseDTO> removeCart(@PathVariable("itemOptionId") int itemOptionId, @MemberId int memberId) {
         return coordinationService.deleteCart(itemOptionId, memberId) ?
                 ResponseEntity.ok(new CommonResponseDTO(true, "장바구니에서 상품이 삭제되었습니다.")) :
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new CommonResponseDTO(false, "장바구니에 상품이 존재하지 않습니다."));
