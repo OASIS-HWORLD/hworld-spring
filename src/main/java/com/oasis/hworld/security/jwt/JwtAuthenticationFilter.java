@@ -54,6 +54,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("request -> " + request.toString());
         String requestURI = request.getRequestURI();
+        String method = request.getMethod();
 
         // 누구나 접근 가능한 페이지에 대한 요청 처리
         // 1. 회원가입 및 로그인 페이지
@@ -72,9 +73,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // 3. 콘테스트 관련 페이지
-        if (requestURI.equals("/contest/posts") || requestURI.equals("/contest/posts/*") ||
-                requestURI.equals("/contest/") || requestURI.equals("/contest/posts/award") ||
-                requestURI.equals("/contest/posts/best") || requestURI.equals("/shop/item/*")) {
+        if (method.equals("GET") && (requestURI.equals("/contest/posts"))
+                || requestURI.equals("/contest/posts/*")
+                || requestURI.equals("/contest/")
+                || requestURI.equals("/contest/posts/award")
+                || requestURI.equals("/contest/posts/best")
+                || requestURI.equals("/shop/item/*")) {
             log.info("콘테스트 관련 전체 공개 페이지 접근: " + requestURI);
             filterChain.doFilter(request, response);
             return;
