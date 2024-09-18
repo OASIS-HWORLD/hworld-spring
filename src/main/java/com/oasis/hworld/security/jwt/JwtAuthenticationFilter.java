@@ -73,12 +73,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // 3. 콘테스트 관련 페이지
-        if (method.equals("GET") && (requestURI.equals("/contest/posts"))
-                || requestURI.equals("/contest/posts/*")
-                || requestURI.equals("/contest/")
-                || requestURI.equals("/contest/posts/award")
-                || requestURI.equals("/contest/posts/best")
-                || requestURI.equals("/shop/item/*")) {
+        if (method.equals("GET") && ((requestURI.startsWith("/contest/posts"))
+                || requestURI.equals("/contest")
+                || requestURI.startsWith("/shop/item"))) {
             log.info("콘테스트 관련 전체 공개 페이지 접근: " + requestURI);
             filterChain.doFilter(request, response);
             return;
