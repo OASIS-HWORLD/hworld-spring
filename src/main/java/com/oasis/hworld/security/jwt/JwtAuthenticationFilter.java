@@ -56,20 +56,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         String method = request.getMethod();
 
+        boolean accessAvailable = false;
+
         // 누구나 접근 가능한 페이지에 대한 요청 처리
         // 1. 회원가입 및 로그인 페이지
         if (requestURI.equals("/members/login") || requestURI.equals("/members/sign-up") ||
                 requestURI.equals("/members/check-id") || requestURI.equals("/members/check-nickname")) {
             log.info("로그인 및 회원가입 페이지 접근: " + requestURI);
-            filterChain.doFilter(request, response);
-            return;
+//            filterChain.doFilter(request, response);
+//            return;
+            accessAvailable = true;
         }
 
         // 2. 공지사항 페이지
         if (requestURI.startsWith("/notices")) {
             log.info("공지사항 페이지 접근: " + requestURI);
-            filterChain.doFilter(request, response);
-            return;
+//            filterChain.doFilter(request, response);
+//            return;
+            accessAvailable = true;
         }
 
         // 3. 콘테스트 관련 페이지
@@ -77,8 +81,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || requestURI.equals("/contest")
                 || requestURI.startsWith("/shop/item"))) {
             log.info("콘테스트 관련 전체 공개 페이지 접근: " + requestURI);
-            filterChain.doFilter(request, response);
-            return;
+//            filterChain.doFilter(request, response);
+//            return;
+            accessAvailable = true;
         }
 
         JwtTokenDTO jwtTokenDTO = jwtTokenProvider.resolveToken(request);
@@ -134,10 +139,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 다음 필터로 요청 전달
                 filterChain.doFilter(request, response);
             } catch (Exception e2) {
-                setErrorResponse(response, FORBIDDEN_REQUEST);
+                if (accessAvailable) {
+                    filterChain.doFilter(request, response);
+                }
+                else {
+                    setErrorResponse(response, FORBIDDEN_REQUEST);
+                }
             }
         } catch (Exception e3) {
-            setErrorResponse(response, FORBIDDEN_REQUEST);
+            if (accessAvailable) {
+                filterChain.doFilter(request, response);
+            }
+            else {
+                setErrorResponse(response, FORBIDDEN_REQUEST);
+            }
         }
     }
 
