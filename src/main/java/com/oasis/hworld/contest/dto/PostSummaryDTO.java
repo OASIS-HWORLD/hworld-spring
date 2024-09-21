@@ -23,6 +23,10 @@ import lombok.ToString;
 public class PostSummaryDTO {
     // 게시글 아이디
     private int postId;
+
+    // 게시글 제목
+    private String title;
+
     // 코디 이미지 url
     private String imageUrl;
     // 추천수
@@ -34,4 +38,7 @@ public class PostSummaryDTO {
 
     // 게시글 이미지 url
     private String postImageUrl;
+
+    // 게시글 작성자
+    private String nickname;
 }

@@ -25,11 +25,13 @@
     <!-- 콘테스트 게시글 목록 조회 -->
     <select id="selectContestPostList">
         SELECT
+            P.title,
             P.post_id,
             CO.image_url,
             P.recommend_count,
             P.reply_count,
-            P.post_image_url
+            P.post_image_url,
+            M.nickname
         FROM
             POST P
         LEFT JOIN CONTEST C         ON P.contest_id = C.contest_id
@@ -77,8 +79,6 @@
             AND TO_DATE(#{month}, 'YYYY-MM') BETWEEN C.start_date AND C.end_date
         </if>
     </select>
-
-
 
     <!-- PostDetailResponseDTO, ReplyDTO, ItemDTO 간의 매핑을 정의하는 ResultMap -->
     <resultMap id="PostDetailResultMap" type="com.oasis.hworld.contest.dto.PostDetailResponseDTO">
@@ -335,12 +335,13 @@
     <!-- 월을 통한 게시글 목록 조회  -->
     <select id="selectPostAwardListByMonth">
         SELECT
+            P.title,
             P.post_id,
-            CO.image_url,
             P.recommend_count,
             P.reply_count,
             P.rank,
-            P.post_image_url
+            P.post_image_url,
+            M.nickname
         FROM
             POST P
                 LEFT JOIN CONTEST C         ON P.contest_id = C.contest_id

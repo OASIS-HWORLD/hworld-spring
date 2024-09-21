@@ -20,6 +20,8 @@ import lombok.ToString;
 @Getter
 @ToString
 public class PostAwardDTO {
+    // 게시글 제목
+    private String title;
     // 게시글 아이디
     private int postId;
     // 코디 이미지 url
@@ -32,6 +34,8 @@ public class PostAwardDTO {
     private int rank;
     // 추천 여부
     private Boolean isRecommended;
-
+    // 게시글 이미지
     private String postImageUrl;
+    // 작성자 닉네임
+    private String nickname;
 }
