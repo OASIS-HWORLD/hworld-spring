@@ -36,5 +36,7 @@ public class CoordinationItemResponseDTO {
     private int price;
     // 장바구니에 담겨 있는지 여부
     private boolean isInCart;
+    // 매장 아이디
+    private int shopId;
 
 }

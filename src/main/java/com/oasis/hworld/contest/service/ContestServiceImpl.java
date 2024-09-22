@@ -5,6 +5,9 @@ import com.oasis.hworld.common.domain.ItemCategory;
 import com.oasis.hworld.common.file.S3Uploader;
 import com.oasis.hworld.contest.dto.*;
 import com.oasis.hworld.contest.mapper.ContestMapper;
+import com.oasis.hworld.coordination.dto.CoordinationItemResponseDTO;
+import com.oasis.hworld.coordination.mapper.CoordinationMapper;
+import com.oasis.hworld.quest.mapper.QuestMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +48,8 @@ import static com.oasis.hworld.common.exception.ErrorCode.*;
 public class ContestServiceImpl implements ContestService {
 
     private final ContestMapper mapper;
+    private final CoordinationMapper coordinationMapper;
+    private final QuestMapper questMapper;
     private final S3Uploader s3Uploader;
     @Value("${S3_BUCKET_URL}")
     private String s3BucketUrl;
@@ -156,6 +161,17 @@ public class ContestServiceImpl implements ContestService {
 //            return false;
 //        }
 //
+
+        List<CoordinationItemResponseDTO> coordinationItemResponseDTOList =
+                coordinationMapper.selectCoordinationItemByCoordinationId(coordinationId);
+
+        for (CoordinationItemResponseDTO coordinationItem : coordinationItemResponseDTOList) {
+            if (coordinationItem.getShopId() == 1) {
+                questMapper.updateStatus(1, memberId, 2);
+                break;
+            }
+        }
+
        return mapper.insertContestPost(memberId, postRequestDTO, uploadedImageUrl) == 1;
     }
 
