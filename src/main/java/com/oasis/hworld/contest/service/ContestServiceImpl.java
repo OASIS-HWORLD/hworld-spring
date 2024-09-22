@@ -166,7 +166,7 @@ public class ContestServiceImpl implements ContestService {
                 coordinationMapper.selectCoordinationItemByCoordinationId(coordinationId);
 
         for (CoordinationItemResponseDTO coordinationItem : coordinationItemResponseDTOList) {
-            if (coordinationItem.getItemId() == 1 || coordinationItem.getItemId() == 2) {
+            if (coordinationItem.getShopId() == 1) {
                 questMapper.updateStatus(1, memberId, 2);
                 break;
             }

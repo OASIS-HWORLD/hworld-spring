@@ -76,10 +76,12 @@
                    CI.item_option_id,
                    I.image_url,
                    I.name,
-                   I.price
+                   I.price,
+                   S.shop_id
             FROM COORDINATION_ITEM CI
                  LEFT JOIN ITEM_OPTION IO    ON CI.item_option_id = IO.item_option_id
                  LEFT JOIN ITEM I            ON IO.item_id = I.item_id
+                 LEFT JOIN SHOP S            ON S.shop_id = I.shop_id
             WHERE CI.coordination_id = #{coordinationId}
             ORDER BY CI.category_id
         ]]>
