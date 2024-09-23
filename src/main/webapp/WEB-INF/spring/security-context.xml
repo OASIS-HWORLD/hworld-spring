@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- JWT Token Provider -->
+    <bean id="jwtTokenProvider" class="com.oasis.hworld.security.jwt.JwtTokenProvider">
+        <property name="tokenSecretKey" value="${TOKEN_SECRET_KEY}" />
+    </bean>
+
+    <!-- JWT Authentication Filter -->
+    <bean id="jwtAuthenticationFilter"
+          class="com.oasis.hworld.security.jwt.JwtAuthenticationFilter">
+        <constructor-arg ref="jwtTokenProvider" />
+    </bean>
+
+    <!-- CORS filter -->
+    <bean id="corsFilter" class="com.oasis.hworld.filter.CorsFilter" />
+
+    <!-- BCrypt Password Encoder -->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+
+    <!-- CustomUserDetailsService -->
+    <bean id="customUserDetailsService" class="com.oasis.hworld.security.service.CustomUserDetailsService" />
+
+    <security:http>
+        <security:csrf disabled="true"/>
+        <security:custom-filter ref="corsFilter" before="CHANNEL_FILTER" />
+
+        <!-- JwtAuthenticationFilter를 UsernamePasswordAuthenticationFilter 이전에 등록 -->
+        <security:custom-filter ref="jwtAuthenticationFilter" before="FORM_LOGIN_FILTER"/>
+
+        <!-- 1. 회원가입 및 로그인 관련 경로 누구나 접근 가능 -->
+        <security:intercept-url pattern="/members/sign-up" access="permitAll" />
+        <security:intercept-url pattern="/members/login" access="permitAll" />
+        <security:intercept-url pattern="/members/check-id" access="permitAll" />
+        <security:intercept-url pattern="/members/check-nickname" access="permitAll" />
+
+        <!-- 2. 공지사항 관련 경로 누구나 접근 가능 -->
+        <security:intercept-url pattern="/notices/**" access="permitAll" />
+
+        <!-- 3. 콘테스트 관련 경로 누구나 접근 가능 -->
+        <security:intercept-url pattern="/contest/posts" access="permitAll" />
+        <security:intercept-url pattern="/contest/posts/*" access="permitAll" />
+        <security:intercept-url pattern="/contest/" access="permitAll" />
+        <security:intercept-url pattern="/contest/posts/award" access="permitAll" />
+        <security:intercept-url pattern="/contest/posts/best" access="permitAll" />
+        <security:intercept-url pattern="/shop/item/*" access="permitAll" />
+
+        <!-- 기타 모든 요청은 인증된 사용자만 접근 가능 -->
+        <security:intercept-url pattern="/**" access="hasRole('MEMBER')" />
+
+        <security:form-login/>
+    </security:http>
+
+    <security:authentication-manager id="authenticationManager">
+        <security:authentication-provider user-service-ref="customUserDetailsService">
+            <security:password-encoder ref="passwordEncoder" />
+        </security:authentication-provider>
+    </security:authentication-manager>
+</beans>

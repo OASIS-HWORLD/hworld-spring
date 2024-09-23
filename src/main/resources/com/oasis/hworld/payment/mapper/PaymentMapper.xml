@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+* 결제 Mybatis mapper xml
+* @author 조영욱
+* @since 2024.09.02
+* @version 1.0
+*
+* <pre>
+* 수정일        	수정자        수정내용
+* ==========  =========    =========
+* 2024.09.02  	조영욱        최초 생성
+* 2024.09.03    조영욱        Item -> ItemOption 변경
+* </pre>
+-->
+<mapper namespace="com.oasis.hworld.payment.mapper.PaymentMapper">
+
+    <!-- 주문 추가 -->
+    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
+        INSERT INTO ORDERS (
+            order_id,
+            member_id,
+            order_name,
+            orderer_name,
+            orderer_phone,
+            location,
+            amount,
+            price_before_discount,
+            point_usage
+        ) VALUES (
+            #{orderId} || LPAD(SEQ_ORDER.NEXTVAL, 6, '0'),
+            #{memberId},
+            #{orderName},
+            #{ordererName},
+            #{ordererPhone},
+            #{location},
+            #{amount},
+            #{priceBeforeDiscount},
+            #{pointUsage}
+        )
+    </insert>
+
+    <!-- 주문 상품 리스트 추가 -->
+    <update id="insertOrderItemList">
+        INSERT ALL
+        <foreach collection="orderItemList" item="orderItem" separator=" ">
+            INTO ORDER_ITEM (
+                order_id,
+                item_option_id,
+                price,
+                item_count
+            ) VALUES (
+                #{orderId},
+                #{orderItem.itemOptionId},
+                #{orderItem.price},
+                #{orderItem.itemCount}
+            )
+        </foreach>
+        SELECT * FROM DUAL
+    </update>
+
+    <!-- 주문 ID로 주문 조회 -->
+    <select id="selectOrderByOrderId">
+        SELECT
+            order_id,
+            amount,
+            point_usage
+        FROM
+            ORDERS
+        WHERE
+            order_id = #{orderId}
+    </select>
+
+    <!-- 결제 추가 -->
+    <insert id="insertPayment">
+        INSERT INTO PAYMENT (
+            payment_key,
+            order_id,
+            status,
+            approved_at,
+            total_amount,
+            method,
+            method_detail,
+            installments_month
+        ) VALUES (
+            #{paymentKey},
+            #{orderId},
+            #{status},
+            SYSDATE,
+            #{totalAmount},
+            #{method},
+            #{methodDetail},
+            #{installmentsMonth}
+        )
+    </insert>
+</mapper>
